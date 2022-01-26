@@ -12,7 +12,7 @@ PreferredSizeWidget appBarMain(BuildContext context) {
   return AppBar(
     title: Center(
         child: Text(
-      "quiz_earn",
+      "Quiz Earn",
       style: TextStyle(color: Colors.blue, fontSize: 24),
     )),
     iconTheme: IconThemeData(color: Colors.black),
@@ -58,7 +58,7 @@ Widget appBarMainWithoutSignout(BuildContext context) {
   return AppBar(
     title: Center(
         child: Text(
-      "quiz_earn",
+      "Quiz Earn",
       style: TextStyle(color: Colors.blue, fontSize: 24),
     )),
     iconTheme: IconThemeData(color: Colors.black),
@@ -143,13 +143,13 @@ Widget appDrawer(BuildContext context) {
   );
 }
 
-Future<void> showMyDialog(BuildContext context, String successmsg) async {
+Future<void> showMyDialog(BuildContext context, String successmessage) async {
   return showDialog<void>(
     context: context,
     barrierDismissible: false, // user must tap button!
     builder: (BuildContext context) {
       return AlertDialog(
-        title: Text(successmsg),
+        title: Text(successmessage),
         actions: <Widget>[
           TextButton(
             child: Text('Okay'),

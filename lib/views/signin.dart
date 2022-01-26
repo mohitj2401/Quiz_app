@@ -93,7 +93,7 @@ class _SignInState extends State<SignIn> {
       appBar: AppBar(
         title: Center(
             child: Text(
-          "quiz_earn",
+          "Quiz Earn",
           style: TextStyle(color: Colors.blue, fontSize: 24),
         )),
         iconTheme: IconThemeData(color: Colors.black),

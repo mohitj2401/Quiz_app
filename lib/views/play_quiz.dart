@@ -75,8 +75,8 @@ class _PlayQuizState extends State<PlayQuiz> with WidgetsBindingObserver {
         await NAlertDialog(
           dismissable: false,
           dialogStyle: DialogStyle(titleDivider: true),
-          title: Text("Abnormal Activity Detected"),
-          content: Text("Remaing Abnormal Activity is $alertCount"),
+          title: Text("Don't Exit Test Window"),
+          content: Text("Remaing Attempt is $alertCount"),
           actions: <Widget>[
             TextButton(
                 child: Text("Ok"),
@@ -110,8 +110,27 @@ class _PlayQuizState extends State<PlayQuiz> with WidgetsBindingObserver {
       'Authorization': 'Bearer $apiToken',
       "X-Requested-With": "XMLHttpRequest"
     })).get(base_url + "/api/questions/" + widget.quizId);
-
-    return response.data['output'];
+    if (response.data['status'] == 200) {
+      return response.data['output'];
+    } else if (response.data['status'] == 401) {
+      await HelperFunctions.saveUserLoggedIn(false);
+      await HelperFunctions.saveUserApiKey("");
+      await Navigator.pushAndRemoveUntil(context,
+          MaterialPageRoute(builder: (context) => SignIn()), (route) => false);
+    } else {
+      await NAlertDialog(
+        dismissable: false,
+        dialogStyle: DialogStyle(titleDivider: true),
+        title: Text(response.data['message']),
+        actions: <Widget>[
+          TextButton(
+              child: Text("Ok"),
+              onPressed: () {
+                Navigator.pop(context);
+              }),
+        ],
+      ).show(context);
+    }
   }
 
   loadQuestions() async {

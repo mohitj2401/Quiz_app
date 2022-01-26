@@ -60,7 +60,8 @@ class _PlayedQuizState extends State<PlayedQuiz> {
 
   getData() async {
     var api = await HelperFunctions.getUserApiKey();
-    if (api != null || api != '') {
+
+    if (api != '') {
       String url = base_url + "/api/result/getquiz/";
 
       try {
@@ -69,15 +70,28 @@ class _PlayedQuizState extends State<PlayedQuiz> {
           "X-Requested-With": "XMLHttpRequest"
         })).get(url);
 
-        if (response.data['status'] == '200') {
-          return response.data['data'];
-        } else if (response.data['status'] == '404') {
+        if (response.data['status'] == 200) {
+          return response.data['output'];
+        } else if (response.data['status'] == 401) {
           await HelperFunctions.saveUserLoggedIn(false);
           await HelperFunctions.saveUserApiKey("");
           await Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute(builder: (context) => SignIn()),
               (route) => false);
+        } else {
+          await NAlertDialog(
+            dismissable: false,
+            dialogStyle: DialogStyle(titleDivider: true),
+            title: Text(response.data['message']),
+            actions: <Widget>[
+              TextButton(
+                  child: Text("Ok"),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  }),
+            ],
+          ).show(context);
         }
       } catch (e) {
         print(e);
@@ -100,20 +114,36 @@ class _PlayedQuizState extends State<PlayedQuiz> {
 
   updateData(url) async {
     try {
-      Response response = await Dio().get(url);
+      Response response = await Dio(BaseOptions(headers: {
+        'Authorization': 'Bearer $api_token',
+        "X-Requested-With": "XMLHttpRequest"
+      })).get(url);
 
-      if (response.data['status'] == '200') {
-        return response.data['data'];
-      } else if (response.data['status'] == '404') {
+      if (response.data['status'] == 200) {
+        return response.data['output'];
+      } else if (response.data['status'] == 401) {
         await HelperFunctions.saveUserLoggedIn(false);
         await HelperFunctions.saveUserApiKey("");
-
         await Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(builder: (context) => SignIn()),
             (route) => false);
-      } else {}
+      } else {
+        await NAlertDialog(
+          dismissable: false,
+          dialogStyle: DialogStyle(titleDivider: true),
+          title: Text(response.data['message']),
+          actions: <Widget>[
+            TextButton(
+                child: Text("Ok"),
+                onPressed: () {
+                  Navigator.pop(context);
+                }),
+          ],
+        ).show(context);
+      }
     } catch (e) {
+      print(e);
       await NAlertDialog(
         dismissable: false,
         dialogStyle: DialogStyle(titleDivider: true),
@@ -174,8 +204,6 @@ class _PlayedQuizState extends State<PlayedQuiz> {
 
                           String url = base_url +
                               "/api/result/search/" +
-                              api_token +
-                              '/' +
                               searchQuiz.text;
                           setState(() {
                             searchQuiz.text = '';
@@ -212,6 +240,7 @@ class _PlayedQuizState extends State<PlayedQuiz> {
         currentIndex: 1,
         onTap: (index) async {
           if (index == 2) {
+            print('ss');
             Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
@@ -277,14 +306,17 @@ class _PlayedQuizState extends State<PlayedQuiz> {
                               } else {
                                 final exterdir =
                                     await getExternalStorageDirectory();
-
+                                print(url);
                                 // ignore: unused_local_variable1
                                 final task = await FlutterDownloader.enqueue(
                                   url: url,
+                                  headers: {
+                                    'Authorization': 'Bearer $api_token',
+                                  },
                                   savedDir: exterdir == null
                                       ? '/storage/emulated/0/Download'
                                       : exterdir.path,
-                                  fileName: 'res' + '.pdf',
+                                  fileName: 'result.pdf',
                                   showNotification: true,
                                   openFileFromNotification: true,
                                 );

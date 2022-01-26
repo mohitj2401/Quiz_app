@@ -46,16 +46,29 @@ class _QuizDetailsState extends State<QuizDetails> {
           setState(() {
             isLoading = false;
           });
-        } else if (response.data['status'] == '404') {
+        } else if (response.data['status'] == 401) {
           await HelperFunctions.saveUserLoggedIn(false);
           await HelperFunctions.saveUserApiKey("");
           await Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute(builder: (context) => SignIn()),
               (route) => false);
+        } else {
           setState(() {
             isLoading = false;
           });
+          await NAlertDialog(
+            dismissable: false,
+            dialogStyle: DialogStyle(titleDivider: true),
+            title: Text(response.data['message']),
+            actions: <Widget>[
+              TextButton(
+                  child: Text("Ok"),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  }),
+            ],
+          ).show(context);
         }
       } catch (e) {
         setState(() {

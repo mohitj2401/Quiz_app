@@ -69,8 +69,22 @@ class _SubjectsState extends State<Subjects> {
               context,
               MaterialPageRoute(builder: (context) => SignIn()),
               (route) => false);
+        } else {
+          await NAlertDialog(
+            dismissable: false,
+            dialogStyle: DialogStyle(titleDivider: true),
+            title: Text(response.data['message']),
+            actions: <Widget>[
+              TextButton(
+                  child: Text("Ok"),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  }),
+            ],
+          ).show(context);
         }
       } catch (e) {
+        print(e);
         await NAlertDialog(
           dismissable: false,
           dialogStyle: DialogStyle(titleDivider: true),
@@ -90,20 +104,36 @@ class _SubjectsState extends State<Subjects> {
 
   updateData(url) async {
     try {
-      Response response = await Dio().get(url);
+      Response response = await Dio(BaseOptions(headers: {
+        'Authorization': 'Bearer $api_token',
+        "X-Requested-With": "XMLHttpRequest"
+      })).get(url);
 
       if (response.data['status'] == 200) {
-        return response.data['data'];
+        return response.data['output'];
       } else if (response.data['status'] == 401) {
         await HelperFunctions.saveUserLoggedIn(false);
         await HelperFunctions.saveUserApiKey("");
-
         await Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(builder: (context) => SignIn()),
             (route) => false);
-      } else {}
+      } else {
+        await NAlertDialog(
+          dismissable: false,
+          dialogStyle: DialogStyle(titleDivider: true),
+          title: Text(response.data['message']),
+          actions: <Widget>[
+            TextButton(
+                child: Text("Ok"),
+                onPressed: () {
+                  Navigator.pop(context);
+                }),
+          ],
+        ).show(context);
+      }
     } catch (e) {
+      print(e);
       await NAlertDialog(
         dismissable: false,
         dialogStyle: DialogStyle(titleDivider: true),
@@ -164,8 +194,6 @@ class _SubjectsState extends State<Subjects> {
 
                           String url = base_url +
                               "/api/subjects/search/" +
-                              api_token +
-                              '/' +
                               searchSubject.text;
                           setState(() {
                             searchSubject.text = '';

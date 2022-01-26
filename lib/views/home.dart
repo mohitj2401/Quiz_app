@@ -107,7 +107,7 @@ class _HomeState extends State<Home> {
   getData() async {
     var api = await HelperFunctions.getUserApiKey();
 
-    if (api != null || api != '') {
+    if (api != '') {
       String url = base_url + "/api/quiz/" + widget.subject_id.toString();
 
       try {
@@ -115,18 +115,29 @@ class _HomeState extends State<Home> {
           'Authorization': 'Bearer $api',
           "X-Requested-With": "XMLHttpRequest"
         })).get(url);
-        print(response);
+
         if (response.data['status'] == 200) {
           return response.data['output'];
-        } else if (response.data['status'] == '404') {
+        } else if (response.data['status'] == 401) {
           await HelperFunctions.saveUserLoggedIn(false);
           await HelperFunctions.saveUserApiKey("");
           await Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute(builder: (context) => SignIn()),
               (route) => false);
-        } else {
-          authService.error = response.data['msg'];
+        } else if (response.data['status'] == 400) {
+          await NAlertDialog(
+            dismissable: false,
+            dialogStyle: DialogStyle(titleDivider: true),
+            title: Text(response.data['message']),
+            actions: <Widget>[
+              TextButton(
+                  child: Text("Ok"),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  }),
+            ],
+          ).show(context);
         }
       } catch (e) {
         await NAlertDialog(
@@ -180,7 +191,7 @@ class _HomeState extends State<Home> {
       appBar: AppBar(
         title: Center(
             child: Text(
-          "quiz_earn",
+          "Quiz Earn",
           style: TextStyle(color: Colors.blue, fontSize: 24),
         )),
         iconTheme: IconThemeData(color: Colors.black),

@@ -16,7 +16,7 @@ class MyAccount extends StatefulWidget {
   _MyAccountState createState() => _MyAccountState();
 }
 
-late String api_token;
+String api_token = '';
 
 class _MyAccountState extends State<MyAccount> {
   bool isLoading = true;
@@ -26,27 +26,44 @@ class _MyAccountState extends State<MyAccount> {
 
   getData() async {
     var api = await HelperFunctions.getUserApiKey();
-    if (api != null || api != '') {
-      String url = base_url + "/api/get/user/" + api_token;
+
+    if (api != '') {
+      String url = base_url + "/api/user";
 
       try {
-        Response response = await Dio().get(url);
+        Response response = await Dio(BaseOptions(headers: {
+          'Authorization': 'Bearer $api',
+          "X-Requested-With": "XMLHttpRequest"
+        })).get(url);
 
-        if (response.data['status'] == '200') {
-          quizdetails = response.data['user'];
+        if (response.data['status'] == 200) {
+          quizdetails = response.data['output'];
           setState(() {
             isLoading = false;
           });
-        } else if (response.data['status'] == '404') {
+        } else if (response.data['status'] == 401) {
           await HelperFunctions.saveUserLoggedIn(false);
           await HelperFunctions.saveUserApiKey("");
           await Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute(builder: (context) => SignIn()),
               (route) => false);
+        } else {
           setState(() {
             isLoading = false;
           });
+          await NAlertDialog(
+            dismissable: false,
+            dialogStyle: DialogStyle(titleDivider: true),
+            title: Text(response.data['message']),
+            actions: <Widget>[
+              TextButton(
+                  child: Text("Ok"),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  }),
+            ],
+          ).show(context);
         }
       } catch (e) {
         print(e);
@@ -74,7 +91,7 @@ class _MyAccountState extends State<MyAccount> {
   storeapi() async {
     api_token = await HelperFunctions.getUserApiKey();
 
-    if (api_token == '' || api_token == null) {
+    if (api_token == '') {
       await HelperFunctions.saveUserLoggedIn(false);
       await HelperFunctions.saveUserApiKey("");
       Navigator.pushAndRemoveUntil(context,
@@ -85,7 +102,9 @@ class _MyAccountState extends State<MyAccount> {
   @override
   void initState() {
     storeapi();
+
     getData();
+
     if (widget.message != '' && !notified) {
       Future(() {
         final snackBar = SnackBar(content: Text(widget.message));
@@ -176,7 +195,9 @@ class _MyAccountState extends State<MyAccount> {
                       children: [
                         Text('Quiz Attempted'),
                         Spacer(),
-                        Text(quizdetails['result_count'].toString()),
+                        quizdetails['result_count'].toString() != ''
+                            ? Text(quizdetails['result_count'].toString())
+                            : Text('0'),
                       ],
                     ),
                     SizedBox(height: 20),

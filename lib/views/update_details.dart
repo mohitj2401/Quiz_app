@@ -25,14 +25,17 @@ class _UpdateDetailsState extends State<UpdateDetails> {
   getData() async {
     var api = await HelperFunctions.getUserApiKey();
     if (api != null || api != '') {
-      String url = base_url + "/api/get/user/" + api_token;
+      String url = base_url + "/api/user";
 
       try {
-        Response response = await Dio().get(url);
+        Response response = await Dio(BaseOptions(headers: {
+          'Authorization': 'Bearer $api',
+          "X-Requested-With": "XMLHttpRequest"
+        })).get(url);
 
-        if (response.data['status'] == '200') {
-          emailTextEditingController.text = response.data['user']['email'];
-          nameTextEditingController.text = response.data['user']['name'];
+        if (response.data['status'] == 200) {
+          emailTextEditingController.text = response.data['output']['email'];
+          nameTextEditingController.text = response.data['output']['name'];
           setState(() {
             isLoading = false;
           });
@@ -94,33 +97,49 @@ class _UpdateDetailsState extends State<UpdateDetails> {
         isLoading = true;
       });
       try {
-        Response response =
-            await Dio().post(base_url + "/api/update/user/" + api_token, data: {
+        Response response = await Dio(BaseOptions(headers: {
+          'Authorization': 'Bearer $api_token',
+          "X-Requested-With": "XMLHttpRequest"
+        })).post(base_url + "/api/update-details", data: {
           "name": nameTextEditingController.text,
           "email": emailTextEditingController.text,
         });
-        if (response.data['email'] != null) {
+
+        if (response.data['status'] == 200) {
+          await Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => MyAccount(
+                        message: 'User Details Updated',
+                      )),
+              (route) => false);
+
           setState(() {
             isLoading = false;
           });
+        } else if (response.data['status'] == 401) {
+          await HelperFunctions.saveUserLoggedIn(false);
+          await HelperFunctions.saveUserApiKey("");
+          await Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (context) => SignIn()),
+              (route) => false);
         } else {
-          if (response.data['status'] == '200') {
-            await Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => MyAccount(
-                          message: 'User Details Updated',
-                        )),
-                (route) => false);
-
-            setState(() {
-              isLoading = false;
-            });
-          } else {
-            setState(() {
-              isLoading = false;
-            });
-          }
+          setState(() {
+            isLoading = false;
+          });
+          await NAlertDialog(
+            dismissable: false,
+            dialogStyle: DialogStyle(titleDivider: true),
+            title: Text(response.data['message']),
+            actions: <Widget>[
+              TextButton(
+                  child: Text("Ok"),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  }),
+            ],
+          ).show(context);
         }
       } catch (e) {
         print(e);

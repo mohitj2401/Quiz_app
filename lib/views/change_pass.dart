@@ -51,51 +51,51 @@ class _ChangePassState extends State<ChangePass> {
         isLoading = true;
       });
       try {
-        Response response = await Dio()
-            .post(base_url + "/api/update/password/" + api_token, data: {
+        Response response = await Dio(BaseOptions(headers: {
+          'Authorization': 'Bearer $api_token',
+          "X-Requested-With": "XMLHttpRequest"
+        })).post(base_url + "/api/update-password", data: {
           "old_pass": oldpasswordEditingController.text,
           "new_pass": passwordTextEditingController.text,
         });
 
-        if (response.data['email'] != null) {
+        if (response.data['status'] == 200) {
+          await Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => MyAccount(
+                        message: 'Password changed successfully',
+                      )),
+              (route) => false);
+
           setState(() {
             isLoading = false;
           });
+        } else if (response.data['status'] == 401) {
+          await HelperFunctions.saveUserLoggedIn(false);
+          await HelperFunctions.saveUserApiKey("");
+          await Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (context) => SignIn()),
+              (route) => false);
         } else {
-          if (response.data['status'] == '200') {
-            await Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => MyAccount(
-                          message: 'Password changed successfully',
-                        )),
-                (route) => false);
-
-            setState(() {
-              isLoading = false;
-            });
-          } else {
-            if (response.data['status'] == '501') {
-              await NAlertDialog(
-                dismissable: false,
-                dialogStyle: DialogStyle(titleDivider: true),
-                title: Text(response.data['msg']),
-                actions: <Widget>[
-                  TextButton(
-                      child: Text("Ok"),
-                      onPressed: () {
-                        Navigator.pop(context);
-                      }),
-                ],
-              ).show(context);
-            }
-            setState(() {
-              isLoading = false;
-            });
-          }
+          setState(() {
+            isLoading = false;
+          });
+          await NAlertDialog(
+            dismissable: false,
+            dialogStyle: DialogStyle(titleDivider: true),
+            title: Text(response.data['message']),
+            actions: <Widget>[
+              TextButton(
+                  child: Text("Ok"),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  }),
+            ],
+          ).show(context);
         }
       } catch (e) {
-        print(e);
         setState(() {
           isLoading = false;
         });
@@ -122,7 +122,7 @@ class _ChangePassState extends State<ChangePass> {
       appBar: AppBar(
         title: Center(
             child: Text(
-          "quiz_earn",
+          "Quiz Earn",
           style: TextStyle(color: Colors.blue, fontSize: 24),
         )),
         iconTheme: IconThemeData(color: Colors.black),
