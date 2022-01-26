@@ -8,7 +8,6 @@
 .buildlog/
 .history
 .svn/
-/lib/constant/
 # IntelliJ related
 *.iml
 *.ipr

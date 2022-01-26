@@ -110,6 +110,7 @@ class _MyAccountState extends State<MyAccount> {
         final snackBar = SnackBar(content: Text(widget.message));
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
       });
+      notified = true;
     }
     super.initState();
   }

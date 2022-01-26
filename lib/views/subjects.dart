@@ -43,6 +43,7 @@ class _SubjectsState extends State<Subjects> {
         final snackBar = SnackBar(content: Text(widget.message));
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
       });
+      notified = true;
     }
     getDataFun = getData();
     super.initState();
@@ -254,16 +255,17 @@ class _SubjectsState extends State<Subjects> {
               'Authorization': 'Bearer $api_token',
               "X-Requested-With": "XMLHttpRequest"
             })).post(url);
+            print(response);
             if (response.data['status'] == 200) {
               await HelperFunctions.saveUserLoggedIn(false);
               await HelperFunctions.saveUserApiKey("");
+              progressDialog.dismiss();
               Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(builder: (context) => SignIn()),
                   (route) => false);
             }
 
-            progressDialog.dismiss();
             // Navigator.pushAndRemoveUntil(
             //     context,
             //     MaterialPageRoute(builder: (context) => SignIn()),

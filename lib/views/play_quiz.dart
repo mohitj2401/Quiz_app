@@ -220,7 +220,44 @@ class _PlayQuizState extends State<PlayQuiz> with WidgetsBindingObserver {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBarMain(context),
+      appBar: AppBar(
+        title: Center(
+            child: Text(
+          "Quiz Earn",
+          style: TextStyle(color: Colors.blue, fontSize: 24),
+        )),
+        automaticallyImplyLeading: false,
+        iconTheme: IconThemeData(color: Colors.black),
+        backgroundColor: Colors.transparent,
+        elevation: 0.0,
+        actions: <Widget>[
+          GestureDetector(
+            onTap: () async {
+              await NDialog(
+                dialogStyle: DialogStyle(titleDivider: true),
+                title: Text("Log Out"),
+                content: Text("Are you sure!.Process is going to be saved"),
+                actions: <Widget>[
+                  TextButton(
+                      child: Text("Yes"),
+                      onPressed: () async {
+                        submitQuiz();
+                      }),
+                  TextButton(
+                      child: Text("No"),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      }),
+                ],
+              ).show(context);
+            },
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 16),
+              child: Icon(Icons.exit_to_app),
+            ),
+          ),
+        ],
+      ),
       body: Container(
         child: questionSnapshot != null
             ? Column(
