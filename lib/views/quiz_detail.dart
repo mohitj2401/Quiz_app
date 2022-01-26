@@ -170,8 +170,7 @@ class _QuizDetailsState extends State<QuizDetails> {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(16),
                       child: Image.network(
-                        "http://192.168.101.7/quizie_backend/storage/app/public/" +
-                            quizdetails['image'],
+                        base_url + '/' + quizdetails['image'],
                         width: MediaQuery.of(context).size.width - 48,
                         fit: BoxFit.cover,
                       ),

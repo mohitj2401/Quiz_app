@@ -261,8 +261,7 @@ class QuizTile extends StatelessWidget {
             ClipRRect(
               borderRadius: BorderRadius.circular(16),
               child: Image.network(
-                "http://192.168.101.7/quizie_backend/storage/app/public/" +
-                    imgUrl,
+                base_url + '/' + imgUrl,
                 width: MediaQuery.of(context).size.width - 48,
                 fit: BoxFit.cover,
               ),
