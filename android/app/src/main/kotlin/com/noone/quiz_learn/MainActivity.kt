@@ -1,4 +1,4 @@
-package com.example.quiz_earn
+package com.noone.quiz_learn
 
 import io.flutter.embedding.android.FlutterActivity
 
