@@ -92,7 +92,7 @@ class _SignUpState extends State<SignUp> {
       appBar: AppBar(
         title: Center(
             child: Text(
-          "Quiz Earn",
+          "Quiz Learn",
           style: TextStyle(color: Colors.blue, fontSize: 24),
         )),
         iconTheme: IconThemeData(color: Colors.black),
@@ -119,7 +119,7 @@ class _SignUpState extends State<SignUp> {
                         AnimatedTextKit(
                           animatedTexts: [
                             TypewriterAnimatedText(
-                              'Welcome to Quiz Earn!',
+                              'Welcome to Quiz Learn!',
                               textStyle: TextStyle(
                                 fontSize: 35,
                                 fontWeight: FontWeight.bold,
