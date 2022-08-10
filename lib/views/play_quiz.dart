@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:quiz_earn/constant/constant.dart';
 import 'package:quiz_earn/helper/helper.dart';
 import 'package:quiz_earn/models/questions.dart';
@@ -343,12 +344,8 @@ class _QuizPlayTileState extends State<QuizPlayTile>
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          "Q${widget.index + 1} " + widget.questionModel.question,
-          style: TextStyle(
-            fontSize: 17,
-            color: Colors.black87,
-          ),
+        Html(
+          data: "Q${widget.index + 1} " + widget.questionModel.question,
         ),
         SizedBox(height: 4),
         GestureDetector(
