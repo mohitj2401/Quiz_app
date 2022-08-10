@@ -12,6 +12,7 @@ import 'package:quiz_earn/widget/widget.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
+import 'package:html/dom.dart' as dom;
 
 class PlayQuiz extends StatefulWidget {
   final String quizId;
@@ -344,9 +345,21 @@ class _QuizPlayTileState extends State<QuizPlayTile>
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Html(
-          data: "Q${widget.index + 1} " + widget.questionModel.question,
-        ),
+        if (widget.questionModel.question != "")
+          Html(
+              data: "Q${widget.index + 1} " + widget.questionModel.question,
+              onImageTap: (String? url, RenderContext context,
+                  Map<String, String> attributes, dom.Element? element) async {
+                url = url as String;
+                await ZoomDialog(
+                  zoomScale: 5,
+                  child: Container(
+                    child: Image(image: NetworkImage(url)),
+                    color: Colors.white,
+                    padding: EdgeInsets.all(20),
+                  ),
+                ).show(super.context);
+              }),
         SizedBox(height: 4),
         GestureDetector(
           onTap: () {
