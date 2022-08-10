@@ -122,7 +122,7 @@ class _ChangePassState extends State<ChangePass> {
       appBar: AppBar(
         title: Center(
             child: Text(
-          "Quiz Earn",
+          "Quiz Learn",
           style: TextStyle(color: Colors.blue, fontSize: 24),
         )),
         iconTheme: IconThemeData(color: Colors.black),

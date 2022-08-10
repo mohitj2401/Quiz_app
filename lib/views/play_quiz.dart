@@ -225,7 +225,7 @@ class _PlayQuizState extends State<PlayQuiz> with WidgetsBindingObserver {
       appBar: AppBar(
         title: Center(
             child: Text(
-          "Quiz Earn",
+          "Quiz Learn",
           style: TextStyle(color: Colors.blue, fontSize: 24),
         )),
         automaticallyImplyLeading: false,
