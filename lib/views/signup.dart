@@ -37,7 +37,7 @@ class _SignUpState extends State<SignUp> {
           "email": emailTextEditingController.text,
           'password': passwordTextEditingController.text,
         });
-        print(response);
+    
         if (response.data['email'] != null) {
           authService.error = response.data['email'][0].toString();
 
@@ -65,7 +65,7 @@ class _SignUpState extends State<SignUp> {
           }
         }
       } catch (e) {
-        print(e);
+      
         setState(() {
           isLoading = false;
         });

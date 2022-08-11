@@ -41,9 +41,7 @@ class _HomeState extends State<Home> {
                 itemCount: snapshot.data.length,
                 itemBuilder: (context, index) {
                   if (DateTime.parse(snapshot.data[index]['start_time'])
-                      .isAfter(DateTime.now())) {
-                    print(DateTime.parse(snapshot.data[index]['start_time']));
-                  }
+                      .isAfter(DateTime.now())) {}
                   // if (DateTime.now() < (snapshot.data[index]['start_time'])) {
                   //   print("Yes");
                   // }

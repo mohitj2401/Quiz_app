@@ -29,9 +29,6 @@ class _PlayedQuizState extends State<PlayedQuiz> {
 
   static void downloadCallback(
       String id, DownloadTaskStatus status, int progress) {
-    print(
-        'Background Isolate Callback: task ($id) is in status ($status) and process ($progress)');
-
     final SendPort? send =
         IsolateNameServer.lookupPortByName('downloader_send_port');
     send!.send([id, status, progress]);
@@ -94,7 +91,6 @@ class _PlayedQuizState extends State<PlayedQuiz> {
           ).show(context);
         }
       } catch (e) {
-        print(e);
         await NAlertDialog(
           dismissable: false,
           dialogStyle: DialogStyle(titleDivider: true),
@@ -143,7 +139,6 @@ class _PlayedQuizState extends State<PlayedQuiz> {
         ).show(context);
       }
     } catch (e) {
-      print(e);
       await NAlertDialog(
         dismissable: false,
         dialogStyle: DialogStyle(titleDivider: true),
@@ -240,7 +235,6 @@ class _PlayedQuizState extends State<PlayedQuiz> {
         currentIndex: 1,
         onTap: (index) async {
           if (index == 2) {
-            print('ss');
             Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
@@ -298,15 +292,15 @@ class _PlayedQuizState extends State<PlayedQuiz> {
                               var url = base_url +
                                   "/api/download/result/" +
                                   subjectsGet[index]['id'].toString();
-                              // print(url);
+
                               final status = await Permission.storage.request();
                               if (!status.isGranted) {
                                 // ignore: avoid_print
-                                print('Permission Denied');
+
                               } else {
                                 final exterdir =
                                     await getExternalStorageDirectory();
-                                print(url);
+
                                 // ignore: unused_local_variable1
                                 final task = await FlutterDownloader.enqueue(
                                   url: url,
@@ -322,7 +316,7 @@ class _PlayedQuizState extends State<PlayedQuiz> {
                                 );
                               }
                             } catch (e) {
-                              print(e);
+                           
                               await NDialog(
                                 title: Text(
                                     "Opps Something Went Worng! or try again after sometime.."),

@@ -66,7 +66,6 @@ class _MyAccountState extends State<MyAccount> {
           ).show(context);
         }
       } catch (e) {
-        print(e);
         setState(() {
           isLoading = false;
         });

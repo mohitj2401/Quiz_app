@@ -51,7 +51,6 @@ class _UpdateDetailsState extends State<UpdateDetails> {
           });
         }
       } catch (e) {
-        print(e);
         setState(() {
           isLoading = false;
         });
@@ -142,7 +141,6 @@ class _UpdateDetailsState extends State<UpdateDetails> {
           ).show(context);
         }
       } catch (e) {
-        print(e);
         setState(() {
           isLoading = false;
         });

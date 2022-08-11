@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:quiz_earn/constant/constant.dart';
@@ -23,16 +24,19 @@ class PlayQuiz extends StatefulWidget {
 }
 
 Map userResultMap = {};
+int page = 1;
+late int totalPage;
 
 class _PlayQuizState extends State<PlayQuiz> with WidgetsBindingObserver {
   // DatabaseService databaseService = new DatabaseService();
   get wantKeepAlive => true;
   late String apiToken;
   int alertCount = 2;
-  List questionSnapshot = [];
+  Map questionSnapshot = {};
   late int endTime;
 
   QuestionModel getQuestionModelFromDataSnapshot(questionSnapshot) {
+    print("error");
     QuestionModel questionModel = new QuestionModel();
     questionModel.question = questionSnapshot['title'];
     questionModel.questionId = questionSnapshot['id'];
@@ -60,7 +64,7 @@ class _PlayQuizState extends State<PlayQuiz> with WidgetsBindingObserver {
         1000 * 60 * widget.duration +
         15;
     WidgetsBinding.instance!.addObserver(this);
-    loadQuestions();
+    loadQuestions(page);
   }
 
   @override
@@ -94,7 +98,7 @@ class _PlayQuizState extends State<PlayQuiz> with WidgetsBindingObserver {
     }
   }
 
-  getdata() async {
+  getdata(page) async {
     await HelperFunctions.getUserApiKey().then((value) {
       setState(() {
         apiToken = value;
@@ -111,9 +115,12 @@ class _PlayQuizState extends State<PlayQuiz> with WidgetsBindingObserver {
     Response response = await Dio(BaseOptions(headers: {
       'Authorization': 'Bearer $apiToken',
       "X-Requested-With": "XMLHttpRequest"
-    })).get(base_url + "/api/questions/" + widget.quizId);
+    })).get(base_url + "/api/questions/" + widget.quizId,
+        queryParameters: {"page": page});
+
     if (response.data['status'] == 200) {
-      return response.data['output'];
+      totalPage = response.data['output']['last_page'];
+      return response.data['output']['data'][0];
     } else if (response.data['status'] == 401) {
       await HelperFunctions.saveUserLoggedIn(false);
       await HelperFunctions.saveUserApiKey("");
@@ -135,8 +142,19 @@ class _PlayQuizState extends State<PlayQuiz> with WidgetsBindingObserver {
     }
   }
 
-  loadQuestions() async {
-    getdata().then((res) async {
+  loadQuestions(page) async {
+    await getdata(page).then((res) async {
+      setState(() {
+        questionSnapshot = res;
+      });
+    });
+  }
+
+  updateQuestions(page) async {
+    setState(() {
+      questionSnapshot = {};
+    });
+    getdata(page).then((res) async {
       setState(() {
         questionSnapshot = res;
       });
@@ -166,7 +184,7 @@ class _PlayQuizState extends State<PlayQuiz> with WidgetsBindingObserver {
       });
 
       userResultMap = {};
-      print(response);
+
       if (response.data['status'] == '200') {
         userResultList = [];
 
@@ -201,7 +219,6 @@ class _PlayQuizState extends State<PlayQuiz> with WidgetsBindingObserver {
         ).show(context);
       }
     } catch (e) {
-      print(e);
       await NAlertDialog(
         dismissable: false,
         dialogStyle: DialogStyle(titleDivider: true),
@@ -223,15 +240,13 @@ class _PlayQuizState extends State<PlayQuiz> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Center(
-            child: Text(
+        title: Text(
           "Quiz Learn",
-          style: TextStyle(color: Colors.blue, fontSize: 24),
-        )),
+          style: TextStyle(color: Colors.white, fontSize: 24),
+        ),
         automaticallyImplyLeading: false,
-        iconTheme: IconThemeData(color: Colors.black),
-        backgroundColor: Colors.transparent,
-        elevation: 0.0,
+        iconTheme: IconThemeData(color: Colors.white),
+        backgroundColor: Colors.blue,
         actions: <Widget>[
           GestureDetector(
             onTap: () async {
@@ -258,10 +273,36 @@ class _PlayQuizState extends State<PlayQuiz> with WidgetsBindingObserver {
               child: Icon(Icons.exit_to_app),
             ),
           ),
+          GestureDetector(
+            onTap: () async {
+              await NDialog(
+                dialogStyle: DialogStyle(titleDivider: true),
+                title: Text("Log Out"),
+                content: Text("Are you sure!.Process is going to be saved"),
+                actions: <Widget>[
+                  TextButton(
+                      child: Text("Yes"),
+                      onPressed: () async {
+                        submitQuiz();
+                      }),
+                  TextButton(
+                      child: Text("No"),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      }),
+                ],
+              ).show(context);
+            },
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 16),
+              child: Icon(Icons.done_all_sharp),
+            ),
+          ),
         ],
       ),
       body: Container(
-        child: questionSnapshot != null
+        padding: EdgeInsets.symmetric(vertical: 10),
+        child: questionSnapshot != null && questionSnapshot.isNotEmpty
             ? Column(
                 children: [
                   CountdownTimer(
@@ -298,38 +339,47 @@ class _PlayQuizState extends State<PlayQuiz> with WidgetsBindingObserver {
                     height: 8,
                   ),
                   Expanded(
-                    child: ListView.builder(
-                      padding: EdgeInsets.symmetric(horizontal: 24),
-                      physics: ClampingScrollPhysics(),
-                      itemCount: questionSnapshot.length,
-                      itemBuilder: (context, index) {
-                        return QuizPlayTile(
-                            questionModel: getQuestionModelFromDataSnapshot(
-                                questionSnapshot[index]),
-                            index: index);
-                      },
-                    ),
-                  ),
+                      child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 24),
+                    child: QuizPlayTile(
+                        questionModel:
+                            getQuestionModelFromDataSnapshot(questionSnapshot),
+                        page: page,
+                        onTap: () {
+                          if (totalPage == page) {
+                            submitQuiz();
+                          } else {
+                            page = page + 1;
+                            updateQuestions(page);
+                          }
+                        }),
+                  )),
                 ],
               )
-            : Container(
-                child: Center(
-                  child: CircularProgressIndicator(),
-                ),
+            : const Center(
+                child: CircularProgressIndicator(),
               ),
       ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.check),
-        onPressed: submitQuiz,
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   child: const Icon(Icons.check),
+      //   onPressed: submitQuiz,
+      // ),
     );
   }
 }
 
 class QuizPlayTile extends StatefulWidget {
   final QuestionModel questionModel;
-  final int index;
-  QuizPlayTile({required this.questionModel, required this.index});
+
+  final int page;
+  // final bool disable;
+  final VoidCallback onTap;
+  QuizPlayTile({
+    required this.questionModel,
+    required this.page,
+    required this.onTap,
+    // required this.disable,
+  });
 
   @override
   _QuizPlayTileState createState() => _QuizPlayTileState();
@@ -339,6 +389,7 @@ class _QuizPlayTileState extends State<QuizPlayTile>
     with AutomaticKeepAliveClientMixin {
   get wantKeepAlive => true;
   String optionSelected = "";
+  bool disable = false;
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -347,7 +398,7 @@ class _QuizPlayTileState extends State<QuizPlayTile>
       children: [
         if (widget.questionModel.question != "")
           Html(
-              data: "Q${widget.index + 1} " + widget.questionModel.question,
+              data: "Q${widget.page} " + widget.questionModel.question,
               onImageTap: (String? url, RenderContext context,
                   Map<String, String> attributes, dom.Element? element) async {
                 url = url as String;
@@ -360,6 +411,7 @@ class _QuizPlayTileState extends State<QuizPlayTile>
                   ),
                 ).show(super.context);
               }),
+        Spacer(),
         SizedBox(height: 4),
         GestureDetector(
           onTap: () {
@@ -517,6 +569,36 @@ class _QuizPlayTileState extends State<QuizPlayTile>
           ),
         ),
         SizedBox(height: 8),
+        Spacer(),
+        page != totalPage
+            ? Container(
+                padding: EdgeInsets.only(bottom: 5),
+                alignment: Alignment.bottomRight,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    shape: CircleBorder(),
+                    padding: EdgeInsets.all(20),
+                    primary: Colors.blue, // <-- Button color
+                    onPrimary: Colors.white, // <-- Splash color
+                  ),
+                  onPressed: widget.onTap,
+                  child: Icon(Icons.arrow_right_alt_sharp),
+                ),
+              )
+            : Container(
+                padding: EdgeInsets.only(bottom: 5),
+                alignment: Alignment.bottomRight,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    shape: CircleBorder(),
+                    padding: EdgeInsets.all(20),
+                    primary: Colors.blue, // <-- Button color
+                    onPrimary: Colors.white, // <-- Splash color
+                  ),
+                  onPressed: widget.onTap,
+                  child: Icon(Icons.check),
+                ),
+              )
       ],
     );
   }

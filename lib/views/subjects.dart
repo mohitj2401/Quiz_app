@@ -85,7 +85,7 @@ class _SubjectsState extends State<Subjects> {
           ).show(context);
         }
       } catch (e) {
-        print(e);
+       
         await NAlertDialog(
           dismissable: false,
           dialogStyle: DialogStyle(titleDivider: true),
@@ -134,7 +134,7 @@ class _SubjectsState extends State<Subjects> {
         ).show(context);
       }
     } catch (e) {
-      print(e);
+    
       await NAlertDialog(
         dismissable: false,
         dialogStyle: DialogStyle(titleDivider: true),
@@ -255,7 +255,7 @@ class _SubjectsState extends State<Subjects> {
               'Authorization': 'Bearer $api_token',
               "X-Requested-With": "XMLHttpRequest"
             })).post(url);
-            print(response);
+          
             if (response.data['status'] == 200) {
               await HelperFunctions.saveUserLoggedIn(false);
               await HelperFunctions.saveUserApiKey("");
