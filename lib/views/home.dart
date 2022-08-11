@@ -50,7 +50,7 @@ class _HomeState extends State<Home> {
                     description: snapshot.data[index]['description'],
                     imgUrl: snapshot.data[index]['image'],
                     quizId: snapshot.data[index]['id'].toString(),
-                    duration: snapshot.data[index]['duration'],
+                    duration: int.parse(snapshot.data[index]['duration']),
                     startDate:
                         DateTime.parse(snapshot.data[index]['start_time']),
                     func: _handleRefresh,
@@ -113,7 +113,7 @@ class _HomeState extends State<Home> {
           'Authorization': 'Bearer $api',
           "X-Requested-With": "XMLHttpRequest"
         })).get(url);
-
+        print(response);
         if (response.data['status'] == 200) {
           return response.data['output'];
         } else if (response.data['status'] == 401) {
@@ -162,6 +162,7 @@ class _HomeState extends State<Home> {
   loadPosts() async {
     getData().then((res) async {
       _quizcontroller.add(res);
+
       return res;
     });
   }
