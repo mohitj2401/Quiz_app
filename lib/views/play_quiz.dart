@@ -12,6 +12,8 @@ import 'package:quiz_earn/views/signin.dart';
 import 'package:quiz_earn/widget/widget.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:wakelock/wakelock.dart';
+
 import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
 import 'package:html/dom.dart' as dom;
 
@@ -24,7 +26,7 @@ class PlayQuiz extends StatefulWidget {
 }
 
 Map userResultMap = {};
-int page = 1;
+int page = 0;
 late int totalPage;
 
 class _PlayQuizState extends State<PlayQuiz> with WidgetsBindingObserver {
@@ -32,19 +34,18 @@ class _PlayQuizState extends State<PlayQuiz> with WidgetsBindingObserver {
   get wantKeepAlive => true;
   late String apiToken;
   int alertCount = 2;
-  Map questionSnapshot = {};
+  List questionSnapshot = [];
   late int endTime;
 
-  QuestionModel getQuestionModelFromDataSnapshot(questionSnapshot) {
-    print("error");
+  QuestionModel getQuestionModelFromDataSnapshot(questionSnapshot, index) {
     QuestionModel questionModel = new QuestionModel();
-    questionModel.question = questionSnapshot['title'];
-    questionModel.questionId = questionSnapshot['id'];
+    questionModel.question = questionSnapshot[index]['title'];
+    questionModel.questionId = questionSnapshot[index]['id'];
     List<String> options = [
-      questionSnapshot['option1'],
-      questionSnapshot['option2'],
-      questionSnapshot['option3'],
-      questionSnapshot['option4'],
+      questionSnapshot[index]['option1'],
+      questionSnapshot[index]['option2'],
+      questionSnapshot[index]['option3'],
+      questionSnapshot[index]['option4'],
     ];
 
     options.shuffle();
@@ -53,22 +54,26 @@ class _PlayQuizState extends State<PlayQuiz> with WidgetsBindingObserver {
     questionModel.option3 = options[2];
     questionModel.option4 = options[3];
     questionModel.answred = false;
-    questionModel.correctOption = questionSnapshot['option1'];
+    questionModel.correctOption = questionSnapshot[index]['option1'];
     return questionModel;
   }
 
   @override
   void initState() {
+    WidgetsBinding.instance!.addObserver(this);
+    loadQuestions(page);
+    page = 0;
+    Wakelock.enable();
+
     super.initState();
     endTime = DateTime.now().millisecondsSinceEpoch +
         1000 * 60 * widget.duration +
         15;
-    WidgetsBinding.instance!.addObserver(this);
-    loadQuestions(page);
   }
 
   @override
   void dispose() {
+    Wakelock.disable();
     WidgetsBinding.instance!.removeObserver(this);
 
     super.dispose();
@@ -119,8 +124,8 @@ class _PlayQuizState extends State<PlayQuiz> with WidgetsBindingObserver {
         queryParameters: {"page": page});
 
     if (response.data['status'] == 200) {
-      totalPage = response.data['output']['last_page'];
-      return response.data['output']['data'][0];
+      totalPage = response.data['output'].length;
+      return response.data['output'];
     } else if (response.data['status'] == 401) {
       await HelperFunctions.saveUserLoggedIn(false);
       await HelperFunctions.saveUserApiKey("");
@@ -151,13 +156,9 @@ class _PlayQuizState extends State<PlayQuiz> with WidgetsBindingObserver {
   }
 
   updateQuestions(page) async {
+    // print(page);
     setState(() {
-      questionSnapshot = {};
-    });
-    getdata(page).then((res) async {
-      setState(() {
-        questionSnapshot = res;
-      });
+      page = page + 1;
     });
   }
 
@@ -182,7 +183,7 @@ class _PlayQuizState extends State<PlayQuiz> with WidgetsBindingObserver {
         "data1": jsonEncode(userResultList),
         'quizId': widget.quizId,
       });
-
+      //  print(response);
       userResultMap = {};
 
       if (response.data['status'] == '200') {
@@ -233,7 +234,6 @@ class _PlayQuizState extends State<PlayQuiz> with WidgetsBindingObserver {
         ],
       ).show(context);
     }
-    ;
   }
 
   @override
@@ -342,15 +342,16 @@ class _PlayQuizState extends State<PlayQuiz> with WidgetsBindingObserver {
                       child: Container(
                     padding: EdgeInsets.symmetric(horizontal: 24),
                     child: QuizPlayTile(
-                        questionModel:
-                            getQuestionModelFromDataSnapshot(questionSnapshot),
+                        questionModel: getQuestionModelFromDataSnapshot(
+                            questionSnapshot, page),
                         page: page,
                         onTap: () {
-                          if (totalPage == page) {
+                          if (totalPage == (page + 1)) {
                             submitQuiz();
                           } else {
-                            page = page + 1;
-                            updateQuestions(page);
+                            setState(() {
+                              page = page + 1;
+                            });
                           }
                         }),
                   )),
@@ -398,7 +399,7 @@ class _QuizPlayTileState extends State<QuizPlayTile>
       children: [
         if (widget.questionModel.question != "")
           Html(
-              data: "Q${widget.page} " + widget.questionModel.question,
+              data: "Q${widget.page + 1} " + widget.questionModel.question,
               onImageTap: (String? url, RenderContext context,
                   Map<String, String> attributes, dom.Element? element) async {
                 url = url as String;
@@ -570,7 +571,7 @@ class _QuizPlayTileState extends State<QuizPlayTile>
         ),
         SizedBox(height: 8),
         Spacer(),
-        page != totalPage
+        (page + 1) != totalPage
             ? Container(
                 padding: EdgeInsets.only(bottom: 5),
                 alignment: Alignment.bottomRight,

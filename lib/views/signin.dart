@@ -109,7 +109,6 @@ class _SignInState extends State<SignIn> {
           : SingleChildScrollView(
               child: Container(
                 child: Form(
-                  autovalidateMode: AutovalidateMode.always,
                   key: formKey,
                   child: Container(
                       margin:
@@ -123,7 +122,7 @@ class _SignInState extends State<SignIn> {
                               TypewriterAnimatedText(
                                 'Hello There!',
                                 textStyle: TextStyle(
-                                  fontSize: 35,
+                                  fontSize: 30,
                                   fontWeight: FontWeight.bold,
                                   color: Colors.grey,
                                 ),

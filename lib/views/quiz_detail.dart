@@ -267,7 +267,7 @@ class _QuizDetailsState extends State<QuizDetails> {
                                 MaterialPageRoute(
                                   builder: (context) => PlayQuiz(
                                       quizdetails['id'].toString(),
-                                      int.parse(quizdetails['duration'])),
+                                      quizdetails['duration']),
                                 ),
                               );
                             }

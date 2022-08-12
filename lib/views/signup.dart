@@ -37,7 +37,7 @@ class _SignUpState extends State<SignUp> {
           "email": emailTextEditingController.text,
           'password': passwordTextEditingController.text,
         });
-    
+
         if (response.data['email'] != null) {
           authService.error = response.data['email'][0].toString();
 
@@ -65,7 +65,6 @@ class _SignUpState extends State<SignUp> {
           }
         }
       } catch (e) {
-      
         setState(() {
           isLoading = false;
         });
@@ -108,7 +107,6 @@ class _SignUpState extends State<SignUp> {
           : SingleChildScrollView(
               child: Container(
                 child: Form(
-                  autovalidateMode: AutovalidateMode.always,
                   key: formKey,
                   child: Container(
                     margin: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
@@ -121,7 +119,7 @@ class _SignUpState extends State<SignUp> {
                             TypewriterAnimatedText(
                               'Welcome to Quiz Learn!',
                               textStyle: TextStyle(
-                                fontSize: 35,
+                                fontSize: 30,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.grey,
                               ),

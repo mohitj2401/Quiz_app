@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:isolate';
 import 'dart:ui';
 
@@ -12,6 +13,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:ndialog/ndialog.dart';
+import 'package:easy_pdf_viewer/easy_pdf_viewer.dart';
 
 class PlayedQuiz extends StatefulWidget {
   @override
@@ -54,6 +56,74 @@ class _PlayedQuizState extends State<PlayedQuiz> {
 
     super.initState();
   }
+
+  Future<String?> getDownloadPath() async {
+    Directory? directory;
+    try {
+      if (Platform.isIOS) {
+        directory = await getApplicationDocumentsDirectory();
+      } else {
+        directory = Directory('/storage/emulated/0/Download');
+        // Put file in global download folder, if for an unknown reason it didn't exist, we fallback
+        // ignore: avoid_slow_async_io
+        if (!await directory.exists())
+          directory = await getExternalStorageDirectory();
+      }
+    } catch (err, stack) {
+      print("Cannot get download folder path");
+    }
+    return directory?.path;
+  }
+
+//Start PDf viewer link code
+  double progress = 0;
+  bool didDownloadPDF = false;
+  String progressString = 'File has not been downloaded yet.';
+
+  void updateProgress(done, total) {
+    progress = done / total;
+    setState(() {
+      if (progress >= 1) {
+        progressString =
+            '✅ File has finished downloading. Try opening the file.';
+        didDownloadPDF = true;
+      } else {
+        progressString = 'Download progress: ' +
+            (progress * 100).toStringAsFixed(0) +
+            '% done.';
+      }
+    });
+  }
+
+  Future download(Dio dio, String url, String savePath) async {
+    try {
+      var api = await HelperFunctions.getUserApiKey();
+      Response response = await dio.get(
+        url,
+        onReceiveProgress: updateProgress,
+        options: Options(
+            headers: {
+              'Authorization': 'Bearer $api',
+              "X-Requested-With": "XMLHttpRequest"
+            },
+            responseType: ResponseType.bytes,
+            followRedirects: false,
+            validateStatus: (status) {
+              return status! < 500;
+            }),
+      );
+      var file = File(savePath).openSync(mode: FileMode.write);
+      file.writeFromSync(response.data);
+      await file.close();
+
+      // Here, you're catching an error and printing it. For production
+      // apps, you should display the warning to the user and give them a
+      // way to restart the download.
+    } catch (e) {
+      print(e);
+    }
+  }
+//End PDf viewer link code
 
   getData() async {
     var api = await HelperFunctions.getUserApiKey();
@@ -286,6 +356,127 @@ class _PlayedQuizState extends State<PlayedQuiz> {
                   return ListView.builder(
                       itemCount: subjectsGet.length,
                       itemBuilder: (context, index) {
+                        return Container(
+                            child: Row(
+                          children: [
+                            Icon(
+                              Icons.arrow_forward_ios_sharp,
+                              size: 30,
+                              color: Colors.grey[500],
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Column(
+                              children: [
+                                Container(
+                                  child: Text(subjectsGet[index]['title']),
+                                ),
+                                SizedBox(
+                                  height: 4,
+                                ),
+                                Container(
+                                  child:
+                                      Text(subjectsGet[index]['description']),
+                                )
+                              ],
+                            ),
+                            Spacer(),
+                            IconButton(
+                              onPressed: () async {
+                                try {
+                                  ProgressDialog progressDialog =
+                                      ProgressDialog(context,
+                                          title: Text("Loading..."));
+                                  progressDialog.show();
+                                  var url = base_url +
+                                      "/api/download/result/" +
+                                      subjectsGet[index]['id'].toString();
+
+                                  var api =
+                                      await HelperFunctions.getUserApiKey();
+                                  PDFDocument doc =
+                                      await PDFDocument.fromURL(url, headers: {
+                                    'Authorization': 'Bearer $api',
+                                    "X-Requested-With": "XMLHttpRequest"
+                                  });
+                                  progressDialog.dismiss();
+                                  await Dialog(
+                                    child: PDFViewer(
+                                      document: doc,
+                                      lazyLoad: false,
+                                    ),
+                                  ).show(super.context);
+                                } catch (e) {
+                                  await NAlertDialog(
+                                    dismissable: false,
+                                    dialogStyle:
+                                        DialogStyle(titleDivider: true),
+                                    title: Text("Opps Something Went Worng!"),
+                                    content: Text(
+                                        "Please check your connectivity or try Again.."),
+                                    actions: <Widget>[
+                                      TextButton(
+                                          child: Text("Ok"),
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                          }),
+                                    ],
+                                  ).show(context);
+                                }
+                              },
+                              icon: Icon(
+                                Icons.visibility,
+                                size: 30,
+                                color: Colors.grey[500],
+                              ),
+                            ),
+                            IconButton(
+                              onPressed: () async {
+                                try {
+                                  var url = base_url +
+                                      "/api/download/result/" +
+                                      subjectsGet[index]['id'].toString();
+
+                                  final status =
+                                      await Permission.storage.request();
+                                  if (!status.isGranted) {
+                                    // ignore: avoid_print
+
+                                  } else {
+                                    final exterdir = await getDownloadPath();
+                                    final exterdir2 =
+                                        await getExternalStorageDirectory();
+                                    // ignore: unused_local_variable1
+                                    final task =
+                                        await FlutterDownloader.enqueue(
+                                      url: url,
+                                      headers: {
+                                        'Authorization': 'Bearer $api_token',
+                                      },
+                                      savedDir: exterdir == null
+                                          ? '/storage/emulated/0/Download'
+                                          : exterdir,
+                                      fileName: 'result.pdf',
+                                      showNotification: true,
+                                      openFileFromNotification: true,
+                                    );
+                                  }
+                                } catch (e) {
+                                  await NDialog(
+                                    title: Text(
+                                        "Opps Something Went Worng! or try again after sometime.."),
+                                  ).show(context);
+                                }
+                              },
+                              icon: Icon(
+                                Icons.download_sharp,
+                                size: 30,
+                                color: Colors.grey[500],
+                              ),
+                            )
+                          ],
+                        ));
                         return ListTile(
                           onTap: () async {
                             try {
@@ -298,9 +489,9 @@ class _PlayedQuizState extends State<PlayedQuiz> {
                                 // ignore: avoid_print
 
                               } else {
-                                final exterdir =
+                                final exterdir = await getDownloadPath();
+                                final exterdir2 =
                                     await getExternalStorageDirectory();
-
                                 // ignore: unused_local_variable1
                                 final task = await FlutterDownloader.enqueue(
                                   url: url,
@@ -309,14 +500,13 @@ class _PlayedQuizState extends State<PlayedQuiz> {
                                   },
                                   savedDir: exterdir == null
                                       ? '/storage/emulated/0/Download'
-                                      : exterdir.path,
+                                      : exterdir,
                                   fileName: 'result.pdf',
                                   showNotification: true,
                                   openFileFromNotification: true,
                                 );
                               }
                             } catch (e) {
-                           
                               await NDialog(
                                 title: Text(
                                     "Opps Something Went Worng! or try again after sometime.."),
