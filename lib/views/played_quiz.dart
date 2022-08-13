@@ -318,17 +318,42 @@ class _PlayedQuizState extends State<PlayedQuiz> {
           }
           if (index == 1) {}
           if (index == 3) {
-            ProgressDialog progressDialog =
-                ProgressDialog(context, message: Text("Logging Out"));
+            await NDialog(
+              title: Text("Log Out"),
+              content: Text("Are you sure!"),
+              actions: <Widget>[
+                TextButton(
+                    child: Text("Yes"),
+                    onPressed: () async {
+                      ProgressDialog progressDialog =
+                          ProgressDialog(context, message: Text("Logging Out"));
 
-            progressDialog.show();
-            await HelperFunctions.saveUserLoggedIn(false);
-            await HelperFunctions.saveUserApiKey("");
-            progressDialog.dismiss();
-            Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(builder: (context) => SignIn()),
-                (route) => false);
+                      progressDialog.show();
+
+                      String url = base_url + "/api/logout";
+
+                      Response response = await Dio(BaseOptions(headers: {
+                        'Authorization': 'Bearer $api_token',
+                        "X-Requested-With": "XMLHttpRequest"
+                      })).post(url);
+
+                      if (response.data['status'] == 200) {
+                        await HelperFunctions.saveUserLoggedIn(false);
+                        await HelperFunctions.saveUserApiKey("");
+                        progressDialog.dismiss();
+                        Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(builder: (context) => SignIn()),
+                            (route) => false);
+                      }
+                    }),
+                TextButton(
+                    child: Text("No"),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    }),
+              ],
+            ).show(context);
           }
         },
         type: BottomNavigationBarType.fixed,
@@ -361,13 +386,14 @@ class _PlayedQuizState extends State<PlayedQuiz> {
                           children: [
                             Icon(
                               Icons.arrow_forward_ios_sharp,
-                              size: 30,
+                              size: 25,
                               color: Colors.grey[500],
                             ),
                             SizedBox(
-                              width: 10,
+                              width: 12,
                             ),
                             Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Container(
                                   child: Text(subjectsGet[index]['title']),
@@ -427,7 +453,7 @@ class _PlayedQuizState extends State<PlayedQuiz> {
                               },
                               icon: Icon(
                                 Icons.visibility,
-                                size: 30,
+                                size: 25,
                                 color: Colors.grey[500],
                               ),
                             ),
@@ -471,7 +497,7 @@ class _PlayedQuizState extends State<PlayedQuiz> {
                               },
                               icon: Icon(
                                 Icons.download_sharp,
-                                size: 30,
+                                size: 25,
                                 color: Colors.grey[500],
                               ),
                             )

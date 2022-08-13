@@ -85,7 +85,6 @@ class _SubjectsState extends State<Subjects> {
           ).show(context);
         }
       } catch (e) {
-       
         await NAlertDialog(
           dismissable: false,
           dialogStyle: DialogStyle(titleDivider: true),
@@ -134,7 +133,6 @@ class _SubjectsState extends State<Subjects> {
         ).show(context);
       }
     } catch (e) {
-    
       await NAlertDialog(
         dismissable: false,
         dialogStyle: DialogStyle(titleDivider: true),
@@ -244,27 +242,42 @@ class _SubjectsState extends State<Subjects> {
                 context, MaterialPageRoute(builder: (context) => PlayedQuiz()));
           }
           if (index == 3) {
-            ProgressDialog progressDialog =
-                ProgressDialog(context, message: Text("Logging Out"));
+            await NDialog(
+              title: Text("Log Out"),
+              content: Text("Are you sure!"),
+              actions: <Widget>[
+                TextButton(
+                    child: Text("Yes"),
+                    onPressed: () async {
+                      ProgressDialog progressDialog =
+                          ProgressDialog(context, message: Text("Logging Out"));
 
-            progressDialog.show();
+                      progressDialog.show();
 
-            String url = base_url + "/api/logout";
+                      String url = base_url + "/api/logout";
 
-            Response response = await Dio(BaseOptions(headers: {
-              'Authorization': 'Bearer $api_token',
-              "X-Requested-With": "XMLHttpRequest"
-            })).post(url);
-          
-            if (response.data['status'] == 200) {
-              await HelperFunctions.saveUserLoggedIn(false);
-              await HelperFunctions.saveUserApiKey("");
-              progressDialog.dismiss();
-              Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(builder: (context) => SignIn()),
-                  (route) => false);
-            }
+                      Response response = await Dio(BaseOptions(headers: {
+                        'Authorization': 'Bearer $api_token',
+                        "X-Requested-With": "XMLHttpRequest"
+                      })).post(url);
+
+                      if (response.data['status'] == 200) {
+                        await HelperFunctions.saveUserLoggedIn(false);
+                        await HelperFunctions.saveUserApiKey("");
+                        progressDialog.dismiss();
+                        Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(builder: (context) => SignIn()),
+                            (route) => false);
+                      }
+                    }),
+                TextButton(
+                    child: Text("No"),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    }),
+              ],
+            ).show(context);
 
             // Navigator.pushAndRemoveUntil(
             //     context,

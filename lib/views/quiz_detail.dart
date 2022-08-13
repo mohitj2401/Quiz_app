@@ -136,24 +136,6 @@ class _QuizDetailsState extends State<QuizDetails> {
               ),
             ),
           ),
-          Container(
-            margin: EdgeInsets.all(12),
-            child: ElevatedButton(
-              onPressed: isStarted
-                  ? () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => PlayQuiz(
-                              quizdetails['id'].toString(),
-                              quizdetails['duration']),
-                        ),
-                      );
-                    }
-                  : null,
-              child: Text('Start'),
-            ),
-          )
         ],
       ),
       body: isLoading

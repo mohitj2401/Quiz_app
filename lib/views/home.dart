@@ -186,7 +186,6 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // drawer: appDrawer(context),
       appBar: AppBar(
         title: Center(
             child: Text(
@@ -204,7 +203,6 @@ class _HomeState extends State<Home> {
           ),
         ],
       ),
-
       body: Container(
         child: quizList(),
       ),

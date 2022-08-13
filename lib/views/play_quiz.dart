@@ -238,133 +238,155 @@ class _PlayQuizState extends State<PlayQuiz> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          "Quiz Learn",
-          style: TextStyle(color: Colors.white, fontSize: 24),
-        ),
-        automaticallyImplyLeading: false,
-        iconTheme: IconThemeData(color: Colors.white),
-        backgroundColor: Colors.blue,
-        actions: <Widget>[
-          GestureDetector(
-            onTap: () async {
-              await NDialog(
-                dialogStyle: DialogStyle(titleDivider: true),
-                title: Text("Log Out"),
-                content: Text("Are you sure!.Process is going to be saved"),
-                actions: <Widget>[
-                  TextButton(
-                      child: Text("Yes"),
-                      onPressed: () async {
-                        submitQuiz();
-                      }),
-                  TextButton(
-                      child: Text("No"),
-                      onPressed: () {
-                        Navigator.pop(context);
-                      }),
-                ],
-              ).show(context);
-            },
-            child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 16),
-              child: Icon(Icons.exit_to_app),
-            ),
+    return WillPopScope(
+      onWillPop: () async {
+        await NDialog(
+          dialogStyle: DialogStyle(titleDivider: true),
+          title: Text("Are you sure! You want to continue."),
+          content: Text("Quiz is going to be saved"),
+          actions: <Widget>[
+            TextButton(
+                child: Text("Yes"),
+                onPressed: () async {
+                  submitQuiz();
+                }),
+            TextButton(
+                child: Text("No"),
+                onPressed: () {
+                  Navigator.pop(context);
+                }),
+          ],
+        ).show(context);
+        return true;
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(
+            "Quiz Learn",
+            style: TextStyle(color: Colors.white, fontSize: 24),
           ),
-          GestureDetector(
-            onTap: () async {
-              await NDialog(
-                dialogStyle: DialogStyle(titleDivider: true),
-                title: Text("Log Out"),
-                content: Text("Are you sure!.Process is going to be saved"),
-                actions: <Widget>[
-                  TextButton(
-                      child: Text("Yes"),
-                      onPressed: () async {
-                        submitQuiz();
-                      }),
-                  TextButton(
-                      child: Text("No"),
-                      onPressed: () {
-                        Navigator.pop(context);
-                      }),
-                ],
-              ).show(context);
-            },
-            child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 16),
-              child: Icon(Icons.done_all_sharp),
-            ),
-          ),
-        ],
-      ),
-      body: Container(
-        padding: EdgeInsets.symmetric(vertical: 10),
-        child: questionSnapshot != null && questionSnapshot.isNotEmpty
-            ? Column(
-                children: [
-                  CountdownTimer(
-                    endTime: endTime,
-                    widgetBuilder: (_, CurrentRemainingTime? time) {
-                      if (time == null || time.sec! < 5 && time.min == null) {
-                        return Text(
-                          'Quiz is going to submit',
-                          style: TextStyle(
-                            color: Colors.red,
-                            fontSize: 21,
-                          ),
-                        );
-                      }
-                      if (time.sec! < 25 && time.min == null) {
-                        return Text(
-                          'Quiz is going to submit after ${time.sec} sec',
-                          style: TextStyle(
-                            color: Colors.orangeAccent,
-                            fontSize: 21,
-                          ),
-                        );
-                      }
-                      return Text(
-                          'Remaning Time:- ${time.min ?? '00'}:${time.sec} ',
-                          style: TextStyle(
-                            color: Colors.grey,
-                            fontSize: 21,
-                          ));
-                    },
-                    onEnd: submitQuiz,
-                  ),
-                  SizedBox(
-                    height: 8,
-                  ),
-                  Expanded(
-                      child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 24),
-                    child: QuizPlayTile(
-                        questionModel: getQuestionModelFromDataSnapshot(
-                            questionSnapshot, page),
-                        page: page,
-                        onTap: () {
-                          if (totalPage == (page + 1)) {
-                            submitQuiz();
-                          } else {
-                            setState(() {
-                              page = page + 1;
-                            });
-                          }
+          automaticallyImplyLeading: false,
+          iconTheme: IconThemeData(color: Colors.white),
+          backgroundColor: Colors.blue,
+          actions: <Widget>[
+            GestureDetector(
+              onTap: () async {
+                await NDialog(
+                  dialogStyle: DialogStyle(titleDivider: true),
+                  title: Text("Are you sure! You want to continue."),
+                  content: Text("Quiz is going to be saved"),
+                  actions: <Widget>[
+                    TextButton(
+                        child: Text("Yes"),
+                        onPressed: () async {
+                          submitQuiz();
                         }),
-                  )),
-                ],
-              )
-            : const Center(
-                child: CircularProgressIndicator(),
+                    TextButton(
+                        child: Text("No"),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        }),
+                  ],
+                ).show(context);
+              },
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 16),
+                child: Icon(Icons.exit_to_app),
               ),
+            ),
+            GestureDetector(
+              onTap: () async {
+                await NDialog(
+                  dialogStyle: DialogStyle(titleDivider: true),
+                  title: Text("Log Out"),
+                  content: Text("Are you sure!.Process is going to be saved"),
+                  actions: <Widget>[
+                    TextButton(
+                        child: Text("Yes"),
+                        onPressed: () async {
+                          submitQuiz();
+                        }),
+                    TextButton(
+                        child: Text("No"),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        }),
+                  ],
+                ).show(context);
+              },
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 16),
+                child: Icon(Icons.done_all_sharp),
+              ),
+            ),
+          ],
+        ),
+        body: Container(
+          padding: EdgeInsets.symmetric(vertical: 10),
+          child: questionSnapshot != null && questionSnapshot.isNotEmpty
+              ? Column(
+                  children: [
+                    CountdownTimer(
+                      endTime: endTime,
+                      widgetBuilder: (_, CurrentRemainingTime? time) {
+                        if (time == null || time.sec! < 5 && time.min == null) {
+                          return Text(
+                            'Quiz is going to submit',
+                            style: TextStyle(
+                              color: Colors.red,
+                              fontSize: 21,
+                            ),
+                          );
+                        }
+                        if (time.sec! < 25 && time.min == null) {
+                          return Text(
+                            'Quiz is going to submit after ${time.sec} sec',
+                            style: TextStyle(
+                              color: Colors.orangeAccent,
+                              fontSize: 21,
+                            ),
+                          );
+                        }
+                        return Text(
+                            'Remaning Time:- ${time.min ?? '00'}:${time.sec} ',
+                            style: TextStyle(
+                              color: Colors.grey,
+                              fontSize: 21,
+                            ));
+                      },
+                      onEnd: submitQuiz,
+                    ),
+                    SizedBox(
+                      height: 8,
+                    ),
+                    Expanded(
+                        child: Container(
+                      padding: EdgeInsets.symmetric(horizontal: 24),
+                      child: QuizPlayTile(
+                          questionModel: getQuestionModelFromDataSnapshot(
+                              questionSnapshot, page),
+                          page: page,
+                          onTap: () {
+                            if (totalPage == (page + 1)) {
+                              submitQuiz();
+                            } else {
+                              setState(() {
+                                page = page + 1;
+                              });
+                            }
+                          }),
+                    )),
+                  ],
+                )
+              : const Center(
+                  child: CircularProgressIndicator(),
+                ),
+        ),
+        // floatingActionButton: FloatingActionButton(
+        //   child: const Icon(Icons.check),
+        //   onPressed: submitQuiz,
+        // ),
       ),
-      // floatingActionButton: FloatingActionButton(
-      //   child: const Icon(Icons.check),
-      //   onPressed: submitQuiz,
-      // ),
     );
   }
 }
