@@ -9,6 +9,8 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:ndialog/ndialog.dart';
 
+import '../widget/drawer.dart';
+
 class MyAccount extends StatefulWidget {
   final String message;
   MyAccount({required this.message});
@@ -125,68 +127,7 @@ class _MyAccountState extends State<MyAccount> {
         iconTheme: IconThemeData(color: Colors.black),
         backgroundColor: Colors.white,
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: 2,
-        onTap: (index) async {
-          if (index == 0) {
-            Navigator.pushReplacement(context,
-                MaterialPageRoute(builder: (context) => Subjects(message: '')));
-          }
-          if (index == 1) {
-            Navigator.pushReplacement(
-                context, MaterialPageRoute(builder: (context) => PlayedQuiz()));
-          }
-          if (index == 3) {
-            await NDialog(
-              title: Text("Log Out"),
-              content: Text("Are you sure!"),
-              actions: <Widget>[
-                TextButton(
-                    child: Text("Yes"),
-                    onPressed: () async {
-                      ProgressDialog progressDialog =
-                          ProgressDialog(context, message: Text("Logging Out"));
-
-                      progressDialog.show();
-
-                      String url = base_url + "/api/logout";
-
-                      Response response = await Dio(BaseOptions(headers: {
-                        'Authorization': 'Bearer $api_token',
-                        "X-Requested-With": "XMLHttpRequest"
-                      })).post(url);
-
-                      if (response.data['status'] == 200) {
-                        await HelperFunctions.saveUserLoggedIn(false);
-                        await HelperFunctions.saveUserApiKey("");
-                        progressDialog.dismiss();
-                        Navigator.pushAndRemoveUntil(
-                            context,
-                            MaterialPageRoute(builder: (context) => SignIn()),
-                            (route) => false);
-                      }
-                    }),
-                TextButton(
-                    child: Text("No"),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    }),
-              ],
-            ).show(context);
-          }
-        },
-        type: BottomNavigationBarType.fixed,
-        items: [
-          BottomNavigationBarItem(
-              icon: Icon(Icons.home_outlined), label: 'Home'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.category_outlined), label: 'Results'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.person_outlined), label: 'Account'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.exit_to_app_outlined), label: 'Logout')
-        ],
-      ),
+      drawer: appDrawer(context),
       body: isLoading
           ? Center(child: CircularProgressIndicator())
           : SingleChildScrollView(

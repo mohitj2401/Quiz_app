@@ -138,7 +138,6 @@ class _ChangePassState extends State<ChangePass> {
           : SingleChildScrollView(
               child: Container(
                 child: Form(
-                  autovalidateMode: AutovalidateMode.always,
                   key: formKey,
                   child: Container(
                     margin: EdgeInsets.symmetric(horizontal: 24, vertical: 16),

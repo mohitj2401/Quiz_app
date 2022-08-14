@@ -46,6 +46,12 @@ class _SignInState extends State<SignIn> {
           });
         } else {
           if (response.data['status'] == 200) {
+            setState(() {
+              userData.addAll({
+                "name": response.data['output']['user']['name'],
+                "email": response.data['output']['user']['email'],
+              });
+            });
             await HelperFunctions.saveUserApiKey(
                 response.data['output']['access_token']);
 

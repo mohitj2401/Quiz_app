@@ -7,6 +7,7 @@ import 'package:quiz_earn/views/signin.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:ndialog/ndialog.dart';
+import 'package:quiz_earn/widget/drawer.dart';
 
 class Subjects extends StatefulWidget {
   final String message;
@@ -46,7 +47,33 @@ class _SubjectsState extends State<Subjects> {
       notified = true;
     }
     getDataFun = getData();
+    getUserData();
     super.initState();
+  }
+
+  getUserData() async {
+    String url = base_url + "/api/user";
+    try {
+      var api = await HelperFunctions.getUserApiKey();
+
+      if (api != '') {
+        Response response = await Dio(BaseOptions(headers: {
+          'Authorization': 'Bearer $api',
+          "X-Requested-With": "XMLHttpRequest"
+        })).get(url);
+
+        if (response.data['status'] == 200) {
+          setState(() {
+            userData.addAll({
+              "name": response.data['output']['name'],
+              "email": response.data['output']['email'],
+            });
+          });
+        }
+      }
+    } catch (e) {
+      print("error on feching user data");
+    }
   }
 
   getData() async {
@@ -158,6 +185,7 @@ class _SubjectsState extends State<Subjects> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: appDrawer(context),
       appBar: AppBar(
         title: Text(
           'Subjects',
@@ -223,78 +251,6 @@ class _SubjectsState extends State<Subjects> {
               ),
             ),
           ),
-        ],
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: 0,
-        onTap: (index) async {
-          if (index == 2) {
-            Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => MyAccount(
-                          message: '',
-                        )));
-          }
-
-          if (index == 1) {
-            Navigator.pushReplacement(
-                context, MaterialPageRoute(builder: (context) => PlayedQuiz()));
-          }
-          if (index == 3) {
-            await NDialog(
-              title: Text("Log Out"),
-              content: Text("Are you sure!"),
-              actions: <Widget>[
-                TextButton(
-                    child: Text("Yes"),
-                    onPressed: () async {
-                      ProgressDialog progressDialog =
-                          ProgressDialog(context, message: Text("Logging Out"));
-
-                      progressDialog.show();
-
-                      String url = base_url + "/api/logout";
-
-                      Response response = await Dio(BaseOptions(headers: {
-                        'Authorization': 'Bearer $api_token',
-                        "X-Requested-With": "XMLHttpRequest"
-                      })).post(url);
-
-                      if (response.data['status'] == 200) {
-                        await HelperFunctions.saveUserLoggedIn(false);
-                        await HelperFunctions.saveUserApiKey("");
-                        progressDialog.dismiss();
-                        Navigator.pushAndRemoveUntil(
-                            context,
-                            MaterialPageRoute(builder: (context) => SignIn()),
-                            (route) => false);
-                      }
-                    }),
-                TextButton(
-                    child: Text("No"),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    }),
-              ],
-            ).show(context);
-
-            // Navigator.pushAndRemoveUntil(
-            //     context,
-            //     MaterialPageRoute(builder: (context) => SignIn()),
-            //     (route) => false);
-          }
-        },
-        type: BottomNavigationBarType.fixed,
-        items: [
-          BottomNavigationBarItem(
-              icon: Icon(Icons.home_outlined), label: 'Home'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.category_outlined), label: 'Results'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.person_outlined), label: 'Account'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.exit_to_app_outlined), label: 'Logout')
         ],
       ),
       body: Container(

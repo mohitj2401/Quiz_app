@@ -15,6 +15,8 @@ import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:ndialog/ndialog.dart';
 import 'package:easy_pdf_viewer/easy_pdf_viewer.dart';
 
+import '../widget/drawer.dart';
+
 class PlayedQuiz extends StatefulWidget {
   @override
   _PlayedQuizState createState() => _PlayedQuizState();
@@ -301,73 +303,7 @@ class _PlayedQuizState extends State<PlayedQuiz> {
           ),
         ],
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: 1,
-        onTap: (index) async {
-          if (index == 2) {
-            Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => MyAccount(
-                          message: '',
-                        )));
-          }
-          if (index == 0) {
-            Navigator.pushReplacement(context,
-                MaterialPageRoute(builder: (context) => Subjects(message: '')));
-          }
-          if (index == 1) {}
-          if (index == 3) {
-            await NDialog(
-              title: Text("Log Out"),
-              content: Text("Are you sure!"),
-              actions: <Widget>[
-                TextButton(
-                    child: Text("Yes"),
-                    onPressed: () async {
-                      ProgressDialog progressDialog =
-                          ProgressDialog(context, message: Text("Logging Out"));
-
-                      progressDialog.show();
-
-                      String url = base_url + "/api/logout";
-
-                      Response response = await Dio(BaseOptions(headers: {
-                        'Authorization': 'Bearer $api_token',
-                        "X-Requested-With": "XMLHttpRequest"
-                      })).post(url);
-
-                      if (response.data['status'] == 200) {
-                        await HelperFunctions.saveUserLoggedIn(false);
-                        await HelperFunctions.saveUserApiKey("");
-                        progressDialog.dismiss();
-                        Navigator.pushAndRemoveUntil(
-                            context,
-                            MaterialPageRoute(builder: (context) => SignIn()),
-                            (route) => false);
-                      }
-                    }),
-                TextButton(
-                    child: Text("No"),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    }),
-              ],
-            ).show(context);
-          }
-        },
-        type: BottomNavigationBarType.fixed,
-        items: [
-          BottomNavigationBarItem(
-              icon: Icon(Icons.home_outlined), label: 'Home'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.category_outlined), label: 'Results'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.person_outlined), label: 'Account'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.exit_to_app_outlined), label: 'Logout')
-        ],
-      ),
+      drawer: appDrawer(context),
       body: Container(
         margin: EdgeInsets.symmetric(horizontal: 8, vertical: 10),
         child: RefreshIndicator(
