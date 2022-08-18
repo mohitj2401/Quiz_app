@@ -32,7 +32,9 @@ Drawer appDrawer(BuildContext context) {
                   height: 6,
                 ),
                 Text(
-                  "${userData['name'][0].toUpperCase()}${userData['name'].substring(1).toLowerCase()}",
+                  userData.isNotEmpty
+                      ? "${userData['name'][0].toUpperCase()}${userData['name'].substring(1).toLowerCase()}"
+                      : "",
                   style: TextStyle(fontSize: 25, fontWeight: FontWeight.w400),
                 )
               ],
@@ -103,8 +105,9 @@ Drawer appDrawer(BuildContext context) {
                 ),
                 actions: <Widget>[
                   TextButton(
-                      child: Text("Yes"),
-                      onPressed: () async {
+                    child: Text("Yes"),
+                    onPressed: () async {
+                      try {
                         Navigator.pop(context);
                         ProgressDialog progressDialog = ProgressDialog(context,
                             message: Text("Logging Out"));
@@ -112,7 +115,8 @@ Drawer appDrawer(BuildContext context) {
                         progressDialog.show();
 
                         String url = base_url + "/api/logout";
-
+                        String api_token =
+                            await HelperFunctions.getUserApiKey();
                         Response response = await Dio(BaseOptions(headers: {
                           'Authorization': 'Bearer $api_token',
                           "X-Requested-With": "XMLHttpRequest"
@@ -123,12 +127,44 @@ Drawer appDrawer(BuildContext context) {
                           await HelperFunctions.saveUserApiKey("");
 
                           progressDialog.dismiss();
-                          Navigator.pushAndRemoveUntil(
+                          await Navigator.pushAndRemoveUntil(
                               context,
                               MaterialPageRoute(builder: (context) => SignIn()),
                               (route) => false);
+                        } else if (response.data['status'] == 401) {
+                          await HelperFunctions.saveUserLoggedIn(false);
+                          await HelperFunctions.saveUserApiKey("");
+
+                          progressDialog.dismiss();
+                          await Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(builder: (context) => SignIn()),
+                              (route) => false);
+                        } else {
+                          progressDialog.dismiss();
+                          await NDialog(
+                              title: Text("Please contact Admin"),
+                              actions: <Widget>[
+                                TextButton(
+                                    child: Text("Ok"),
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    }),
+                              ]).show(context);
                         }
-                      }),
+                      } catch (e) {
+                        await NDialog(
+                            title: Text("Please contact Admin"),
+                            actions: <Widget>[
+                              TextButton(
+                                  child: Text("Ok"),
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  }),
+                            ]).show(context);
+                      }
+                    },
+                  ),
                   TextButton(
                       child: Text("No"),
                       onPressed: () {

@@ -80,11 +80,11 @@ class Dialogs {
               child: const Text('No'),
             ),
             RaisedButton(
-              onPressed: () {
+              onPressed: () async {
                 // authService.signOut();
 
-                HelperFunctions.saveUserLoggedIn(false);
-                Navigator.pushAndRemoveUntil(
+                await HelperFunctions.saveUserLoggedIn(false);
+                await Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(builder: (context) => navigateTo),
                     (route) => false);
