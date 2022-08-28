@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:ndialog/ndialog.dart';
 import 'package:quiz_earn/constant/constant.dart';
-
+import 'package:quiz_earn/views/feedback.dart';
 import '../helper/helper.dart';
 import '../views/myaccount.dart';
 import '../views/played_quiz.dart';
@@ -74,6 +74,20 @@ Drawer appDrawer(BuildContext context) {
             ),
           ),
           Spacer(),
+          ListTile(
+            onTap: () {
+              Navigator.pushReplacement(context,
+                  MaterialPageRoute(builder: (context) => FeedbackScrean()));
+            },
+            leading: Icon(Icons.feedback_sharp, size: 30),
+            title: Text(
+              "Feedback",
+              style: TextStyle(fontSize: 22, fontWeight: FontWeight.w300),
+            ),
+          ),
+          SizedBox(
+            height: 20,
+          ),
           ListTile(
             onTap: () {
               Navigator.pushReplacement(

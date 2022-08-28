@@ -9,7 +9,6 @@ import 'package:flutter_countdown_timer/current_remaining_time.dart';
 import 'package:ndialog/ndialog.dart';
 import 'package:quiz_earn/views/quiz_play_widget.dart';
 import 'package:quiz_earn/views/signin.dart';
-import 'package:quiz_earn/widget/widget.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:wakelock/wakelock.dart';
@@ -60,7 +59,6 @@ class _PlayQuizState extends State<PlayQuiz> with WidgetsBindingObserver {
 
   @override
   void initState() {
-    WidgetsBinding.instance!.addObserver(this);
     loadQuestions(page);
     page = 0;
     Wakelock.enable();
@@ -74,7 +72,6 @@ class _PlayQuizState extends State<PlayQuiz> with WidgetsBindingObserver {
   @override
   void dispose() {
     Wakelock.disable();
-    WidgetsBinding.instance!.removeObserver(this);
 
     super.dispose();
   }

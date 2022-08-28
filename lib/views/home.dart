@@ -1,11 +1,9 @@
 import 'dart:async';
 import 'package:quiz_earn/constant/constant.dart';
 import 'package:quiz_earn/helper/helper.dart';
-import 'package:quiz_earn/views/play_quiz.dart';
 import 'package:quiz_earn/views/quiz_detail.dart';
 import 'package:quiz_earn/views/signin.dart';
 import 'package:flutter/material.dart';
-import 'package:quiz_earn/widget/dialog.dart';
 import 'package:dio/dio.dart';
 import 'package:ndialog/ndialog.dart';
 

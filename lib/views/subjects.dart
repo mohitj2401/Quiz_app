@@ -1,8 +1,6 @@
 import 'package:quiz_earn/constant/constant.dart';
 import 'package:quiz_earn/helper/helper.dart';
 import 'package:quiz_earn/views/home.dart';
-import 'package:quiz_earn/views/myaccount.dart';
-import 'package:quiz_earn/views/played_quiz.dart';
 import 'package:quiz_earn/views/signin.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';

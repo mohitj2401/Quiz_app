@@ -51,6 +51,7 @@ android {
         applicationId "com.noone.quiz_learn"
         minSdkVersion 21
         multiDexEnabled true
+        compileSdkVersion 33
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName

@@ -1,12 +1,9 @@
 import 'dart:io';
 import 'dart:isolate';
 import 'dart:ui';
-
 import 'package:quiz_earn/constant/constant.dart';
 import 'package:quiz_earn/helper/helper.dart';
-import 'package:quiz_earn/views/myaccount.dart';
 import 'package:quiz_earn/views/signin.dart';
-import 'package:quiz_earn/views/subjects.dart';
 import 'package:dio/dio.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:path_provider/path_provider.dart';
@@ -14,7 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:ndialog/ndialog.dart';
 import 'package:easy_pdf_viewer/easy_pdf_viewer.dart';
-
+import 'package:open_file/open_file.dart';
 import '../widget/drawer.dart';
 
 class PlayedQuiz extends StatefulWidget {
@@ -51,6 +48,8 @@ class _PlayedQuizState extends State<PlayedQuiz> {
 
   @override
   void initState() {
+    WidgetsFlutterBinding.ensureInitialized();
+
     FlutterDownloader.registerCallback(downloadCallback);
     storeapi();
 
@@ -407,21 +406,17 @@ class _PlayedQuizState extends State<PlayedQuiz> {
 
                                   } else {
                                     final exterdir = await getDownloadPath();
-                                    final exterdir2 =
-                                        await getExternalStorageDirectory();
-                                    // ignore: unused_local_variable1
+
                                     final task =
                                         await FlutterDownloader.enqueue(
                                       url: url,
                                       headers: {
                                         'Authorization': 'Bearer $api_token',
                                       },
-                                      savedDir: exterdir == null
-                                          ? '/storage/emulated/0/Download'
-                                          : exterdir,
+                                      savedDir: exterdir ??
+                                          '/storage/emulated/0/Download',
                                       fileName: 'result.pdf',
-                                      showNotification: true,
-                                      openFileFromNotification: true,
+                                      saveInPublicStorage: true,
                                     );
                                   }
                                 } catch (e) {
