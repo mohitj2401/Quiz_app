@@ -1,4 +1,5 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:provider/provider.dart';
 import 'package:quiz_earn/constant/constant.dart';
 import 'package:quiz_earn/helper/helper.dart';
 import 'package:quiz_earn/views/myaccount.dart';
@@ -6,6 +7,8 @@ import 'package:quiz_earn/views/signin.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:ndialog/ndialog.dart';
+
+import '../providers/userprovider.dart';
 
 class UpdateDetails extends StatefulWidget {
   @override
@@ -105,6 +108,8 @@ class _UpdateDetailsState extends State<UpdateDetails> {
         });
 
         if (response.data['status'] == 200) {
+          context.read<User>().updateUser(
+              nameTextEditingController.text, emailTextEditingController.text);
           await Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute(

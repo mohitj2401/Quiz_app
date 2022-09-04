@@ -1,4 +1,6 @@
+import 'package:provider/provider.dart';
 import 'package:quiz_earn/helper/helper.dart';
+import 'package:quiz_earn/providers/userprovider.dart';
 import 'package:quiz_earn/views/signin.dart';
 import 'package:quiz_earn/views/subjects.dart';
 import 'package:flutter/material.dart';
@@ -7,7 +9,10 @@ import 'package:flutter_downloader/flutter_downloader.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await FlutterDownloader.initialize();
-  runApp(MyApp());
+  runApp(MultiProvider(
+    providers: [ChangeNotifierProvider(create: (_) => User())],
+    child: MyApp(),
+  ));
 }
 
 class MyApp extends StatefulWidget {

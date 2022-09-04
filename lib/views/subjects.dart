@@ -1,3 +1,4 @@
+import 'package:provider/provider.dart';
 import 'package:quiz_earn/constant/constant.dart';
 import 'package:quiz_earn/helper/helper.dart';
 import 'package:quiz_earn/views/home.dart';
@@ -6,6 +7,8 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:ndialog/ndialog.dart';
 import 'package:quiz_earn/widget/drawer.dart';
+
+import '../providers/userprovider.dart';
 
 class Subjects extends StatefulWidget {
   final String message;
@@ -61,12 +64,8 @@ class _SubjectsState extends State<Subjects> {
         })).get(url);
 
         if (response.data['status'] == 200) {
-          setState(() {
-            userData.addAll({
-              "name": response.data['output']['name'],
-              "email": response.data['output']['email'],
-            });
-          });
+          context.read<User>().updateUser(response.data['output']['name'],
+              response.data['output']['email']);
         }
       }
     } catch (e) {
@@ -186,7 +185,7 @@ class _SubjectsState extends State<Subjects> {
       drawer: appDrawer(context),
       appBar: AppBar(
         title: Text(
-          'Subjects',
+          'Categories',
           style: TextStyle(color: Colors.blueAccent, fontSize: 22),
         ),
         iconTheme: IconThemeData(color: Colors.black),
@@ -270,7 +269,9 @@ class _SubjectsState extends State<Subjects> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => Home(
-                                        subject_id: subjectsGet[index]['id'])));
+                                        subject_id: subjectsGet[index]['id'],
+                                        subject_name: subjectsGet[index]
+                                            ['name'])));
                           },
                           leading: Icon(Icons.subject),
                           title: Text(subjectsGet[index]['name']),

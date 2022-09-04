@@ -31,7 +31,10 @@ class Dialogs {
               onPressed: () => Navigator.of(context).pop(DialogAction.abort),
               child: const Text('No'),
             ),
-            RaisedButton(
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                onPrimary: Colors.red,
+              ),
               onPressed: () async {
                 try {
                   Response response = await Dio().post(
@@ -43,7 +46,6 @@ class Dialogs {
                 newful();
                 Navigator.of(context).pop(DialogAction.yes);
               },
-              color: Colors.red,
               child: const Text(
                 'Yes',
                 style: TextStyle(
@@ -79,7 +81,7 @@ class Dialogs {
               onPressed: () => Navigator.of(context).pop(DialogAction.abort),
               child: const Text('No'),
             ),
-            RaisedButton(
+            ElevatedButton(
               onPressed: () async {
                 // authService.signOut();
 
@@ -89,7 +91,6 @@ class Dialogs {
                     MaterialPageRoute(builder: (context) => navigateTo),
                     (route) => false);
               },
-              color: Colors.red,
               child: const Text(
                 'Yes',
                 style: TextStyle(

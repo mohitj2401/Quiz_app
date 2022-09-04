@@ -1,3 +1,4 @@
+import 'package:provider/provider.dart';
 import 'package:quiz_earn/constant/constant.dart';
 import 'package:quiz_earn/helper/helper.dart';
 import 'package:quiz_earn/service/auth.dart';
@@ -9,6 +10,8 @@ import 'package:animated_text_kit/animated_text_kit.dart';
 
 import 'package:flutter/material.dart';
 import 'package:ndialog/ndialog.dart';
+
+import '../providers/userprovider.dart';
 
 class SignIn extends StatefulWidget {
   @override
@@ -46,12 +49,9 @@ class _SignInState extends State<SignIn> {
           });
         } else {
           if (response.data['status'] == 200) {
-            setState(() {
-              userData.addAll({
-                "name": response.data['output']['user']['name'],
-                "email": response.data['output']['user']['email'],
-              });
-            });
+            context.read<User>().updateUser(
+                response.data['output']['user']['name'],
+                response.data['output']['user']['email']);
             await HelperFunctions.saveUserApiKey(
                 response.data['output']['access_token']);
 
@@ -73,6 +73,7 @@ class _SignInState extends State<SignIn> {
           }
         }
       } catch (e) {
+        print(e);
         setState(() {
           isLoading = false;
         });

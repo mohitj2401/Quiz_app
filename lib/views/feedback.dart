@@ -1,5 +1,6 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:quiz_earn/service/auth.dart';
 import 'package:quiz_earn/views/signup.dart';
 import 'package:quiz_earn/widget/drawer.dart';
@@ -22,18 +23,42 @@ class _FeedbackScreanState extends State<FeedbackScrean> {
 
   AuthService authService = new AuthService();
 
-  TextEditingController emailTextEditingController = TextEditingController();
+  double rating = 3;
+  String imporvements = '';
 
   TextEditingController passwordTextEditingController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: appDrawer(context),
+      bottomNavigationBar: Container(
+        color: Colors.white,
+        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+        child: ElevatedButton(
+          child: Text(
+            "Submit",
+            style: TextStyle(
+              fontSize: 14,
+              fontFamily: 'Poppins',
+            ),
+          ),
+          style: ButtonStyle(
+            minimumSize: MaterialStateProperty.all(Size.fromHeight(50)),
+            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+              RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+                side: BorderSide(color: Colors.blue),
+              ),
+            ),
+          ),
+          onPressed: () {},
+        ),
+      ),
       appBar: AppBar(
+        elevation: 1,
         title: Text(
           'Feedback',
-          style: TextStyle(color: Colors.blueAccent, fontSize: 22),
+          style: TextStyle(color: Colors.black, fontSize: 22),
         ),
         iconTheme: IconThemeData(color: Colors.black),
         backgroundColor: Colors.white,
@@ -44,171 +69,163 @@ class _FeedbackScreanState extends State<FeedbackScrean> {
                 child: CircularProgressIndicator(),
               ),
             )
-          : SingleChildScrollView(
-              child: Container(
-                child: Form(
-                  key: formKey,
-                  child: Container(
-                      margin:
+          : Container(
+              margin: EdgeInsets.symmetric(vertical: 16),
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Container(
+                      width: MediaQuery.of(context).size.width,
+                      padding:
                           EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                      color: Colors.white,
                       child: Column(
-                        children: <Widget>[
-                          showAlert(),
-                          SizedBox(height: 20),
-                          AnimatedTextKit(
-                            animatedTexts: [
-                              TypewriterAnimatedText(
-                                'Hello There!',
-                                textStyle: TextStyle(
-                                  fontSize: 30,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.grey,
-                                ),
-                                speed: Duration(milliseconds: 100),
-                              ),
-                            ],
-                            pause: Duration(milliseconds: 500),
-                            displayFullTextOnTap: true,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Rate Your Experience",
+                            style: TextStyle(
+                              fontSize: 30,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                          SizedBox(height: 50),
-                          TextFormField(
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return 'Please enter your email';
-                              }
-                              if (!RegExp(
-                                      r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-                                  .hasMatch(value)) {
-                                return "Please enter valid email";
-                              }
-                              return null;
-                            },
-                            controller: emailTextEditingController,
-                            decoration: InputDecoration(
-                              icon: Icon(
-                                Icons.email_rounded,
-                              ),
-                              labelText: "Email",
+                          Text(
+                            "Are you Satisfied with our Service ?",
+                            style: TextStyle(
+                              fontWeight: FontWeight.w300,
                             ),
                           ),
                           SizedBox(
-                            height: 8,
+                            height: 15,
                           ),
-                          TextFormField(
-                            obscureText: _isHidden,
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return "Please Enter Password";
-                              } else {
-                                return null;
+                          RatingBar.builder(
+                            initialRating: rating,
+                            itemCount: 5,
+                            itemBuilder: (context, index) {
+                              switch (index) {
+                                case 0:
+                                  return Icon(
+                                    Icons.sentiment_very_dissatisfied,
+                                    color: Colors.red,
+                                  );
+                                case 1:
+                                  return Icon(
+                                    Icons.sentiment_dissatisfied,
+                                    color: Colors.redAccent,
+                                  );
+                                case 2:
+                                  return Icon(
+                                    Icons.sentiment_neutral,
+                                    color: Colors.amber,
+                                  );
+                                case 3:
+                                  return Icon(
+                                    Icons.sentiment_satisfied,
+                                    color: Colors.lightGreen,
+                                  );
+                                case 4:
+                                  return Icon(
+                                    Icons.sentiment_very_satisfied,
+                                    color: Colors.green,
+                                  );
                               }
+                              return Icon(
+                                Icons.sentiment_satisfied,
+                                color: Colors.white,
+                              );
                             },
-                            controller: passwordTextEditingController,
-                            decoration: InputDecoration(
-                              icon: Icon(Icons.lock),
-                              suffix: InkWell(
-                                onTap: _togglePasswordView,
-                                child: Padding(
-                                  padding:
-                                      EdgeInsets.only(left: 8.0, right: 20),
-                                  child: Icon(
-                                    Icons.visibility,
-                                    size: 24,
-                                    color:
-                                        _isHidden ? Colors.grey : Colors.black,
-                                  ),
-                                ),
-                              ),
-                              labelText: "Password",
+                            onRatingUpdate: (value) {
+                              setState(() {
+                                rating = value;
+                              });
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      width: MediaQuery.of(context).size.width,
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                      margin: EdgeInsets.symmetric(vertical: 16),
+                      color: Colors.white,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Tell us what can be Improved?",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
                           SizedBox(
-                            height: 24,
+                            height: 10,
                           ),
                           GestureDetector(
                             onTap: () {},
                             child: Container(
-                              padding: EdgeInsets.symmetric(vertical: 16),
-                              width: MediaQuery.of(context).size.width - 50,
-                              alignment: Alignment.center,
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 20, vertical: 15),
                               decoration: BoxDecoration(
-                                color: Colors.blue,
-                                borderRadius: BorderRadius.circular(30),
-                              ),
+                                  borderRadius: BorderRadius.circular(30),
+                                  color: Colors.grey.withOpacity(0.2)),
+                              margin: EdgeInsets.symmetric(),
                               child: Text(
-                                "Sign In",
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 17),
+                                "Quiz UI",
+                                style: TextStyle(color: Colors.grey),
                               ),
                             ),
                           ),
                           SizedBox(
-                            height: 16,
+                            height: 10,
                           ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Text(
-                                "Don't have Account? ",
-                                style: TextStyle(fontSize: 16),
+                          Form(
+                            key: formKey,
+                            child: TextFormField(
+                              maxLines: 8,
+                              keyboardType: TextInputType.multiline,
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return 'Please enter your email';
+                                }
+                                if (!RegExp(
+                                        r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                                    .hasMatch(value)) {
+                                  return "Please enter valid email";
+                                }
+                                return null;
+                              },
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 14,
                               ),
-                              GestureDetector(
-                                onTap: () {
-                                  Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => SignUp()));
-                                },
-                                child: Text(
-                                  "Sign Up",
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    decoration: TextDecoration.underline,
+                              controller: passwordTextEditingController,
+                              decoration: InputDecoration(
+                                hintText: "Tell us how can we improve...",
+                                hintStyle: TextStyle(
+                                  fontSize: 14,
+                                ),
+                                fillColor: Colors.white,
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Colors.blue,
                                   ),
                                 ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(),
+                                ),
                               ),
-                            ],
+                            ),
                           ),
-                          SizedBox(
-                            height: 60,
-                          )
                         ],
-                      )),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
     );
-  }
-
-  Widget showAlert() {
-    if (authService.error != '') {
-      return Container(
-        color: Colors.amberAccent,
-        width: double.infinity,
-        padding: EdgeInsets.all(8),
-        child: Row(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Icon(Icons.error_outline),
-            ),
-            Expanded(
-              child: Text(authService.error),
-            ),
-            IconButton(
-              icon: Icon(Icons.close),
-              onPressed: () {
-                setState(() {
-                  authService.error = '';
-                });
-              },
-            )
-          ],
-        ),
-      );
-    } else {
-      return SizedBox(height: 0);
-    }
   }
 
   void _togglePasswordView() {
