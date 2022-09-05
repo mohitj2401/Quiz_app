@@ -1,6 +1,8 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:loading_elevated_button/loading_elevated_button.dart';
+import 'package:quiz_earn/constant/feedbackCard.dart';
 import 'package:quiz_earn/service/auth.dart';
 import 'package:quiz_earn/views/signup.dart';
 import 'package:quiz_earn/widget/drawer.dart';
@@ -14,10 +16,14 @@ class FeedbackScrean extends StatefulWidget {
 
 class _FeedbackScreanState extends State<FeedbackScrean> {
   bool isLoading = false;
-
+  bool isSubmit = false;
   bool showError = false;
 
   bool _isHidden = true;
+
+  // int selectedBox = 0;
+
+  List<int> selectedList = [];
 
   final formKey = GlobalKey<FormState>();
 
@@ -28,13 +34,21 @@ class _FeedbackScreanState extends State<FeedbackScrean> {
 
   TextEditingController passwordTextEditingController = TextEditingController();
 
+  sumbitFeedback() {
+    setState(() {
+      isSubmit = true;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: Container(
         color: Colors.white,
         padding: EdgeInsets.symmetric(horizontal: 20, vertical: 30),
-        child: ElevatedButton(
+        child: LoadingElevatedButton(
+          isLoading: isSubmit,
+          disabledWhileLoading: isSubmit,
           child: Text(
             "Submit",
             style: TextStyle(
@@ -51,7 +65,9 @@ class _FeedbackScreanState extends State<FeedbackScrean> {
               ),
             ),
           ),
-          onPressed: () {},
+          onPressed: () {
+            sumbitFeedback();
+          },
         ),
       ),
       appBar: AppBar(
@@ -162,20 +178,99 @@ class _FeedbackScreanState extends State<FeedbackScrean> {
                           SizedBox(
                             height: 10,
                           ),
-                          GestureDetector(
-                            onTap: () {},
-                            child: Container(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 20, vertical: 15),
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(30),
-                                  color: Colors.grey.withOpacity(0.2)),
-                              margin: EdgeInsets.symmetric(),
-                              child: Text(
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              feedbackCard(
                                 "Quiz UI",
-                                style: TextStyle(color: Colors.grey),
+                                () {
+                                  if (selectedList.contains(1)) {
+                                    setState(() {
+                                      selectedList.remove(1);
+                                    });
+                                  } else {
+                                    setState(() {
+                                      selectedList.add(1);
+                                    });
+                                  }
+                                },
+                                selectedCard:
+                                    selectedList.contains(1) ? true : false,
                               ),
-                            ),
+                              feedbackCard(
+                                "App Services",
+                                () {
+                                  if (selectedList.contains(2)) {
+                                    setState(() {
+                                      selectedList.remove(2);
+                                    });
+                                  } else {
+                                    setState(() {
+                                      selectedList.add(2);
+                                    });
+                                  }
+                                },
+                                selectedCard:
+                                    selectedList.contains(2) ? true : false,
+                              ),
+                              feedbackCard(
+                                "App UI",
+                                () {
+                                  if (selectedList.contains(3)) {
+                                    setState(() {
+                                      selectedList.remove(3);
+                                    });
+                                  } else {
+                                    setState(() {
+                                      selectedList.add(3);
+                                    });
+                                  }
+                                },
+                                selectedCard:
+                                    selectedList.contains(3) ? true : false,
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              feedbackCard(
+                                "App Services",
+                                () {
+                                  if (selectedList.contains(4)) {
+                                    setState(() {
+                                      selectedList.remove(4);
+                                    });
+                                  } else {
+                                    setState(() {
+                                      selectedList.add(4);
+                                    });
+                                  }
+                                },
+                                selectedCard:
+                                    selectedList.contains(4) ? true : false,
+                              ),
+                              feedbackCard(
+                                "App Functionality",
+                                () {
+                                  if (selectedList.contains(5)) {
+                                    setState(() {
+                                      selectedList.remove(5);
+                                    });
+                                  } else {
+                                    setState(() {
+                                      selectedList.add(5);
+                                    });
+                                  }
+                                },
+                                selectedCard:
+                                    selectedList.contains(5) ? true : false,
+                              ),
+                              Container()
+                            ],
                           ),
                           SizedBox(
                             height: 10,
@@ -185,17 +280,6 @@ class _FeedbackScreanState extends State<FeedbackScrean> {
                             child: TextFormField(
                               maxLines: 8,
                               keyboardType: TextInputType.multiline,
-                              validator: (value) {
-                                if (value!.isEmpty) {
-                                  return 'Please enter your email';
-                                }
-                                if (!RegExp(
-                                        r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-                                    .hasMatch(value)) {
-                                  return "Please enter valid email";
-                                }
-                                return null;
-                              },
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 14,
@@ -226,11 +310,5 @@ class _FeedbackScreanState extends State<FeedbackScrean> {
               ),
             ),
     );
-  }
-
-  void _togglePasswordView() {
-    setState(() {
-      _isHidden = !_isHidden;
-    });
   }
 }
