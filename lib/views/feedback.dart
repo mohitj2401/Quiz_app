@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:loading_elevated_button/loading_elevated_button.dart';
 import 'package:quiz_earn/constant/feedbackCard.dart';
+import 'package:quiz_earn/helper/feedbackHelper.dart';
 import 'package:quiz_earn/service/auth.dart';
 import 'package:quiz_earn/views/signup.dart';
 import 'package:quiz_earn/widget/drawer.dart';
@@ -18,11 +19,6 @@ class _FeedbackScreanState extends State<FeedbackScrean> {
   bool isLoading = false;
   bool isSubmit = false;
   bool showError = false;
-
-  bool _isHidden = true;
-
-  // int selectedBox = 0;
-
   List<int> selectedList = [];
 
   final formKey = GlobalKey<FormState>();
@@ -31,45 +27,74 @@ class _FeedbackScreanState extends State<FeedbackScrean> {
 
   double rating = 3;
   String imporvements = '';
+  Feedbackhelper _feedbackhelper = Feedbackhelper();
 
-  TextEditingController passwordTextEditingController = TextEditingController();
+  TextEditingController messageTextEditingController = TextEditingController();
 
-  sumbitFeedback() {
+  sumbitFeedback() async {
     setState(() {
       isSubmit = true;
+    });
+    String title = '';
+    selectedList.forEach((element) {
+      if (element == 1) {
+        title = title + 'Quiz Ui ,';
+      }
+      if (element == 2) {
+        title = title + 'App Services ,';
+      }
+      if (element == 3) {
+        title = title + 'App Ui ,';
+      }
+      if (element == 4) {
+        title = title + 'App Functionality ,';
+      }
+    });
+    Map<String, dynamic> feedbackdata = {
+      "rating": rating,
+      "title": title,
+      "message": messageTextEditingController.text
+    };
+    var value = await _feedbackhelper.saveFeedback(context, feedbackdata);
+
+    setState(() {
+      isLoading = value;
+      // isSubmit = !value;
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: Container(
-        color: Colors.white,
-        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 30),
-        child: LoadingElevatedButton(
-          isLoading: isSubmit,
-          disabledWhileLoading: isSubmit,
-          child: Text(
-            "Submit",
-            style: TextStyle(
-              fontSize: 14,
-              fontFamily: 'Poppins',
-            ),
-          ),
-          style: ButtonStyle(
-            minimumSize: MaterialStateProperty.all(Size.fromHeight(50)),
-            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-              RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
-                side: BorderSide(color: Colors.blue),
+      bottomNavigationBar: isLoading
+          ? null
+          : Container(
+              color: Colors.white,
+              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+              child: LoadingElevatedButton(
+                isLoading: isSubmit,
+                disabledWhileLoading: isSubmit,
+                child: Text(
+                  "Submit",
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontFamily: 'Poppins',
+                  ),
+                ),
+                style: ButtonStyle(
+                  minimumSize: MaterialStateProperty.all(Size.fromHeight(50)),
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      side: BorderSide(color: Colors.blue),
+                    ),
+                  ),
+                ),
+                onPressed: () {
+                  sumbitFeedback();
+                },
               ),
             ),
-          ),
-          onPressed: () {
-            sumbitFeedback();
-          },
-        ),
-      ),
       appBar: AppBar(
         elevation: 1,
         title: Text(
@@ -80,11 +105,7 @@ class _FeedbackScreanState extends State<FeedbackScrean> {
         backgroundColor: Colors.white,
       ),
       body: isLoading
-          ? Container(
-              child: Center(
-                child: CircularProgressIndicator(),
-              ),
-            )
+          ? SubmitedFeedbackScreen()
           : Container(
               margin: EdgeInsets.symmetric(vertical: 16),
               child: SingleChildScrollView(
@@ -238,22 +259,6 @@ class _FeedbackScreanState extends State<FeedbackScrean> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
                               feedbackCard(
-                                "App Services",
-                                () {
-                                  if (selectedList.contains(4)) {
-                                    setState(() {
-                                      selectedList.remove(4);
-                                    });
-                                  } else {
-                                    setState(() {
-                                      selectedList.add(4);
-                                    });
-                                  }
-                                },
-                                selectedCard:
-                                    selectedList.contains(4) ? true : false,
-                              ),
-                              feedbackCard(
                                 "App Functionality",
                                 () {
                                   if (selectedList.contains(5)) {
@@ -273,7 +278,7 @@ class _FeedbackScreanState extends State<FeedbackScrean> {
                             ],
                           ),
                           SizedBox(
-                            height: 10,
+                            height: 15,
                           ),
                           Form(
                             key: formKey,
@@ -281,10 +286,9 @@ class _FeedbackScreanState extends State<FeedbackScrean> {
                               maxLines: 8,
                               keyboardType: TextInputType.multiline,
                               style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 14,
+                                fontSize: 16,
                               ),
-                              controller: passwordTextEditingController,
+                              controller: messageTextEditingController,
                               decoration: InputDecoration(
                                 hintText: "Tell us how can we improve...",
                                 hintStyle: TextStyle(
@@ -309,6 +313,66 @@ class _FeedbackScreanState extends State<FeedbackScrean> {
                 ),
               ),
             ),
+    );
+  }
+}
+
+class SubmitedFeedbackScreen extends StatelessWidget {
+  const SubmitedFeedbackScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: 30, horizontal: 15),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(
+            Icons.thumb_up_off_alt,
+            size: 80,
+          ),
+          SizedBox(
+            height: 15,
+          ),
+          Text(
+            "Thank You",
+            style: TextStyle(fontSize: 22),
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Text(
+            "Your Feedback was Successfully Submitted.",
+            style: TextStyle(
+                fontSize: 18, color: Colors.blueAccent.withOpacity(0.7)),
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: Row(
+              children: [
+                Icon(
+                  Icons.arrow_back,
+                  size: 20,
+                  color: Colors.red.withOpacity(0.6),
+                ),
+                Text(
+                  "Go Back",
+                  style: TextStyle(
+                    fontSize: 18,
+                    color: Colors.red.withOpacity(0.6),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
