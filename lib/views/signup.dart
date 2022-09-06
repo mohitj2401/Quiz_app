@@ -93,16 +93,6 @@ class _SignUpState extends State<SignUp> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Center(
-            child: Text(
-          "Quiz Learn",
-          style: TextStyle(color: Colors.blue, fontSize: 24),
-        )),
-        iconTheme: IconThemeData(color: Colors.black),
-        backgroundColor: Colors.transparent,
-        elevation: 0.0,
-      ),
       body: isLoading
           ? Container(
               child: Center(
@@ -114,9 +104,12 @@ class _SignUpState extends State<SignUp> {
                 child: Form(
                   key: formKey,
                   child: Container(
-                    margin: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                    margin: EdgeInsets.symmetric(horizontal: 24, vertical: 50),
                     child: Column(
                       children: <Widget>[
+                        SizedBox(
+                          height: 100,
+                        ),
                         showAlert(),
                         SizedBox(height: 20),
                         AnimatedTextKit(
