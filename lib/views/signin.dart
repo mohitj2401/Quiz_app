@@ -1,3 +1,4 @@
+import 'package:loading_elevated_button/loading_elevated_button.dart';
 import 'package:provider/provider.dart';
 import 'package:quiz_earn/constant/constant.dart';
 import 'package:quiz_earn/helper/helper.dart';
@@ -96,100 +97,98 @@ class _SignInState extends State<SignIn> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: isLoading
-          ? Container(
-              child: Center(
-                child: CircularProgressIndicator(),
-              ),
-            )
-          : SingleChildScrollView(
-              child: Form(
-                key: formKey,
-                child: Container(
-                  alignment: Alignment.center,
-                  margin: EdgeInsets.symmetric(horizontal: 24, vertical: 50),
-                  child: Column(
-                    // crossAxisAlignment: CrossAxisAlignment.end,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      SizedBox(
-                        height: 100,
+      body: SingleChildScrollView(
+        child: Form(
+          key: formKey,
+          child: Container(
+            alignment: Alignment.center,
+            margin: EdgeInsets.symmetric(horizontal: 24, vertical: 50),
+            child: Column(
+              // crossAxisAlignment: CrossAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                SizedBox(
+                  height: 100,
+                ),
+                showAlert(),
+                SizedBox(height: 20),
+                AnimatedTextKit(
+                  animatedTexts: [
+                    TypewriterAnimatedText(
+                      'Hello There!',
+                      textStyle: TextStyle(
+                        fontSize: 30,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.grey,
                       ),
-                      showAlert(),
-                      SizedBox(height: 20),
-                      AnimatedTextKit(
-                        animatedTexts: [
-                          TypewriterAnimatedText(
-                            'Hello There!',
-                            textStyle: TextStyle(
-                              fontSize: 30,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.grey,
-                            ),
-                            speed: Duration(milliseconds: 100),
-                          ),
-                        ],
-                        pause: Duration(milliseconds: 500),
-                        displayFullTextOnTap: true,
-                      ),
-                      SizedBox(height: 50),
-                      TextFormField(
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return 'Please enter your email';
-                          }
-                          if (!RegExp(
-                                  r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-                              .hasMatch(value)) {
-                            return "Please enter valid email";
-                          }
-                          return null;
-                        },
-                        controller: emailTextEditingController,
-                        decoration: InputDecoration(
-                          icon: Icon(
-                            Icons.email_rounded,
-                          ),
-                          labelText: "Email",
+                      speed: Duration(milliseconds: 100),
+                    ),
+                  ],
+                  pause: Duration(milliseconds: 500),
+                  displayFullTextOnTap: true,
+                ),
+                SizedBox(height: 50),
+                TextFormField(
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Please enter your email';
+                    }
+                    if (!RegExp(
+                            r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                        .hasMatch(value)) {
+                      return "Please enter valid email";
+                    }
+                    return null;
+                  },
+                  controller: emailTextEditingController,
+                  decoration: InputDecoration(
+                    icon: Icon(
+                      Icons.email_rounded,
+                    ),
+                    labelText: "Email",
+                  ),
+                ),
+                SizedBox(
+                  height: 8,
+                ),
+                TextFormField(
+                  obscureText: _isHidden,
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return "Please Enter Password";
+                    } else {
+                      return null;
+                    }
+                  },
+                  controller: passwordTextEditingController,
+                  decoration: InputDecoration(
+                    icon: Icon(Icons.lock),
+                    suffix: InkWell(
+                      onTap: _togglePasswordView,
+                      child: Padding(
+                        padding: EdgeInsets.only(left: 8.0, right: 20),
+                        child: Icon(
+                          Icons.visibility,
+                          size: 24,
+                          color: _isHidden ? Colors.grey : Colors.black,
                         ),
                       ),
-                      SizedBox(
-                        height: 8,
-                      ),
-                      TextFormField(
-                        obscureText: _isHidden,
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return "Please Enter Password";
-                          } else {
-                            return null;
-                          }
-                        },
-                        controller: passwordTextEditingController,
-                        decoration: InputDecoration(
-                          icon: Icon(Icons.lock),
-                          suffix: InkWell(
-                            onTap: _togglePasswordView,
-                            child: Padding(
-                              padding: EdgeInsets.only(left: 8.0, right: 20),
-                              child: Icon(
-                                Icons.visibility,
-                                size: 24,
-                                color: _isHidden ? Colors.grey : Colors.black,
-                              ),
-                            ),
-                          ),
-                          labelText: "Password",
-                        ),
-                      ),
-                      SizedBox(
-                        height: 24,
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          signIn();
-                        },
-                        child: Container(
+                    ),
+                    labelText: "Password",
+                  ),
+                ),
+                SizedBox(
+                  height: 24,
+                ),
+                GestureDetector(
+                  onTap: () {
+                    signIn();
+                  },
+                  child: isLoading
+                      ? Center(
+                          child: CircularProgressIndicator(),
+                        )
+                      : Container(
                           padding: EdgeInsets.symmetric(vertical: 16),
                           width: MediaQuery.of(context).size.width - 50,
                           alignment: Alignment.center,
@@ -202,42 +201,40 @@ class _SignInState extends State<SignIn> {
                             style: TextStyle(color: Colors.white, fontSize: 17),
                           ),
                         ),
-                      ),
-                      SizedBox(
-                        height: 16,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Text(
-                            "Don't have Account? ",
-                            style: TextStyle(fontSize: 16),
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => SignUp()));
-                            },
-                            child: Text(
-                              "Sign Up",
-                              style: TextStyle(
-                                fontSize: 16,
-                                decoration: TextDecoration.underline,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 60,
-                      )
-                    ],
-                  ),
                 ),
-              ),
+                SizedBox(
+                  height: 16,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text(
+                      "Don't have Account? ",
+                      style: TextStyle(fontSize: 16),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.pushReplacement(context,
+                            MaterialPageRoute(builder: (context) => SignUp()));
+                      },
+                      child: Text(
+                        "Sign Up",
+                        style: TextStyle(
+                          fontSize: 16,
+                          decoration: TextDecoration.underline,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 60,
+                )
+              ],
             ),
+          ),
+        ),
+      ),
     );
   }
 

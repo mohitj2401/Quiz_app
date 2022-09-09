@@ -93,124 +93,121 @@ class _SignUpState extends State<SignUp> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: isLoading
-          ? Container(
-              child: Center(
-                child: CircularProgressIndicator(),
-              ),
-            )
-          : SingleChildScrollView(
-              child: Container(
-                child: Form(
-                  key: formKey,
-                  child: Container(
-                    margin: EdgeInsets.symmetric(horizontal: 24, vertical: 50),
-                    child: Column(
-                      children: <Widget>[
-                        SizedBox(
-                          height: 100,
+      body: SingleChildScrollView(
+        child: Container(
+          child: Form(
+            key: formKey,
+            child: Container(
+              margin: EdgeInsets.symmetric(horizontal: 24, vertical: 50),
+              child: Column(
+                children: <Widget>[
+                  SizedBox(
+                    height: 100,
+                  ),
+                  showAlert(),
+                  SizedBox(height: 20),
+                  AnimatedTextKit(
+                    animatedTexts: [
+                      TypewriterAnimatedText(
+                        'Welcome to Quiz Learn!',
+                        textStyle: TextStyle(
+                          fontSize: 30,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.grey,
                         ),
-                        showAlert(),
-                        SizedBox(height: 20),
-                        AnimatedTextKit(
-                          animatedTexts: [
-                            TypewriterAnimatedText(
-                              'Welcome to Quiz Learn!',
-                              textStyle: TextStyle(
-                                fontSize: 30,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.grey,
-                              ),
-                              speed: Duration(milliseconds: 100),
-                            ),
-                          ],
-                          isRepeatingAnimation: true,
-                          pause: Duration(milliseconds: 500),
-                          displayFullTextOnTap: true,
-                        ),
-                        SizedBox(height: 50),
-                        TextFormField(
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              return "Please Enter Name";
-                            }
+                        speed: Duration(milliseconds: 100),
+                      ),
+                    ],
+                    isRepeatingAnimation: true,
+                    pause: Duration(milliseconds: 500),
+                    displayFullTextOnTap: true,
+                  ),
+                  SizedBox(height: 50),
+                  TextFormField(
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return "Please Enter Name";
+                      }
 
-                            if (!RegExp(r"^[a-zA-Z][a-zA-Z ]+$")
-                                .hasMatch(value)) {
-                              return 'Please enter valid name';
-                            }
-                            return null;
-                          },
-                          controller: nameTextEditingController,
-                          decoration: InputDecoration(
-                              labelText: "Name",
-                              icon: Icon(Icons.person_rounded)),
-                        ),
-                        SizedBox(
-                          height: 8,
-                        ),
-                        TextFormField(
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              return 'Please enter email';
-                            }
-                            if (!RegExp(
-                                    r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-                                .hasMatch(value)) {
-                              return "Please enter valid email";
-                            }
-                            return null;
-                          },
-                          controller: emailTextEditingController,
-                          decoration: InputDecoration(
-                            icon: Icon(
-                              Icons.email_rounded,
-                            ),
-                            labelText: "Email",
+                      if (!RegExp(r"^[a-zA-Z][a-zA-Z ]+$").hasMatch(value)) {
+                        return 'Please enter valid name';
+                      }
+                      return null;
+                    },
+                    controller: nameTextEditingController,
+                    decoration: InputDecoration(
+                        labelText: "Name", icon: Icon(Icons.person_rounded)),
+                  ),
+                  SizedBox(
+                    height: 8,
+                  ),
+                  TextFormField(
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Please enter email';
+                      }
+                      if (!RegExp(
+                              r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                          .hasMatch(value)) {
+                        return "Please enter valid email";
+                      }
+                      return null;
+                    },
+                    controller: emailTextEditingController,
+                    decoration: InputDecoration(
+                      icon: Icon(
+                        Icons.email_rounded,
+                      ),
+                      labelText: "Email",
+                    ),
+                  ),
+                  SizedBox(
+                    height: 8,
+                  ),
+                  TextFormField(
+                    obscureText: _isHidden,
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return "Please Enter Password";
+                      }
+                      if (!RegExp(
+                              r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$')
+                          .hasMatch(value)) {
+                        return 'Please enter strong password';
+                      }
+                      return null;
+                    },
+                    controller: passwordTextEditingController,
+                    decoration: InputDecoration(
+                      icon: Icon(Icons.lock),
+                      suffix: InkWell(
+                        onTap: _togglePasswordView,
+                        child: Padding(
+                          padding: EdgeInsets.only(left: 8.0, right: 20),
+                          child: Icon(
+                            Icons.visibility,
+                            size: 24,
+                            color: _isHidden ? Colors.grey : Colors.blueGrey,
                           ),
                         ),
-                        SizedBox(
-                          height: 8,
-                        ),
-                        TextFormField(
-                          obscureText: _isHidden,
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              return "Please Enter Password";
-                            }
-                            if (!RegExp(
-                                    r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$')
-                                .hasMatch(value)) {
-                              return 'Please enter strong password';
-                            }
-                            return null;
-                          },
-                          controller: passwordTextEditingController,
-                          decoration: InputDecoration(
-                            icon: Icon(Icons.lock),
-                            suffix: InkWell(
-                              onTap: _togglePasswordView,
-                              child: Padding(
-                                padding: EdgeInsets.only(left: 8.0, right: 20),
-                                child: Icon(
-                                  Icons.visibility,
-                                  size: 24,
-                                  color:
-                                      _isHidden ? Colors.grey : Colors.blueGrey,
-                                ),
-                              ),
+                      ),
+                      labelText: "Password",
+                    ),
+                  ),
+                  SizedBox(
+                    height: 24,
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      signUp();
+                    },
+                    child: isLoading
+                        ? Container(
+                            child: Center(
+                              child: CircularProgressIndicator(),
                             ),
-                            labelText: "Password",
-                          ),
-                        ),
-                        SizedBox(
-                          height: 24,
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            signUp();
-                          },
-                          child: Container(
+                          )
+                        : Container(
                             padding: EdgeInsets.symmetric(vertical: 16),
                             width: MediaQuery.of(context).size.width - 50,
                             alignment: Alignment.center,
@@ -224,43 +221,43 @@ class _SignUpState extends State<SignUp> {
                                   TextStyle(color: Colors.white, fontSize: 17),
                             ),
                           ),
-                        ),
-                        SizedBox(
-                          height: 16,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Text(
-                              "Already have an account? ",
-                              style: TextStyle(fontSize: 16),
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => SignIn()));
-                              },
-                              child: Text(
-                                "Sign in",
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  decoration: TextDecoration.underline,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 60,
-                        )
-                      ],
-                    ),
                   ),
-                ),
+                  SizedBox(
+                    height: 16,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text(
+                        "Already have an account? ",
+                        style: TextStyle(fontSize: 16),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => SignIn()));
+                        },
+                        child: Text(
+                          "Sign in",
+                          style: TextStyle(
+                            fontSize: 16,
+                            decoration: TextDecoration.underline,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 60,
+                  )
+                ],
               ),
             ),
+          ),
+        ),
+      ),
     );
   }
 

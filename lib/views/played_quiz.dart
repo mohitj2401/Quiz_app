@@ -401,25 +401,21 @@ class _PlayedQuizState extends State<PlayedQuiz> {
 
                                   final status =
                                       await Permission.storage.request();
-                                  if (!status.isGranted) {
-                                    // ignore: avoid_print
 
-                                  } else {
-                                    final exterdir = await getDownloadPath();
+                                  final exterdir2 =
+                                      await getExternalStorageDirectory();
 
-                                    final task =
-                                        await FlutterDownloader.enqueue(
-                                      url: url,
-                                      headers: {
-                                        'Authorization': 'Bearer $api_token',
-                                      },
-                                      savedDir: exterdir ??
-                                          '/storage/emulated/0/Download',
-                                      fileName: 'result.pdf',
-                                      saveInPublicStorage: true,
-                                    );
-                                  }
+                                  final task = await FlutterDownloader.enqueue(
+                                    url: url,
+                                    headers: {
+                                      'Authorization': 'Bearer $api_token',
+                                    },
+                                    savedDir: exterdir2!.path,
+                                    fileName: 'result.pdf',
+                                    saveInPublicStorage: true,
+                                  );
                                 } catch (e) {
+                                  print(e.toString());
                                   await NDialog(
                                     title: Text(
                                         "Opps Something Went Worng! or try again after sometime.."),
