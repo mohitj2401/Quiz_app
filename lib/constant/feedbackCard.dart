@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-GestureDetector feedbackCard(String txt, VoidCallback onPressed,
+GestureDetector feedbackCard(
+    String txt, VoidCallback onPressed, BuildContext context,
     {selectedCard = false}) {
   return GestureDetector(
     onTap: onPressed,

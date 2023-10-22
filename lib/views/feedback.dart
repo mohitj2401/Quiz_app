@@ -69,7 +69,6 @@ class _FeedbackScreanState extends State<FeedbackScrean> {
       bottomNavigationBar: isLoading
           ? null
           : Container(
-              color: Colors.white,
               padding: EdgeInsets.symmetric(horizontal: 20, vertical: 30),
               child: LoadingElevatedButton(
                 isLoading: isSubmit,
@@ -86,7 +85,7 @@ class _FeedbackScreanState extends State<FeedbackScrean> {
                   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                     RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
-                      side: BorderSide(color: Colors.blue),
+                      side: BorderSide(),
                     ),
                   ),
                 ),
@@ -99,10 +98,7 @@ class _FeedbackScreanState extends State<FeedbackScrean> {
         elevation: 1,
         title: Text(
           'Feedback',
-          style: TextStyle(color: Colors.black, fontSize: 22),
         ),
-        iconTheme: IconThemeData(color: Colors.black),
-        backgroundColor: Colors.white,
       ),
       body: isLoading
           ? SubmitedFeedbackScreen()
@@ -116,7 +112,6 @@ class _FeedbackScreanState extends State<FeedbackScrean> {
                       width: MediaQuery.of(context).size.width,
                       padding:
                           EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-                      color: Colors.white,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -169,7 +164,6 @@ class _FeedbackScreanState extends State<FeedbackScrean> {
                               }
                               return Icon(
                                 Icons.sentiment_satisfied,
-                                color: Colors.white,
                               );
                             },
                             onRatingUpdate: (value) {
@@ -186,7 +180,6 @@ class _FeedbackScreanState extends State<FeedbackScrean> {
                       padding:
                           EdgeInsets.symmetric(horizontal: 24, vertical: 16),
                       margin: EdgeInsets.symmetric(vertical: 16),
-                      color: Colors.white,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -215,6 +208,7 @@ class _FeedbackScreanState extends State<FeedbackScrean> {
                                     });
                                   }
                                 },
+                                context,
                                 selectedCard:
                                     selectedList.contains(1) ? true : false,
                               ),
@@ -231,6 +225,7 @@ class _FeedbackScreanState extends State<FeedbackScrean> {
                                     });
                                   }
                                 },
+                                context,
                                 selectedCard:
                                     selectedList.contains(2) ? true : false,
                               ),
@@ -247,6 +242,7 @@ class _FeedbackScreanState extends State<FeedbackScrean> {
                                     });
                                   }
                                 },
+                                context,
                                 selectedCard:
                                     selectedList.contains(3) ? true : false,
                               ),
@@ -271,6 +267,7 @@ class _FeedbackScreanState extends State<FeedbackScrean> {
                                     });
                                   }
                                 },
+                                context,
                                 selectedCard:
                                     selectedList.contains(5) ? true : false,
                               ),
@@ -294,11 +291,8 @@ class _FeedbackScreanState extends State<FeedbackScrean> {
                                 hintStyle: TextStyle(
                                   fontSize: 14,
                                 ),
-                                fillColor: Colors.white,
                                 focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                    color: Colors.blue,
-                                  ),
+                                  borderSide: BorderSide(),
                                 ),
                                 enabledBorder: OutlineInputBorder(
                                   borderSide: BorderSide(),

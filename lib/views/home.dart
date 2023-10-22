@@ -190,11 +190,7 @@ class _HomeState extends State<Home> {
         title: Center(
             child: Text(
           widget.subject_name,
-          style: TextStyle(color: Colors.blue, fontSize: 24),
         )),
-        iconTheme: IconThemeData(color: Colors.black),
-        backgroundColor: Colors.transparent,
-        elevation: 0.0,
         actions: <Widget>[
           IconButton(
             tooltip: 'Refresh',

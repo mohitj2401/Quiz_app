@@ -1,16 +1,21 @@
 import 'package:provider/provider.dart';
 import 'package:quiz_earn/helper/helper.dart';
+import 'package:quiz_earn/providers/themeprovider.dart';
 import 'package:quiz_earn/providers/userprovider.dart';
 import 'package:quiz_earn/views/signin.dart';
 import 'package:quiz_earn/views/subjects.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await FlutterDownloader.initialize();
   runApp(MultiProvider(
-    providers: [ChangeNotifierProvider(create: (_) => User())],
+    providers: [
+      ChangeNotifierProvider(create: (_) => User()),
+      ChangeNotifierProvider(create: (_) => ThemeProviders())
+    ],
     child: MyApp(),
   ));
 }
@@ -51,24 +56,24 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Quiz Learn',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      home: isLoading
-          ? Container(
-              color: Colors.white,
-              child: Center(
-                child: CircularProgressIndicator(),
-              ),
-            )
-          : _isLoggedIn
-              ? Subjects(
-                  message: '',
-                )
-              : SignIn(),
-    );
+    return ResponsiveSizer(builder: (context, orientation, screenType) {
+      return MaterialApp(
+        title: 'Quiz Learn',
+        debugShowCheckedModeBanner: false,
+        theme: Provider.of<ThemeProviders>(context).themeData,
+        home: isLoading
+            ? Container(
+                color: Colors.white,
+                child: Center(
+                  child: CircularProgressIndicator(),
+                ),
+              )
+            : _isLoggedIn
+                ? Subjects(
+                    message: '',
+                  )
+                : SignIn(),
+      );
+    });
   }
 }

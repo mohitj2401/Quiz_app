@@ -28,8 +28,7 @@ class _PlayedQuizState extends State<PlayedQuiz> {
   late Future getDataFun;
   final formKey = GlobalKey<FormState>();
 
-  static void downloadCallback(
-      String id, DownloadTaskStatus status, int progress) {
+  static void downloadCallback(String id, int status, int progress) {
     final SendPort? send =
         IsolateNameServer.lookupPortByName('downloader_send_port');
     send!.send([id, status, progress]);
@@ -236,12 +235,9 @@ class _PlayedQuizState extends State<PlayedQuiz> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           'Results',
-          style: TextStyle(color: Colors.blueAccent, fontSize: 22),
         ),
-        iconTheme: IconThemeData(color: Colors.black),
-        backgroundColor: Colors.white,
         actions: [
           GestureDetector(
             onTap: () async {
@@ -440,7 +436,6 @@ class _PlayedQuizState extends State<PlayedQuiz> {
                               final status = await Permission.storage.request();
                               if (!status.isGranted) {
                                 // ignore: avoid_print
-
                               } else {
                                 final exterdir = await getDownloadPath();
                                 final exterdir2 =

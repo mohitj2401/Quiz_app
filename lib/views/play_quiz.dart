@@ -425,8 +425,8 @@ class _QuizPlayTileState extends State<QuizPlayTile>
             child: Html(
               shrinkWrap: true,
               data: "Q${widget.page + 1} " + widget.questionModel.question,
-              onImageTap: (String? url, RenderContext context,
-                  Map<String, String> attributes, dom.Element? element) async {
+              onLinkTap: (String? url, Map<String, String> attributes,
+                  dom.Element? element) async {
                 url = url as String;
                 await ZoomDialog(
                   zoomScale: 5,

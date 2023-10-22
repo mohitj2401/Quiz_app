@@ -7,7 +7,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:ndialog/ndialog.dart';
 import 'package:quiz_earn/widget/drawer.dart';
-
+import 'dart:math' as math;
 import '../providers/userprovider.dart';
 
 class Subjects extends StatefulWidget {
@@ -186,10 +186,7 @@ class _SubjectsState extends State<Subjects> {
       appBar: AppBar(
         title: Text(
           'Categories',
-          style: TextStyle(color: Colors.blueAccent, fontSize: 22),
         ),
-        iconTheme: IconThemeData(color: Colors.black),
-        backgroundColor: Colors.white,
         actions: [
           GestureDetector(
             onTap: () async {
@@ -260,6 +257,41 @@ class _SubjectsState extends State<Subjects> {
               if (snapshot.connectionState == ConnectionState.done) {
                 if (snapshot.hasData && (snapshot.data as List).isNotEmpty) {
                   List subjectsGet = snapshot.data as List;
+                  return GridView.builder(
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 3,
+                    ),
+                    itemCount: subjectsGet.length,
+                    itemBuilder: (context, index) {
+                      return InkWell(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => Home(
+                                      subject_id: subjectsGet[index]['id'],
+                                      subject_name: subjectsGet[index]
+                                          ['name'])));
+                        },
+                        child: Card(
+                          color: Color((math.Random().nextDouble() * 0xFFFFF)
+                                  .toInt())
+                              .withOpacity(0.5),
+                          child: Container(
+                            alignment: Alignment.center,
+                            child: Text(
+                              subjectsGet[index]['name'],
+                              style: TextStyle(
+                                fontSize: 20,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  );
                   return ListView.builder(
                       itemCount: subjectsGet.length,
                       itemBuilder: (context, index) {

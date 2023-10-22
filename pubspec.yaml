@@ -34,25 +34,27 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
-  shared_preferences: ^2.0.15
-  dio: ^4.0.6
-  ndialog: ^4.1.1+1
+  shared_preferences: ^2.2.2
+  dio: ^5.3.3
+  ndialog: ^4.3.1
   animated_text_kit: ^4.2.2
-  path_provider: ^2.0.11
+  path_provider: ^2.1.1
   flutter_countdown_timer: ^4.1.0
-  intl: ^0.17.0
-  flutter_downloader: ^1.8.3
-  permission_handler: ^10.0.0
-  flutter_html: ^2.2.1
-  easy_pdf_viewer: ^1.0.2
+  intl: ^0.18.1
+  flutter_downloader: ^1.11.3
+  permission_handler: ^11.0.1
+  flutter_html: ^3.0.0-beta.2
+  easy_pdf_viewer: ^1.0.7
   wakelock: ^0.6.2
-  flutter_launcher_icons: ^0.10.0
-  open_file: ^3.2.1
-  provider: ^6.0.3
+  flutter_launcher_icons: ^0.13.1
+  open_file: ^3.3.2
+  provider: ^6.0.5
   flutter_rating_bar: ^4.0.1
-  flutter_widget_from_html: ^0.8.5
+  flutter_widget_from_html: ^0.10.6
   loading_elevated_button: ^1.0.0+2
-  progress_loading_button: ^1.1.4
+  progress_loading_button: ^2.0.2
+  logger: ^2.0.2+1
+  responsive_sizer: ^3.2.0
 
 
 flutter_icons:

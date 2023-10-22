@@ -1,3 +1,4 @@
+import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 import 'package:quiz_earn/constant/constant.dart';
 import 'package:quiz_earn/helper/helper.dart';
@@ -26,6 +27,7 @@ class _SignUpState extends State<SignUp> {
   TextEditingController passwordTextEditingController = TextEditingController();
   TextEditingController confirmPasswordTextEditingController =
       TextEditingController();
+  Logger logger = Logger();
 
   signUp() async {
     if (formKey.currentState!.validate()) {
@@ -40,7 +42,7 @@ class _SignUpState extends State<SignUp> {
           "email": emailTextEditingController.text,
           'password': passwordTextEditingController.text,
         });
-
+        logger.i(response);
         if (response.data['email'] != null) {
           authService.error = response.data['email'][0].toString();
 
@@ -49,8 +51,9 @@ class _SignUpState extends State<SignUp> {
           });
         } else {
           if (response.data['status'] == 200) {
-            context.read<User>().updateUser(response.data['output']['name'],
-                response.data['output']['email']);
+            context.read<User>().updateUser(
+                response.data['output']['user']['name'],
+                response.data['output']['user']['email']);
             await HelperFunctions.saveUserApiKey(
                 response.data['output']['access_token']);
             await HelperFunctions.saveUserLoggedIn(true);
@@ -70,6 +73,7 @@ class _SignUpState extends State<SignUp> {
           }
         }
       } catch (e) {
+        logger.i(e.toString());
         setState(() {
           isLoading = false;
         });

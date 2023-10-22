@@ -6,6 +6,7 @@ import 'package:quiz_earn/views/update_details.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:ndialog/ndialog.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 
 import '../widget/drawer.dart';
 
@@ -120,10 +121,7 @@ class _MyAccountState extends State<MyAccount> {
       appBar: AppBar(
         title: Text(
           'My Account',
-          style: TextStyle(color: Colors.blueAccent, fontSize: 22),
         ),
-        iconTheme: IconThemeData(color: Colors.black),
-        backgroundColor: Colors.white,
       ),
       drawer: appDrawer(context),
       body: isLoading
@@ -133,6 +131,15 @@ class _MyAccountState extends State<MyAccount> {
                 padding: EdgeInsets.all(20),
                 child: Column(
                   children: [
+                    Container(
+                      child: Card(
+                        shape: CircleBorder(),
+                        child: Icon(
+                          Icons.person_rounded,
+                          // size: 20.sp,
+                        ),
+                      ),
+                    ),
                     Center(
                         child: Icon(
                       Icons.person_rounded,

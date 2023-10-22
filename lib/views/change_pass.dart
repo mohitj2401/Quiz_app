@@ -121,11 +121,7 @@ class _ChangePassState extends State<ChangePass> {
         title: Center(
             child: Text(
           "Quiz Learn",
-          style: TextStyle(color: Colors.blue, fontSize: 24),
         )),
-        iconTheme: IconThemeData(color: Colors.black),
-        backgroundColor: Colors.transparent,
-        elevation: 0.0,
       ),
       body: isLoading
           ? Container(

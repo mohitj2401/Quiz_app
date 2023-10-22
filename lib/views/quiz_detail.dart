@@ -114,10 +114,7 @@ class _QuizDetailsState extends State<QuizDetails> {
       appBar: AppBar(
         title: Text(
           'Quiz Details',
-          style: TextStyle(color: Colors.blueAccent, fontSize: 22),
         ),
-        iconTheme: IconThemeData(color: Colors.black),
-        backgroundColor: Colors.white,
         actions: [
           GestureDetector(
             onTap: () async {
@@ -175,14 +172,11 @@ class _QuizDetailsState extends State<QuizDetails> {
                     child: RichText(
                       text: TextSpan(
                         text: "Description  :-  ",
-                        style: TextStyle(color: Colors.black87, fontSize: 20),
+                        style: TextStyle(fontSize: 20),
                         children: [
                           TextSpan(
                               text: quizdetails['description'],
-                              style: TextStyle(
-                                  wordSpacing: 5,
-                                  color: Colors.black45,
-                                  fontSize: 16))
+                              style: TextStyle(wordSpacing: 5, fontSize: 16))
                         ],
                       ),
                     ),
@@ -196,19 +190,13 @@ class _QuizDetailsState extends State<QuizDetails> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text('Start Time',
-                            style: TextStyle(
-                                wordSpacing: 5,
-                                color: Colors.black45,
-                                fontSize: 16)),
+                            style: TextStyle(wordSpacing: 5, fontSize: 16)),
                         Text(
                             DateFormat('dd MMMM , yyyy hh:mm aaa')
                                 .format(
                                     DateTime.parse(quizdetails['start_time']))
                                 .toString(),
-                            style: TextStyle(
-                                wordSpacing: 5,
-                                color: Colors.black45,
-                                fontSize: 16))
+                            style: TextStyle(wordSpacing: 5, fontSize: 16))
                       ],
                     ),
                   ),
@@ -219,18 +207,12 @@ class _QuizDetailsState extends State<QuizDetails> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text('End Time',
-                            style: TextStyle(
-                                wordSpacing: 5,
-                                color: Colors.black45,
-                                fontSize: 16)),
+                            style: TextStyle(wordSpacing: 5, fontSize: 16)),
                         Text(
                             DateFormat('dd MMMM , yyyy hh:mm aaa')
                                 .format(DateTime.parse(quizdetails['end_time']))
                                 .toString(),
-                            style: TextStyle(
-                                wordSpacing: 5,
-                                color: Colors.black45,
-                                fontSize: 16))
+                            style: TextStyle(wordSpacing: 5, fontSize: 16))
                       ],
                     ),
                   ),
