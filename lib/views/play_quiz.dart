@@ -1,8 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_html/flutter_html.dart';
-import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:quiz_earn/constant/constant.dart';
 import 'package:quiz_earn/helper/helper.dart';
 import 'package:quiz_earn/models/questions.dart';
@@ -22,7 +20,7 @@ class PlayQuiz extends StatefulWidget {
   final String quizId;
   final String quizName;
   final int duration;
-  PlayQuiz(this.quizId, this.duration, this.quizName);
+  const PlayQuiz(this.quizId, this.duration, this.quizName, {super.key});
   @override
   _PlayQuizState createState() => _PlayQuizState();
 }
@@ -40,7 +38,7 @@ class _PlayQuizState extends State<PlayQuiz> with WidgetsBindingObserver {
   late int endTime;
 
   QuestionModel getQuestionModelFromDataSnapshot(questionSnapshot, index) {
-    QuestionModel questionModel = new QuestionModel();
+    QuestionModel questionModel = QuestionModel();
     questionModel.question = questionSnapshot[index]['title'];
     questionModel.questionId = questionSnapshot[index]['id'];
     List<String> options = [
@@ -86,11 +84,11 @@ class _PlayQuizState extends State<PlayQuiz> with WidgetsBindingObserver {
         await NAlertDialog(
           dismissable: false,
           dialogStyle: DialogStyle(titleDivider: true),
-          title: Text("Don't Exit Test Window"),
+          title: const Text("Don't Exit Test Window"),
           content: Text("Remaing Attempt is $alertCount"),
           actions: <Widget>[
             TextButton(
-                child: Text("Ok"),
+                child: const Text("Ok"),
                 onPressed: () {
                   Navigator.pop(context);
                 }),
@@ -114,7 +112,7 @@ class _PlayQuizState extends State<PlayQuiz> with WidgetsBindingObserver {
       await HelperFunctions.saveUserLoggedIn(false);
       await HelperFunctions.saveUserApiKey("");
       Navigator.pushAndRemoveUntil(context,
-          MaterialPageRoute(builder: (context) => SignIn()), (route) => false);
+          MaterialPageRoute(builder: (context) => const SignIn()), (route) => false);
     }
 
     Response response = await Dio(BaseOptions(headers: {
@@ -130,7 +128,7 @@ class _PlayQuizState extends State<PlayQuiz> with WidgetsBindingObserver {
       await HelperFunctions.saveUserLoggedIn(false);
       await HelperFunctions.saveUserApiKey("");
       await Navigator.pushAndRemoveUntil(context,
-          MaterialPageRoute(builder: (context) => SignIn()), (route) => false);
+          MaterialPageRoute(builder: (context) => const SignIn()), (route) => false);
     } else {
       await NAlertDialog(
         dismissable: false,
@@ -138,7 +136,7 @@ class _PlayQuizState extends State<PlayQuiz> with WidgetsBindingObserver {
         title: Text(response.data['message']),
         actions: <Widget>[
           TextButton(
-              child: Text("Ok"),
+              child: const Text("Ok"),
               onPressed: () {
                 Navigator.pop(context);
               }),
@@ -194,13 +192,13 @@ class _PlayQuizState extends State<PlayQuiz> with WidgetsBindingObserver {
           blur: 10,
           dismissable: false,
           dialogStyle: DialogStyle(),
-          title: Text("Your Quiz is Completed"),
+          title: const Text("Your Quiz is Completed"),
         ).show(context);
-        await Future.delayed(Duration(seconds: 2));
+        await Future.delayed(const Duration(seconds: 2));
         Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(
-                builder: (context) => Subjects(message: 'Quiz Attempted')),
+                builder: (context) => const Subjects(message: 'Quiz Attempted')),
             (route) => false);
       } else {
         progressDialog.dismiss();
@@ -208,11 +206,11 @@ class _PlayQuizState extends State<PlayQuiz> with WidgetsBindingObserver {
         await NAlertDialog(
           dismissable: false,
           dialogStyle: DialogStyle(titleDivider: true),
-          title: Text("Opps Something Went Worng!"),
-          content: Text("Please check your connectivity and try Again.."),
+          title: const Text("Opps Something Went Worng!"),
+          content: const Text("Please check your connectivity and try Again.."),
           actions: <Widget>[
             TextButton(
-                child: Text("Ok"),
+                child: const Text("Ok"),
                 onPressed: () {
                   Navigator.pop(context);
                 }),
@@ -223,11 +221,11 @@ class _PlayQuizState extends State<PlayQuiz> with WidgetsBindingObserver {
       await NAlertDialog(
         dismissable: false,
         dialogStyle: DialogStyle(titleDivider: true),
-        title: Text("Opps Something Went Worng!"),
-        content: Text("Please check your connectivity and try Again.."),
+        title: const Text("Opps Something Went Worng!"),
+        content: const Text("Please check your connectivity and try Again.."),
         actions: <Widget>[
           TextButton(
-              child: Text("Ok"),
+              child: const Text("Ok"),
               onPressed: () {
                 Navigator.pop(context);
               }),
@@ -242,16 +240,16 @@ class _PlayQuizState extends State<PlayQuiz> with WidgetsBindingObserver {
       onWillPop: () async {
         await NDialog(
           dialogStyle: DialogStyle(titleDivider: true),
-          title: Text("Are you sure! You want to continue."),
-          content: Text("Quiz is going to be saved"),
+          title: const Text("Are you sure! You want to continue."),
+          content: const Text("Quiz is going to be saved"),
           actions: <Widget>[
             TextButton(
-                child: Text("Yes"),
+                child: const Text("Yes"),
                 onPressed: () async {
                   submitQuiz();
                 }),
             TextButton(
-                child: Text("No"),
+                child: const Text("No"),
                 onPressed: () {
                   Navigator.pop(context);
                 }),
@@ -263,7 +261,7 @@ class _PlayQuizState extends State<PlayQuiz> with WidgetsBindingObserver {
         appBar: AppBar(
           title: Text(
             widget.quizName,
-            style: TextStyle(fontSize: 22),
+            style: const TextStyle(fontSize: 22),
           ),
           automaticallyImplyLeading: false,
           actions: <Widget>[
@@ -271,16 +269,16 @@ class _PlayQuizState extends State<PlayQuiz> with WidgetsBindingObserver {
               onTap: () async {
                 await NDialog(
                   dialogStyle: DialogStyle(titleDivider: true),
-                  title: Text("Are you sure! You want to continue."),
-                  content: Text("Quiz is going to be saved"),
+                  title: const Text("Are you sure! You want to continue."),
+                  content: const Text("Quiz is going to be saved"),
                   actions: <Widget>[
                     TextButton(
-                        child: Text("Yes"),
+                        child: const Text("Yes"),
                         onPressed: () async {
                           submitQuiz();
                         }),
                     TextButton(
-                        child: Text("No"),
+                        child: const Text("No"),
                         onPressed: () {
                           Navigator.pop(context);
                         }),
@@ -288,24 +286,24 @@ class _PlayQuizState extends State<PlayQuiz> with WidgetsBindingObserver {
                 ).show(context);
               },
               child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 16),
-                child: Icon(Icons.exit_to_app),
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: const Icon(Icons.exit_to_app),
               ),
             ),
             GestureDetector(
               onTap: () async {
                 await NDialog(
                   dialogStyle: DialogStyle(titleDivider: true),
-                  title: Text("Log Out"),
-                  content: Text("Are you sure!.Process is going to be saved"),
+                  title: const Text("Log Out"),
+                  content: const Text("Are you sure!.Process is going to be saved"),
                   actions: <Widget>[
                     TextButton(
-                        child: Text("Yes"),
+                        child: const Text("Yes"),
                         onPressed: () async {
                           submitQuiz();
                         }),
                     TextButton(
-                        child: Text("No"),
+                        child: const Text("No"),
                         onPressed: () {
                           Navigator.pop(context);
                         }),
@@ -313,22 +311,22 @@ class _PlayQuizState extends State<PlayQuiz> with WidgetsBindingObserver {
                 ).show(context);
               },
               child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 16),
-                child: Icon(Icons.done_all_sharp),
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: const Icon(Icons.done_all_sharp),
               ),
             ),
           ],
         ),
         body: Container(
-          padding: EdgeInsets.symmetric(vertical: 20),
-          child: questionSnapshot != null && questionSnapshot.isNotEmpty
+          padding: const EdgeInsets.symmetric(vertical: 20),
+          child: questionSnapshot.isNotEmpty
               ? Column(
                   children: [
                     CountdownTimer(
                       endTime: endTime,
                       widgetBuilder: (_, CurrentRemainingTime? time) {
                         if (time == null || time.sec! < 5 && time.min == null) {
-                          return Text(
+                          return const Text(
                             'Quiz is going to submit',
                             style: TextStyle(
                               color: Colors.red,
@@ -339,7 +337,7 @@ class _PlayQuizState extends State<PlayQuiz> with WidgetsBindingObserver {
                         if (time.sec! < 25 && time.min == null) {
                           return Text(
                             'Quiz is going to submit after ${time.sec} sec',
-                            style: TextStyle(
+                            style: const TextStyle(
                               color: Colors.orangeAccent,
                               fontSize: 21,
                             ),
@@ -347,19 +345,19 @@ class _PlayQuizState extends State<PlayQuiz> with WidgetsBindingObserver {
                         }
                         return Text(
                             'Remaning Time:- ${time.min ?? '00'}:${time.sec} ',
-                            style: TextStyle(
+                            style: const TextStyle(
                               color: Colors.grey,
                               fontSize: 21,
                             ));
                       },
                       onEnd: submitQuiz,
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 8,
                     ),
                     Expanded(
                       child: Container(
-                        padding: EdgeInsets.symmetric(horizontal: 24),
+                        padding: const EdgeInsets.symmetric(horizontal: 24),
                         child: QuizPlayTile(
                             questionModel: getQuestionModelFromDataSnapshot(
                                 questionSnapshot, page),
@@ -377,7 +375,7 @@ class _PlayQuizState extends State<PlayQuiz> with WidgetsBindingObserver {
                     ),
                   ],
                 )
-              : Center(
+              : const Center(
                   child: CircularProgressIndicator(),
                 ),
         ),
@@ -397,7 +395,7 @@ class QuizPlayTile extends StatefulWidget {
   final int page;
   // final bool disable;
   final VoidCallback onTap;
-  QuizPlayTile({
+  const QuizPlayTile({super.key, 
     required this.questionModel,
     required this.page,
     required this.onTap,
@@ -410,6 +408,7 @@ class QuizPlayTile extends StatefulWidget {
 
 class _QuizPlayTileState extends State<QuizPlayTile>
     with AutomaticKeepAliveClientMixin {
+  @override
   get wantKeepAlive => true;
   String optionSelected = "";
   bool disable = false;
@@ -430,14 +429,14 @@ class _QuizPlayTileState extends State<QuizPlayTile>
                   zoomScale: 5,
                   child: Container(
                     child: Image(image: NetworkImage(url)),
-                    padding: EdgeInsets.all(20),
+                    padding: const EdgeInsets.all(20),
                   ),
                 ).show(super.context);
               },
             ),
           ),
-        Spacer(),
-        SizedBox(height: 4),
+        const Spacer(),
+        const SizedBox(height: 4),
         Column(
           children: [
             GestureDetector(
@@ -478,7 +477,7 @@ class _QuizPlayTileState extends State<QuizPlayTile>
                 option: "A",
               ),
             ),
-            SizedBox(height: 4),
+            const SizedBox(height: 4),
             GestureDetector(
               onTap: () {
                 userResultMap.addAll({
@@ -517,7 +516,7 @@ class _QuizPlayTileState extends State<QuizPlayTile>
                 option: "B",
               ),
             ),
-            SizedBox(height: 4),
+            const SizedBox(height: 4),
             GestureDetector(
               onTap: () {
                 userResultMap.addAll({
@@ -556,7 +555,7 @@ class _QuizPlayTileState extends State<QuizPlayTile>
                 option: "C",
               ),
             ),
-            SizedBox(height: 4),
+            const SizedBox(height: 4),
             GestureDetector(
               onTap: () {
                 userResultMap.addAll({
@@ -597,35 +596,31 @@ class _QuizPlayTileState extends State<QuizPlayTile>
             ),
           ],
         ),
-        SizedBox(height: 8),
-        Spacer(),
+        const SizedBox(height: 8),
+        const Spacer(),
         (page + 1) != totalPage
             ? Container(
-                padding: EdgeInsets.only(bottom: 5),
+                padding: const EdgeInsets.only(bottom: 5),
                 alignment: Alignment.bottomRight,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    shape: CircleBorder(),
-                    padding: EdgeInsets.all(20),
-                    primary: Colors.blue, // <-- Button color
-                    onPrimary: Colors.white, // <-- Splash color
+                    foregroundColor: Colors.white, shape: const CircleBorder(), backgroundColor: Colors.blue,
+                    padding: const EdgeInsets.all(20), // <-- Splash color
                   ),
                   onPressed: widget.onTap,
-                  child: Icon(Icons.arrow_right_alt_sharp),
+                  child: const Icon(Icons.arrow_right_alt_sharp),
                 ),
               )
             : Container(
-                padding: EdgeInsets.only(bottom: 5),
+                padding: const EdgeInsets.only(bottom: 5),
                 alignment: Alignment.bottomRight,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    shape: CircleBorder(),
-                    padding: EdgeInsets.all(20),
-                    primary: Colors.blue, // <-- Button color
-                    onPrimary: Colors.white, // <-- Splash color
+                    foregroundColor: Colors.white, shape: const CircleBorder(), backgroundColor: Colors.blue,
+                    padding: const EdgeInsets.all(20), // <-- Splash color
                   ),
                   onPressed: widget.onTap,
-                  child: Icon(Icons.check),
+                  child: const Icon(Icons.check),
                 ),
               )
       ],

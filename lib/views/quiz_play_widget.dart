@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 class QuestionTile extends StatefulWidget {
   final String option, description, correctAnswer, optionSelcted;
-  QuestionTile(
-      {required this.option,
+  const QuestionTile(
+      {super.key, required this.option,
       required this.description,
       required this.correctAnswer,
       required this.optionSelcted});
@@ -15,7 +15,7 @@ class _QuestionTileState extends State<QuestionTile> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 10),
+      padding: const EdgeInsets.symmetric(vertical: 10),
       child: Row(
         children: [
           Container(
@@ -45,14 +45,14 @@ class _QuestionTileState extends State<QuestionTile> {
               ),
             ),
           ),
-          SizedBox(width: 8),
+          const SizedBox(width: 8),
           Text(
             widget.description,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 16,
             ),
           ),
-          SizedBox(height: 2)
+          const SizedBox(height: 2)
         ],
       ),
     );

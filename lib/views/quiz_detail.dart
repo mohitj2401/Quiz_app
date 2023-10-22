@@ -11,7 +11,7 @@ import 'package:quiz_earn/views/play_quiz.dart';
 class QuizDetails extends StatefulWidget {
   final String quizId;
 
-  QuizDetails(this.quizId);
+  const QuizDetails(this.quizId, {super.key});
 
   @override
   _QuizDetailsState createState() => _QuizDetailsState();
@@ -49,7 +49,7 @@ class _QuizDetailsState extends State<QuizDetails> {
           await HelperFunctions.saveUserApiKey("");
           await Navigator.pushAndRemoveUntil(
               context,
-              MaterialPageRoute(builder: (context) => SignIn()),
+              MaterialPageRoute(builder: (context) => const SignIn()),
               (route) => false);
         } else {
           setState(() {
@@ -61,7 +61,7 @@ class _QuizDetailsState extends State<QuizDetails> {
             title: Text(response.data['message']),
             actions: <Widget>[
               TextButton(
-                  child: Text("Ok"),
+                  child: const Text("Ok"),
                   onPressed: () {
                     Navigator.pop(context);
                   }),
@@ -76,11 +76,11 @@ class _QuizDetailsState extends State<QuizDetails> {
         await NAlertDialog(
           dismissable: false,
           dialogStyle: DialogStyle(titleDivider: true),
-          title: Text("Opps Something Went Worng!"),
-          content: Text("Please check your connectivity and try Again.."),
+          title: const Text("Opps Something Went Worng!"),
+          content: const Text("Please check your connectivity and try Again.."),
           actions: <Widget>[
             TextButton(
-                child: Text("Ok"),
+                child: const Text("Ok"),
                 onPressed: () {
                   Navigator.pop(context);
                 }),
@@ -93,11 +93,11 @@ class _QuizDetailsState extends State<QuizDetails> {
   storeapi() async {
     api_token = await HelperFunctions.getUserApiKey();
 
-    if (api_token == '' || api_token == null) {
+    if (api_token == '') {
       await HelperFunctions.saveUserLoggedIn(false);
       await HelperFunctions.saveUserApiKey("");
       Navigator.pushAndRemoveUntil(context,
-          MaterialPageRoute(builder: (context) => SignIn()), (route) => false);
+          MaterialPageRoute(builder: (context) => const SignIn()), (route) => false);
     }
   }
 
@@ -112,7 +112,7 @@ class _QuizDetailsState extends State<QuizDetails> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           'Quiz Details',
         ),
         actions: [
@@ -124,7 +124,7 @@ class _QuizDetailsState extends State<QuizDetails> {
 
               getData();
             },
-            child: Padding(
+            child: const Padding(
               padding: EdgeInsets.only(right: 15),
               child: Icon(
                 Icons.refresh,
@@ -134,15 +134,15 @@ class _QuizDetailsState extends State<QuizDetails> {
         ],
       ),
       body: isLoading
-          ? Center(
+          ? const Center(
               child: CircularProgressIndicator(),
             )
           : Container(
-              padding: EdgeInsets.all(20),
+              padding: const EdgeInsets.all(20),
               child: ListView(
                 clipBehavior: Clip.none,
                 children: [
-                  Container(
+                  SizedBox(
                     height: 150,
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(16),
@@ -153,70 +153,70 @@ class _QuizDetailsState extends State<QuizDetails> {
                       ),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   Padding(
-                    padding: EdgeInsets.only(left: 15),
+                    padding: const EdgeInsets.only(left: 15),
                     child: Text(
                       quizdetails['title'],
                       style:
-                          TextStyle(fontSize: 22, fontWeight: FontWeight.w700),
+                          const TextStyle(fontSize: 22, fontWeight: FontWeight.w700),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 15,
                   ),
                   Padding(
-                    padding: EdgeInsets.only(left: 15),
+                    padding: const EdgeInsets.only(left: 15),
                     child: RichText(
                       text: TextSpan(
                         text: "Description  :-  ",
-                        style: TextStyle(fontSize: 20),
+                        style: const TextStyle(fontSize: 20),
                         children: [
                           TextSpan(
                               text: quizdetails['description'],
-                              style: TextStyle(wordSpacing: 5, fontSize: 16))
+                              style: const TextStyle(wordSpacing: 5, fontSize: 16))
                         ],
                       ),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   Padding(
-                    padding: EdgeInsets.only(left: 15.0),
+                    padding: const EdgeInsets.only(left: 15.0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text('Start Time',
+                        const Text('Start Time',
                             style: TextStyle(wordSpacing: 5, fontSize: 16)),
                         Text(
                             DateFormat('dd MMMM , yyyy hh:mm aaa')
                                 .format(
                                     DateTime.parse(quizdetails['start_time']))
                                 .toString(),
-                            style: TextStyle(wordSpacing: 5, fontSize: 16))
+                            style: const TextStyle(wordSpacing: 5, fontSize: 16))
                       ],
                     ),
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   Padding(
-                    padding: EdgeInsets.only(left: 15.0),
+                    padding: const EdgeInsets.only(left: 15.0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text('End Time',
+                        const Text('End Time',
                             style: TextStyle(wordSpacing: 5, fontSize: 16)),
                         Text(
                             DateFormat('dd MMMM , yyyy hh:mm aaa')
                                 .format(DateTime.parse(quizdetails['end_time']))
                                 .toString(),
-                            style: TextStyle(wordSpacing: 5, fontSize: 16))
+                            style: const TextStyle(wordSpacing: 5, fontSize: 16))
                       ],
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   Container(
@@ -235,7 +235,7 @@ class _QuizDetailsState extends State<QuizDetails> {
                               );
                             }
                           : null,
-                      child: Text('Start'),
+                      child: const Text('Start'),
                     ),
                   )
                 ],

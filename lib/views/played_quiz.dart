@@ -11,11 +11,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:ndialog/ndialog.dart';
 import 'package:easy_pdf_viewer/easy_pdf_viewer.dart';
-import 'package:open_file/open_file.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import '../widget/drawer.dart';
 
 class PlayedQuiz extends StatefulWidget {
+  const PlayedQuiz({super.key});
+
   @override
   _PlayedQuizState createState() => _PlayedQuizState();
 }
@@ -42,7 +43,7 @@ class _PlayedQuizState extends State<PlayedQuiz> {
       await HelperFunctions.saveUserLoggedIn(false);
       await HelperFunctions.saveUserApiKey("");
       Navigator.pushAndRemoveUntil(context,
-          MaterialPageRoute(builder: (context) => SignIn()), (route) => false);
+          MaterialPageRoute(builder: (context) => const SignIn()), (route) => false);
     }
   }
 
@@ -67,10 +68,11 @@ class _PlayedQuizState extends State<PlayedQuiz> {
         directory = Directory('/storage/emulated/0/Download');
         // Put file in global download folder, if for an unknown reason it didn't exist, we fallback
         // ignore: avoid_slow_async_io
-        if (!await directory.exists())
+        if (!await directory.exists()) {
           directory = await getExternalStorageDirectory();
+        }
       }
-    } catch (err, stack) {
+    } catch (err) {
       print("Cannot get download folder path");
     }
     return directory?.path;
@@ -145,7 +147,7 @@ class _PlayedQuizState extends State<PlayedQuiz> {
           await HelperFunctions.saveUserApiKey("");
           await Navigator.pushAndRemoveUntil(
               context,
-              MaterialPageRoute(builder: (context) => SignIn()),
+              MaterialPageRoute(builder: (context) => const SignIn()),
               (route) => false);
         } else {
           await NAlertDialog(
@@ -154,7 +156,7 @@ class _PlayedQuizState extends State<PlayedQuiz> {
             title: Text(response.data['message']),
             actions: <Widget>[
               TextButton(
-                  child: Text("Ok"),
+                  child: const Text("Ok"),
                   onPressed: () {
                     Navigator.pop(context);
                   }),
@@ -165,11 +167,11 @@ class _PlayedQuizState extends State<PlayedQuiz> {
         await NAlertDialog(
           dismissable: false,
           dialogStyle: DialogStyle(titleDivider: true),
-          title: Text("Opps Something Went Worng!"),
-          content: Text("Please check your connectivity and try Again.."),
+          title: const Text("Opps Something Went Worng!"),
+          content: const Text("Please check your connectivity and try Again.."),
           actions: <Widget>[
             TextButton(
-                child: Text("Ok"),
+                child: const Text("Ok"),
                 onPressed: () {
                   Navigator.pop(context);
                 }),
@@ -193,7 +195,7 @@ class _PlayedQuizState extends State<PlayedQuiz> {
         await HelperFunctions.saveUserApiKey("");
         await Navigator.pushAndRemoveUntil(
             context,
-            MaterialPageRoute(builder: (context) => SignIn()),
+            MaterialPageRoute(builder: (context) => const SignIn()),
             (route) => false);
       } else {
         await NAlertDialog(
@@ -202,7 +204,7 @@ class _PlayedQuizState extends State<PlayedQuiz> {
           title: Text(response.data['message']),
           actions: <Widget>[
             TextButton(
-                child: Text("Ok"),
+                child: const Text("Ok"),
                 onPressed: () {
                   Navigator.pop(context);
                 }),
@@ -213,11 +215,11 @@ class _PlayedQuizState extends State<PlayedQuiz> {
       await NAlertDialog(
         dismissable: false,
         dialogStyle: DialogStyle(titleDivider: true),
-        title: Text("Opps Something Went Worng!"),
-        content: Text("Please check your connectivity and try Again.."),
+        title: const Text("Opps Something Went Worng!"),
+        content: const Text("Please check your connectivity and try Again.."),
         actions: <Widget>[
           TextButton(
-              child: Text("Ok"),
+              child: const Text("Ok"),
               onPressed: () {
                 Navigator.pop(context);
               }),
@@ -226,7 +228,7 @@ class _PlayedQuizState extends State<PlayedQuiz> {
     }
   }
 
-  Future<Null> _handleRefresh() async {
+  Future<void> _handleRefresh() async {
     setState(() {
       getDataFun = getData();
     });
@@ -253,14 +255,14 @@ class _PlayedQuizState extends State<PlayedQuiz> {
                       }
                       return null;
                     },
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       labelText: "Quiz Name",
                     ),
                   ),
                 ),
                 actions: <Widget>[
                   TextButton(
-                      child: Text("Search"),
+                      child: const Text("Search"),
                       onPressed: () async {
                         if (formKey.currentState!.validate()) {
                           Navigator.pop(context);
@@ -277,7 +279,7 @@ class _PlayedQuizState extends State<PlayedQuiz> {
                 ],
               ).show(context);
             },
-            child: Padding(
+            child: const Padding(
               padding: EdgeInsets.only(right: 25),
               child: Icon(
                 Icons.search,
@@ -290,7 +292,7 @@ class _PlayedQuizState extends State<PlayedQuiz> {
                 getDataFun = getData();
               });
             },
-            child: Padding(
+            child: const Padding(
               padding: EdgeInsets.only(right: 15),
               child: Icon(
                 Icons.refresh,
@@ -301,7 +303,7 @@ class _PlayedQuizState extends State<PlayedQuiz> {
       ),
       drawer: appDrawer(context),
       body: Container(
-        margin: EdgeInsets.symmetric(horizontal: 8, vertical: 10),
+        margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
         child: RefreshIndicator(
           onRefresh: _handleRefresh,
           child: FutureBuilder(
@@ -328,7 +330,7 @@ class _PlayedQuizState extends State<PlayedQuiz> {
                               //   size: 25,
                               //   color: Colors.grey[500],
                               // ),
-                              SizedBox(
+                              const SizedBox(
                                 width: 12,
                               ),
                               Column(
@@ -349,13 +351,13 @@ class _PlayedQuizState extends State<PlayedQuiz> {
                                   )
                                 ],
                               ),
-                              Spacer(),
+                              const Spacer(),
                               IconButton(
                                 onPressed: () async {
                                   try {
                                     ProgressDialog progressDialog =
                                         ProgressDialog(context,
-                                            title: Text("Loading..."));
+                                            title: const Text("Loading..."));
                                     progressDialog.show();
                                     var url = base_url +
                                         "/api/download/result/" +
@@ -381,12 +383,12 @@ class _PlayedQuizState extends State<PlayedQuiz> {
                                       dismissable: false,
                                       dialogStyle:
                                           DialogStyle(titleDivider: true),
-                                      title: Text("Opps Something Went Worng!"),
-                                      content: Text(
+                                      title: const Text("Opps Something Went Worng!"),
+                                      content: const Text(
                                           "Please check your connectivity or try Again.."),
                                       actions: <Widget>[
                                         TextButton(
-                                            child: Text("Ok"),
+                                            child: const Text("Ok"),
                                             onPressed: () {
                                               Navigator.pop(context);
                                             }),
@@ -425,7 +427,7 @@ class _PlayedQuizState extends State<PlayedQuiz> {
                                     );
                                   } catch (e) {
                                     print(e.toString());
-                                    await NDialog(
+                                    await const NDialog(
                                       title: Text(
                                           "Opps Something Went Worng! or try again after sometime.."),
                                     ).show(context);
@@ -460,25 +462,23 @@ class _PlayedQuizState extends State<PlayedQuiz> {
                                   headers: {
                                     'Authorization': 'Bearer $api_token',
                                   },
-                                  savedDir: exterdir == null
-                                      ? '/storage/emulated/0/Download'
-                                      : exterdir,
+                                  savedDir: exterdir ?? '/storage/emulated/0/Download',
                                   fileName: 'result.pdf',
                                   showNotification: true,
                                   openFileFromNotification: true,
                                 );
                               }
                             } catch (e) {
-                              await NDialog(
+                              await const NDialog(
                                 title: Text(
                                     "Opps Something Went Worng! or try again after sometime.."),
                               ).show(context);
                             }
                           },
-                          leading: Icon(Icons.subject),
+                          leading: const Icon(Icons.subject),
                           title: Text(subjectsGet[index]['title']),
                           subtitle: Text(subjectsGet[index]['description']),
-                          trailing: Icon(
+                          trailing: const Icon(
                             Icons.download_outlined,
                             color: Color(0xFF303030),
                             size: 20,
@@ -488,13 +488,13 @@ class _PlayedQuizState extends State<PlayedQuiz> {
                 } else if (snapshot.hasError) {
                   return Text("${snapshot.error}");
                 } else {
-                  return Center(
+                  return const Center(
                       child: Text(
                     'No result Found',
                   ));
                 }
               }
-              return Center(child: CircularProgressIndicator());
+              return const Center(child: CircularProgressIndicator());
             },
           ),
         ),

@@ -6,13 +6,11 @@ import 'package:quiz_earn/views/update_details.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:ndialog/ndialog.dart';
-import 'package:responsive_sizer/responsive_sizer.dart';
 
-import '../widget/drawer.dart';
 
 class MyAccount extends StatefulWidget {
   final String message;
-  MyAccount({required this.message});
+  const MyAccount({super.key, required this.message});
   @override
   _MyAccountState createState() => _MyAccountState();
 }
@@ -47,7 +45,7 @@ class _MyAccountState extends State<MyAccount> {
           await HelperFunctions.saveUserApiKey("");
           await Navigator.pushAndRemoveUntil(
               context,
-              MaterialPageRoute(builder: (context) => SignIn()),
+              MaterialPageRoute(builder: (context) => const SignIn()),
               (route) => false);
         } else {
           setState(() {
@@ -59,7 +57,7 @@ class _MyAccountState extends State<MyAccount> {
             title: Text(response.data['message']),
             actions: <Widget>[
               TextButton(
-                  child: Text("Ok"),
+                  child: const Text("Ok"),
                   onPressed: () {
                     Navigator.pop(context);
                   }),
@@ -74,11 +72,11 @@ class _MyAccountState extends State<MyAccount> {
         await NAlertDialog(
           dismissable: false,
           dialogStyle: DialogStyle(titleDivider: true),
-          title: Text("Opps Something Went Worng!"),
-          content: Text("Please check your connectivity and try Again.."),
+          title: const Text("Opps Something Went Worng!"),
+          content: const Text("Please check your connectivity and try Again.."),
           actions: <Widget>[
             TextButton(
-                child: Text("Ok"),
+                child: const Text("Ok"),
                 onPressed: () {
                   Navigator.pop(context);
                 }),
@@ -95,7 +93,7 @@ class _MyAccountState extends State<MyAccount> {
       await HelperFunctions.saveUserLoggedIn(false);
       await HelperFunctions.saveUserApiKey("");
       Navigator.pushAndRemoveUntil(context,
-          MaterialPageRoute(builder: (context) => SignIn()), (route) => false);
+          MaterialPageRoute(builder: (context) => const SignIn()), (route) => false);
     }
   }
 
@@ -119,50 +117,50 @@ class _MyAccountState extends State<MyAccount> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           'My Account',
         ),
       ),
       // drawer: appDrawer(context),
       body: isLoading
-          ? Center(child: CircularProgressIndicator())
+          ? const Center(child: CircularProgressIndicator())
           : SingleChildScrollView(
               child: Container(
-                padding: EdgeInsets.all(20),
+                padding: const EdgeInsets.all(20),
                 child: Column(
                   children: [
-                    Center(
+                    const Center(
                         child: Icon(
                       Icons.person_rounded,
                       size: 100,
                     )),
-                    SizedBox(height: 50),
+                    const SizedBox(height: 50),
                     Row(
                       children: [
-                        Text('Name'),
-                        Spacer(),
+                        const Text('Name'),
+                        const Spacer(),
                         Text(quizdetails['name']),
                       ],
                     ),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     Row(
                       children: [
-                        Text('Email'),
-                        Spacer(),
+                        const Text('Email'),
+                        const Spacer(),
                         Text(quizdetails['email']),
                       ],
                     ),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     Row(
                       children: [
-                        Text('Quiz Attempted'),
-                        Spacer(),
+                        const Text('Quiz Attempted'),
+                        const Spacer(),
                         quizdetails['result_count'].toString() != ''
                             ? Text(quizdetails['result_count'].toString())
-                            : Text('0'),
+                            : const Text('0'),
                       ],
                     ),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -173,14 +171,14 @@ class _MyAccountState extends State<MyAccount> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => UpdateDetails(),
+                                  builder: (context) => const UpdateDetails(),
                                 ),
                               );
                             },
-                            child: Text('Update Details'),
+                            child: const Text('Update Details'),
                           ),
                         ),
-                        SizedBox(width: 10),
+                        const SizedBox(width: 10),
                         Container(
                           alignment: Alignment.center,
                           child: ElevatedButton(
@@ -188,11 +186,11 @@ class _MyAccountState extends State<MyAccount> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => ChangePass(),
+                                  builder: (context) => const ChangePass(),
                                 ),
                               );
                             },
-                            child: Text('Change Password'),
+                            child: const Text('Change Password'),
                           ),
                         ),
                       ],

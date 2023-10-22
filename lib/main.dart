@@ -16,11 +16,13 @@ void main() async {
       ChangeNotifierProvider(create: (_) => User()),
       ChangeNotifierProvider(create: (_) => ThemeProviders())
     ],
-    child: MyApp(),
+    child: const MyApp(),
   ));
 }
 
 class MyApp extends StatefulWidget {
+  const MyApp({super.key});
+
   @override
   _MyAppState createState() => _MyAppState();
 }
@@ -64,15 +66,15 @@ class _MyAppState extends State<MyApp> {
         home: isLoading
             ? Container(
                 color: Colors.white,
-                child: Center(
+                child: const Center(
                   child: CircularProgressIndicator(),
                 ),
               )
             : _isLoggedIn
-                ? Subjects(
+                ? const Subjects(
                     message: '',
                   )
-                : SignIn(),
+                : const SignIn(),
       );
     });
   }

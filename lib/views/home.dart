@@ -22,11 +22,11 @@ late String api_token;
 
 class _HomeState extends State<Home> {
   late StreamController _quizcontroller;
-  final GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   bool notified = false;
   Widget quizList() {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 24),
+      margin: const EdgeInsets.symmetric(horizontal: 24),
       child: StreamBuilder(
         stream: _quizcontroller.stream,
         builder: (BuildContext context, AsyncSnapshot snapshot) {
@@ -60,7 +60,7 @@ class _HomeState extends State<Home> {
             );
           }
           if (snapshot.connectionState != ConnectionState.active) {
-            return Center(
+            return const Center(
               child: CircularProgressIndicator(),
             );
           }
@@ -69,12 +69,12 @@ class _HomeState extends State<Home> {
               snapshot.connectionState == ConnectionState.active) {
             return Container(
               alignment: Alignment.center,
-              child: Text('No Quiz Available or refresh'),
+              child: const Text('No Quiz Available or refresh'),
             );
           }
           return Container(
             alignment: Alignment.center,
-            child: Text('No Quiz Available or refresh'),
+            child: const Text('No Quiz Available or refresh'),
           );
         },
       ),
@@ -83,11 +83,11 @@ class _HomeState extends State<Home> {
 
   storeapi() async {
     api_token = await HelperFunctions.getUserApiKey();
-    if (api_token == '' || api_token == null) {
+    if (api_token == '') {
       await HelperFunctions.saveUserLoggedIn(false);
       await HelperFunctions.saveUserApiKey("");
       Navigator.pushAndRemoveUntil(context,
-          MaterialPageRoute(builder: (context) => SignIn()), (route) => false);
+          MaterialPageRoute(builder: (context) => const SignIn()), (route) => false);
     }
   }
 
@@ -121,7 +121,7 @@ class _HomeState extends State<Home> {
           await HelperFunctions.saveUserApiKey("");
           await Navigator.pushAndRemoveUntil(
               context,
-              MaterialPageRoute(builder: (context) => SignIn()),
+              MaterialPageRoute(builder: (context) => const SignIn()),
               (route) => false);
         } else if (response.data['status'] == 400) {
           await NAlertDialog(
@@ -130,7 +130,7 @@ class _HomeState extends State<Home> {
             title: Text(response.data['message']),
             actions: <Widget>[
               TextButton(
-                  child: Text("Ok"),
+                  child: const Text("Ok"),
                   onPressed: () {
                     Navigator.pop(context);
                   }),
@@ -141,11 +141,11 @@ class _HomeState extends State<Home> {
         await NAlertDialog(
           dismissable: false,
           dialogStyle: DialogStyle(titleDivider: true),
-          title: Text("Opps Something Went Worng!"),
-          content: Text("Please check your connectivity and try Again.."),
+          title: const Text("Opps Something Went Worng!"),
+          content: const Text("Please check your connectivity and try Again.."),
           actions: <Widget>[
             TextButton(
-                child: Text("Ok"),
+                child: const Text("Ok"),
                 onPressed: () {
                   Navigator.pop(context);
                 }),
@@ -155,7 +155,7 @@ class _HomeState extends State<Home> {
     } else {
       await HelperFunctions.saveUserLoggedIn(false);
       await Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => SignIn()));
+          context, MaterialPageRoute(builder: (context) => const SignIn()));
     }
   }
 
@@ -167,9 +167,9 @@ class _HomeState extends State<Home> {
     });
   }
 
-  Future<Null> _handleRefresh() async {
+  Future<void> _handleRefresh() async {
     ProgressDialog progressDialog =
-        ProgressDialog(context, message: Text("Loading"));
+        ProgressDialog(context, message: const Text("Loading"));
 
     //You can set Message using this function
     // progressDialog.setTitle(Text("Loading"));
@@ -194,7 +194,7 @@ class _HomeState extends State<Home> {
         actions: <Widget>[
           IconButton(
             tooltip: 'Refresh',
-            icon: Icon(Icons.refresh),
+            icon: const Icon(Icons.refresh),
             onPressed: _handleRefresh,
           ),
         ],
@@ -215,7 +215,7 @@ class QuizTile extends StatelessWidget {
   final DateTime startDate;
 
   final Function func;
-  QuizTile({
+  const QuizTile({super.key, 
     required this.imgUrl,
     required this.title,
     required this.description,
@@ -248,7 +248,7 @@ class QuizTile extends StatelessWidget {
       // : null,
       child: Container(
         height: 150,
-        margin: EdgeInsets.only(bottom: 8, top: 2),
+        margin: const EdgeInsets.only(bottom: 8, top: 2),
         child: Stack(
           children: [
             ClipRRect(
@@ -269,14 +269,14 @@ class QuizTile extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(title,
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: Colors.white,
                           fontSize: 17,
                           fontWeight: FontWeight.w400,
                         )),
-                    SizedBox(height: 6),
+                    const SizedBox(height: 6),
                     Text(description,
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: Colors.white,
                           fontSize: 14,
                         )),

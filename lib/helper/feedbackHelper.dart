@@ -29,16 +29,16 @@ class Feedbackhelper {
           await HelperFunctions.saveUserApiKey("");
           await Navigator.pushAndRemoveUntil(
               context,
-              MaterialPageRoute(builder: (context) => SignIn()),
+              MaterialPageRoute(builder: (context) => const SignIn()),
               (route) => false);
         } else {
           await NAlertDialog(
             dismissable: false,
             dialogStyle: DialogStyle(titleDivider: true),
-            title: Text("Something Went Wrong."),
+            title: const Text("Something Went Wrong."),
             actions: <Widget>[
               TextButton(
-                  child: Text("Ok"),
+                  child: const Text("Ok"),
                   onPressed: () {
                     Navigator.pop(context);
                   }),
@@ -50,11 +50,11 @@ class Feedbackhelper {
         await NAlertDialog(
           dismissable: false,
           dialogStyle: DialogStyle(titleDivider: true),
-          title: Text("Opps Something Went Worng!"),
-          content: Text("Please check your connectivity and try Again.."),
+          title: const Text("Opps Something Went Worng!"),
+          content: const Text("Please check your connectivity and try Again.."),
           actions: <Widget>[
             TextButton(
-                child: Text("Ok"),
+                child: const Text("Ok"),
                 onPressed: () {
                   Navigator.pop(context);
                 }),

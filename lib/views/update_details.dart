@@ -11,6 +11,8 @@ import 'package:ndialog/ndialog.dart';
 import '../providers/userprovider.dart';
 
 class UpdateDetails extends StatefulWidget {
+  const UpdateDetails({super.key});
+
   @override
   _UpdateDetailsState createState() => _UpdateDetailsState();
 }
@@ -47,7 +49,7 @@ class _UpdateDetailsState extends State<UpdateDetails> {
           await HelperFunctions.saveUserApiKey("");
           await Navigator.pushAndRemoveUntil(
               context,
-              MaterialPageRoute(builder: (context) => SignIn()),
+              MaterialPageRoute(builder: (context) => const SignIn()),
               (route) => false);
           setState(() {
             isLoading = false;
@@ -61,11 +63,11 @@ class _UpdateDetailsState extends State<UpdateDetails> {
         await NAlertDialog(
           dismissable: false,
           dialogStyle: DialogStyle(titleDivider: true),
-          title: Text("Opps Something Went Worng!"),
-          content: Text("Please check your connectivity and try Again.."),
+          title: const Text("Opps Something Went Worng!"),
+          content: const Text("Please check your connectivity and try Again.."),
           actions: <Widget>[
             TextButton(
-                child: Text("Ok"),
+                child: const Text("Ok"),
                 onPressed: () {
                   Navigator.pop(context);
                 }),
@@ -78,11 +80,11 @@ class _UpdateDetailsState extends State<UpdateDetails> {
   storeapi() async {
     api_token = await HelperFunctions.getUserApiKey();
 
-    if (api_token == '' || api_token == null) {
+    if (api_token == '') {
       await HelperFunctions.saveUserLoggedIn(false);
       await HelperFunctions.saveUserApiKey("");
       Navigator.pushAndRemoveUntil(context,
-          MaterialPageRoute(builder: (context) => SignIn()), (route) => false);
+          MaterialPageRoute(builder: (context) => const SignIn()), (route) => false);
     }
   }
 
@@ -113,7 +115,7 @@ class _UpdateDetailsState extends State<UpdateDetails> {
           await Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute(
-                  builder: (context) => MyAccount(
+                  builder: (context) => const MyAccount(
                         message: 'User Details Updated',
                       )),
               (route) => false);
@@ -126,7 +128,7 @@ class _UpdateDetailsState extends State<UpdateDetails> {
           await HelperFunctions.saveUserApiKey("");
           await Navigator.pushAndRemoveUntil(
               context,
-              MaterialPageRoute(builder: (context) => SignIn()),
+              MaterialPageRoute(builder: (context) => const SignIn()),
               (route) => false);
         } else {
           setState(() {
@@ -138,7 +140,7 @@ class _UpdateDetailsState extends State<UpdateDetails> {
             title: Text(response.data['message']),
             actions: <Widget>[
               TextButton(
-                  child: Text("Ok"),
+                  child: const Text("Ok"),
                   onPressed: () {
                     Navigator.pop(context);
                   }),
@@ -152,11 +154,11 @@ class _UpdateDetailsState extends State<UpdateDetails> {
         await NAlertDialog(
           dismissable: false,
           dialogStyle: DialogStyle(titleDivider: true),
-          title: Text("Opps Something Went Worng!"),
-          content: Text("Please check your connectivity and try Again.."),
+          title: const Text("Opps Something Went Worng!"),
+          content: const Text("Please check your connectivity and try Again.."),
           actions: <Widget>[
             TextButton(
-                child: Text("Ok"),
+                child: const Text("Ok"),
                 onPressed: () {
                   Navigator.pop(context);
                 }),
@@ -170,18 +172,18 @@ class _UpdateDetailsState extends State<UpdateDetails> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Center(
+        title: const Center(
             child: Text(
           "User Update",
           style: TextStyle(color: Colors.blue, fontSize: 24),
         )),
-        iconTheme: IconThemeData(color: Colors.black),
+        iconTheme: const IconThemeData(color: Colors.black),
         backgroundColor: Colors.transparent,
         elevation: 0.0,
       ),
       body: isLoading
           ? Container(
-              child: Center(
+              child: const Center(
                 child: CircularProgressIndicator(),
               ),
             )
@@ -191,26 +193,26 @@ class _UpdateDetailsState extends State<UpdateDetails> {
                   autovalidateMode: AutovalidateMode.always,
                   key: formKey,
                   child: Container(
-                    margin: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                    margin: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
                     child: Column(
                       children: <Widget>[
                         AnimatedTextKit(
                           animatedTexts: [
                             TypewriterAnimatedText(
                               'Update Your Details',
-                              textStyle: TextStyle(
+                              textStyle: const TextStyle(
                                 fontSize: 35,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.grey,
                               ),
-                              speed: Duration(milliseconds: 100),
+                              speed: const Duration(milliseconds: 100),
                             ),
                           ],
                           isRepeatingAnimation: true,
-                          pause: Duration(milliseconds: 500),
+                          pause: const Duration(milliseconds: 500),
                           displayFullTextOnTap: true,
                         ),
-                        SizedBox(height: 50),
+                        const SizedBox(height: 50),
                         TextFormField(
                           validator: (value) {
                             if (value!.isEmpty) {
@@ -224,11 +226,11 @@ class _UpdateDetailsState extends State<UpdateDetails> {
                             return null;
                           },
                           controller: nameTextEditingController,
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                               labelText: "Name",
                               icon: Icon(Icons.person_rounded)),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 8,
                         ),
                         TextFormField(
@@ -244,14 +246,14 @@ class _UpdateDetailsState extends State<UpdateDetails> {
                             return null;
                           },
                           controller: emailTextEditingController,
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             icon: Icon(
                               Icons.email_rounded,
                             ),
                             labelText: "Email",
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 20,
                         ),
                         GestureDetector(
@@ -259,21 +261,21 @@ class _UpdateDetailsState extends State<UpdateDetails> {
                             signUp();
                           },
                           child: Container(
-                            padding: EdgeInsets.symmetric(vertical: 16),
+                            padding: const EdgeInsets.symmetric(vertical: 16),
                             width: MediaQuery.of(context).size.width - 50,
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
                               color: Colors.blue,
                               borderRadius: BorderRadius.circular(30),
                             ),
-                            child: Text(
+                            child: const Text(
                               "Update",
                               style:
                                   TextStyle(color: Colors.white, fontSize: 17),
                             ),
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 16,
                         ),
                       ],

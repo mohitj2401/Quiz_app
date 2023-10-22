@@ -13,12 +13,14 @@ import 'package:animated_text_kit/animated_text_kit.dart';
 import '../providers/userprovider.dart';
 
 class SignUp extends StatefulWidget {
+  const SignUp({super.key});
+
   @override
   _SignUpState createState() => _SignUpState();
 }
 
 class _SignUpState extends State<SignUp> {
-  AuthService authService = new AuthService();
+  AuthService authService = AuthService();
   final formKey = GlobalKey<FormState>();
   bool isLoading = false;
   bool _isHidden = true;
@@ -61,7 +63,7 @@ class _SignUpState extends State<SignUp> {
                 context,
                 MaterialPageRoute(
                     builder: (context) =>
-                        Subjects(message: 'Resgiter Successfully')));
+                        const Subjects(message: 'Resgiter Successfully')));
 
             setState(() {
               isLoading = false;
@@ -80,11 +82,11 @@ class _SignUpState extends State<SignUp> {
         await NAlertDialog(
           dismissable: false,
           dialogStyle: DialogStyle(titleDivider: true),
-          title: Text("Opps Something Went Worng!"),
-          content: Text("Please check your connectivity and try Again.."),
+          title: const Text("Opps Something Went Worng!"),
+          content: const Text("Please check your connectivity and try Again.."),
           actions: <Widget>[
             TextButton(
-                child: Text("Ok"),
+                child: const Text("Ok"),
                 onPressed: () {
                   Navigator.pop(context);
                 }),
@@ -102,31 +104,31 @@ class _SignUpState extends State<SignUp> {
           child: Form(
             key: formKey,
             child: Container(
-              margin: EdgeInsets.symmetric(horizontal: 24, vertical: 50),
+              margin: const EdgeInsets.symmetric(horizontal: 24, vertical: 50),
               child: Column(
                 children: <Widget>[
-                  SizedBox(
+                  const SizedBox(
                     height: 100,
                   ),
                   showAlert(),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   AnimatedTextKit(
                     animatedTexts: [
                       TypewriterAnimatedText(
                         'Welcome to Quiz Learn!',
-                        textStyle: TextStyle(
+                        textStyle: const TextStyle(
                           fontSize: 30,
                           fontWeight: FontWeight.bold,
                           color: Colors.grey,
                         ),
-                        speed: Duration(milliseconds: 100),
+                        speed: const Duration(milliseconds: 100),
                       ),
                     ],
                     isRepeatingAnimation: true,
-                    pause: Duration(milliseconds: 500),
+                    pause: const Duration(milliseconds: 500),
                     displayFullTextOnTap: true,
                   ),
-                  SizedBox(height: 50),
+                  const SizedBox(height: 50),
                   TextFormField(
                     validator: (value) {
                       if (value!.isEmpty) {
@@ -139,10 +141,10 @@ class _SignUpState extends State<SignUp> {
                       return null;
                     },
                     controller: nameTextEditingController,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                         labelText: "Name", icon: Icon(Icons.person_rounded)),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 8,
                   ),
                   TextFormField(
@@ -158,14 +160,14 @@ class _SignUpState extends State<SignUp> {
                       return null;
                     },
                     controller: emailTextEditingController,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       icon: Icon(
                         Icons.email_rounded,
                       ),
                       labelText: "Email",
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 8,
                   ),
                   TextFormField(
@@ -183,11 +185,11 @@ class _SignUpState extends State<SignUp> {
                     },
                     controller: passwordTextEditingController,
                     decoration: InputDecoration(
-                      icon: Icon(Icons.lock),
+                      icon: const Icon(Icons.lock),
                       suffix: InkWell(
                         onTap: _togglePasswordView,
                         child: Padding(
-                          padding: EdgeInsets.only(left: 8.0, right: 20),
+                          padding: const EdgeInsets.only(left: 8.0, right: 20),
                           child: Icon(
                             Icons.visibility,
                             size: 24,
@@ -198,7 +200,7 @@ class _SignUpState extends State<SignUp> {
                       labelText: "Password",
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 24,
                   ),
                   GestureDetector(
@@ -207,32 +209,32 @@ class _SignUpState extends State<SignUp> {
                     },
                     child: isLoading
                         ? Container(
-                            child: Center(
+                            child: const Center(
                               child: CircularProgressIndicator(),
                             ),
                           )
                         : Container(
-                            padding: EdgeInsets.symmetric(vertical: 16),
+                            padding: const EdgeInsets.symmetric(vertical: 16),
                             width: MediaQuery.of(context).size.width - 50,
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
                               color: Colors.blue,
                               borderRadius: BorderRadius.circular(30),
                             ),
-                            child: Text(
+                            child: const Text(
                               "Sign Up",
                               style:
                                   TextStyle(color: Colors.white, fontSize: 17),
                             ),
                           ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 16,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      Text(
+                      const Text(
                         "Already have an account? ",
                         style: TextStyle(fontSize: 16),
                       ),
@@ -241,9 +243,9 @@ class _SignUpState extends State<SignUp> {
                           Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => SignIn()));
+                                  builder: (context) => const SignIn()));
                         },
-                        child: Text(
+                        child: const Text(
                           "Sign in",
                           style: TextStyle(
                             fontSize: 16,
@@ -253,7 +255,7 @@ class _SignUpState extends State<SignUp> {
                       ),
                     ],
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 60,
                   )
                 ],
@@ -276,18 +278,18 @@ class _SignUpState extends State<SignUp> {
       return Container(
         color: Colors.amberAccent,
         width: double.infinity,
-        padding: EdgeInsets.all(8),
+        padding: const EdgeInsets.all(8),
         child: Row(
           children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
+            const Padding(
+              padding: EdgeInsets.all(8.0),
               child: Icon(Icons.error_outline),
             ),
             Expanded(
               child: Text(authService.error),
             ),
             IconButton(
-              icon: Icon(Icons.close),
+              icon: const Icon(Icons.close),
               onPressed: () {
                 setState(() {
                   authService.error = '';
@@ -298,7 +300,7 @@ class _SignUpState extends State<SignUp> {
         ),
       );
     } else {
-      return SizedBox(height: 0);
+      return const SizedBox(height: 0);
     }
   }
 }

@@ -2,10 +2,8 @@ import 'package:provider/provider.dart';
 import 'package:quiz_earn/constant/constant.dart';
 import 'package:quiz_earn/helper/helper.dart';
 import 'package:quiz_earn/providers/themeprovider.dart';
-import 'package:quiz_earn/views/change_pass.dart';
 import 'package:quiz_earn/views/myaccount.dart';
 import 'package:quiz_earn/views/signin.dart';
-import 'package:quiz_earn/views/update_details.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:ndialog/ndialog.dart';
@@ -16,7 +14,7 @@ import '../widget/drawer.dart';
 
 class SettingScreen extends StatefulWidget {
   final String message;
-  SettingScreen({required this.message});
+  const SettingScreen({super.key, required this.message});
   @override
   _SettingScreenState createState() => _SettingScreenState();
 }
@@ -51,7 +49,7 @@ class _SettingScreenState extends State<SettingScreen> {
           await HelperFunctions.saveUserApiKey("");
           await Navigator.pushAndRemoveUntil(
               context,
-              MaterialPageRoute(builder: (context) => SignIn()),
+              MaterialPageRoute(builder: (context) => const SignIn()),
               (route) => false);
         } else {
           setState(() {
@@ -63,7 +61,7 @@ class _SettingScreenState extends State<SettingScreen> {
             title: Text(response.data['message']),
             actions: <Widget>[
               TextButton(
-                  child: Text("Ok"),
+                  child: const Text("Ok"),
                   onPressed: () {
                     Navigator.pop(context);
                   }),
@@ -78,11 +76,11 @@ class _SettingScreenState extends State<SettingScreen> {
         await NAlertDialog(
           dismissable: false,
           dialogStyle: DialogStyle(titleDivider: true),
-          title: Text("Opps Something Went Worng!"),
-          content: Text("Please check your connectivity and try Again.."),
+          title: const Text("Opps Something Went Worng!"),
+          content: const Text("Please check your connectivity and try Again.."),
           actions: <Widget>[
             TextButton(
-                child: Text("Ok"),
+                child: const Text("Ok"),
                 onPressed: () {
                   Navigator.pop(context);
                 }),
@@ -99,7 +97,7 @@ class _SettingScreenState extends State<SettingScreen> {
       await HelperFunctions.saveUserLoggedIn(false);
       await HelperFunctions.saveUserApiKey("");
       Navigator.pushAndRemoveUntil(context,
-          MaterialPageRoute(builder: (context) => SignIn()), (route) => false);
+          MaterialPageRoute(builder: (context) => const SignIn()), (route) => false);
     }
   }
 
@@ -123,13 +121,13 @@ class _SettingScreenState extends State<SettingScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           'Settings',
         ),
       ),
       drawer: appDrawer(context),
       body: Container(
-        padding: EdgeInsets.all(20),
+        padding: const EdgeInsets.all(20),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -143,7 +141,7 @@ class _SettingScreenState extends State<SettingScreen> {
                 children: [
                   Card(
                     margin: EdgeInsets.zero,
-                    shape: CircleBorder(),
+                    shape: const CircleBorder(),
                     child: Icon(
                       Icons.person_rounded,
                       size: 20.w,
@@ -169,32 +167,32 @@ class _SettingScreenState extends State<SettingScreen> {
                 ],
               ),
             ),
-            SizedBox(height: 20),
-            Divider(),
+            const SizedBox(height: 20),
+            const Divider(),
             ListTile(
               onTap: () {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => MyAccount(
+                        builder: (context) => const MyAccount(
                               message: '',
                             )));
               },
-              leading: Icon(Icons.lock),
-              title: Text("My Account"),
+              leading: const Icon(Icons.lock),
+              title: const Text("My Account"),
               // trailing: IconButton(
               //   onPressed: () {},
               //   icon: context.read<ThemeProviders>().theme_number == 1
               //       ? Icon(Icons.light_mode)
               //       : Icon(Icons.dark_mode),
               // ),
-              trailing: Icon(Icons.arrow_forward_ios),
+              trailing: const Icon(Icons.arrow_forward_ios),
             ),
-            Divider(),
+            const Divider(),
             ListTile(
               leading: context.read<ThemeProviders>().theme_number == 1
-                  ? Icon(Icons.dark_mode)
-                  : Icon(Icons.light_mode),
+                  ? const Icon(Icons.dark_mode)
+                  : const Icon(Icons.light_mode),
               title: Text(context.read<ThemeProviders>().theme_number == 1
                   ? "Dart Theme "
                   : "Light Theme"),
@@ -214,8 +212,8 @@ class _SettingScreenState extends State<SettingScreen> {
                 },
               ),
             ),
-            Divider(),
-            ListTile(
+            const Divider(),
+            const ListTile(
               leading: Icon(Icons.logout),
               title: Text("Logout"),
               // trailing: IconButton(
@@ -234,7 +232,7 @@ class _SettingScreenState extends State<SettingScreen> {
               //   },
               // ),
             ),
-            Divider(),
+            const Divider(),
           ],
         ),
       ),

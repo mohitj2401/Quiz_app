@@ -1,15 +1,12 @@
-import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:loading_elevated_button/loading_elevated_button.dart';
 import 'package:quiz_earn/constant/feedbackCard.dart';
 import 'package:quiz_earn/helper/feedbackHelper.dart';
 import 'package:quiz_earn/service/auth.dart';
-import 'package:quiz_earn/views/signup.dart';
-import 'package:quiz_earn/widget/drawer.dart';
 
 class FeedbackScrean extends StatefulWidget {
-  FeedbackScrean({Key? key}) : super(key: key);
+  const FeedbackScrean({Key? key}) : super(key: key);
 
   @override
   State<FeedbackScrean> createState() => _FeedbackScreanState();
@@ -23,11 +20,11 @@ class _FeedbackScreanState extends State<FeedbackScrean> {
 
   final formKey = GlobalKey<FormState>();
 
-  AuthService authService = new AuthService();
+  AuthService authService = AuthService();
 
   double rating = 3;
   String imporvements = '';
-  Feedbackhelper _feedbackhelper = Feedbackhelper();
+  final Feedbackhelper _feedbackhelper = Feedbackhelper();
 
   TextEditingController messageTextEditingController = TextEditingController();
 
@@ -36,7 +33,7 @@ class _FeedbackScreanState extends State<FeedbackScrean> {
       isSubmit = true;
     });
     String title = '';
-    selectedList.forEach((element) {
+    for (var element in selectedList) {
       if (element == 1) {
         title = title + 'Quiz Ui ,';
       }
@@ -49,7 +46,7 @@ class _FeedbackScreanState extends State<FeedbackScrean> {
       if (element == 4) {
         title = title + 'App Functionality ,';
       }
-    });
+    }
     Map<String, dynamic> feedbackdata = {
       "rating": rating,
       "title": title,
@@ -69,11 +66,11 @@ class _FeedbackScreanState extends State<FeedbackScrean> {
       bottomNavigationBar: isLoading
           ? null
           : Container(
-              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
               child: LoadingElevatedButton(
                 isLoading: isSubmit,
                 disabledWhileLoading: isSubmit,
-                child: Text(
+                child: const Text(
                   "Submit",
                   style: TextStyle(
                     fontSize: 14,
@@ -81,11 +78,11 @@ class _FeedbackScreanState extends State<FeedbackScrean> {
                   ),
                 ),
                 style: ButtonStyle(
-                  minimumSize: MaterialStateProperty.all(Size.fromHeight(50)),
+                  minimumSize: MaterialStateProperty.all(const Size.fromHeight(50)),
                   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                     RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
-                      side: BorderSide(),
+                      side: const BorderSide(),
                     ),
                   ),
                 ),
@@ -96,14 +93,14 @@ class _FeedbackScreanState extends State<FeedbackScrean> {
             ),
       appBar: AppBar(
         elevation: 1,
-        title: Text(
+        title: const Text(
           'Feedback',
         ),
       ),
       body: isLoading
-          ? SubmitedFeedbackScreen()
+          ? const SubmitedFeedbackScreen()
           : Container(
-              margin: EdgeInsets.symmetric(vertical: 16),
+              margin: const EdgeInsets.symmetric(vertical: 16),
               child: SingleChildScrollView(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -111,24 +108,24 @@ class _FeedbackScreanState extends State<FeedbackScrean> {
                     Container(
                       width: MediaQuery.of(context).size.width,
                       padding:
-                          EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                          const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
+                          const Text(
                             "Rate Your Experience",
                             style: TextStyle(
                               fontSize: 30,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          Text(
+                          const Text(
                             "Are you Satisfied with our Service ?",
                             style: TextStyle(
                               fontWeight: FontWeight.w300,
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 15,
                           ),
                           RatingBar.builder(
@@ -137,32 +134,32 @@ class _FeedbackScreanState extends State<FeedbackScrean> {
                             itemBuilder: (context, index) {
                               switch (index) {
                                 case 0:
-                                  return Icon(
+                                  return const Icon(
                                     Icons.sentiment_very_dissatisfied,
                                     color: Colors.red,
                                   );
                                 case 1:
-                                  return Icon(
+                                  return const Icon(
                                     Icons.sentiment_dissatisfied,
                                     color: Colors.redAccent,
                                   );
                                 case 2:
-                                  return Icon(
+                                  return const Icon(
                                     Icons.sentiment_neutral,
                                     color: Colors.amber,
                                   );
                                 case 3:
-                                  return Icon(
+                                  return const Icon(
                                     Icons.sentiment_satisfied,
                                     color: Colors.lightGreen,
                                   );
                                 case 4:
-                                  return Icon(
+                                  return const Icon(
                                     Icons.sentiment_very_satisfied,
                                     color: Colors.green,
                                   );
                               }
-                              return Icon(
+                              return const Icon(
                                 Icons.sentiment_satisfied,
                               );
                             },
@@ -178,18 +175,18 @@ class _FeedbackScreanState extends State<FeedbackScrean> {
                     Container(
                       width: MediaQuery.of(context).size.width,
                       padding:
-                          EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-                      margin: EdgeInsets.symmetric(vertical: 16),
+                          const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                      margin: const EdgeInsets.symmetric(vertical: 16),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
+                          const Text(
                             "Tell us what can be Improved?",
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 10,
                           ),
                           Row(
@@ -248,7 +245,7 @@ class _FeedbackScreanState extends State<FeedbackScrean> {
                               ),
                             ],
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 10,
                           ),
                           Row(
@@ -274,7 +271,7 @@ class _FeedbackScreanState extends State<FeedbackScrean> {
                               Container()
                             ],
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 15,
                           ),
                           Form(
@@ -282,11 +279,11 @@ class _FeedbackScreanState extends State<FeedbackScrean> {
                             child: TextFormField(
                               maxLines: 8,
                               keyboardType: TextInputType.multiline,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontSize: 16,
                               ),
                               controller: messageTextEditingController,
-                              decoration: InputDecoration(
+                              decoration: const InputDecoration(
                                 hintText: "Tell us how can we improve...",
                                 hintStyle: TextStyle(
                                   fontSize: 14,
@@ -317,23 +314,23 @@ class SubmitedFeedbackScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 30, horizontal: 15),
+      margin: const EdgeInsets.symmetric(vertical: 30, horizontal: 15),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(
+          const Icon(
             Icons.thumb_up_off_alt,
             size: 80,
           ),
-          SizedBox(
+          const SizedBox(
             height: 15,
           ),
-          Text(
+          const Text(
             "Thank You",
             style: TextStyle(fontSize: 22),
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           Text(
@@ -341,7 +338,7 @@ class SubmitedFeedbackScreen extends StatelessWidget {
             style: TextStyle(
                 fontSize: 18, color: Colors.blueAccent.withOpacity(0.7)),
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           TextButton(

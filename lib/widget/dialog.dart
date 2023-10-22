@@ -6,7 +6,7 @@ import 'package:dio/dio.dart';
 
 enum DialogAction { yes, abort }
 
-AuthService authService = new AuthService();
+AuthService authService = AuthService();
 
 class Dialogs {
   static Future<DialogAction> yesAbortDialog(
@@ -33,7 +33,7 @@ class Dialogs {
             ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
-                onPrimary: Colors.red,
+                foregroundColor: Colors.red,
               ),
               onPressed: () async {
                 try {

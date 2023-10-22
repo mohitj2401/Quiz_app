@@ -10,9 +10,9 @@ class HelperFunctions {
     prefs.setBool(userLoggedInKey, isLoggedIn);
   }
 
-  static saveUserApiKey(String api_token) async {
+  static saveUserApiKey(String apiToken) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString(userApiKey, api_token);
+    prefs.setString(userApiKey, apiToken);
   }
 
   static Future<bool> getUserLoggedIn() async {

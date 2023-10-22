@@ -7,7 +7,6 @@ import 'package:quiz_earn/views/feedback.dart';
 import 'package:quiz_earn/views/settings.dart';
 import '../helper/helper.dart';
 import '../providers/userprovider.dart';
-import '../views/myaccount.dart';
 import '../views/played_quiz.dart';
 import '../views/signin.dart';
 import '../views/subjects.dart';
@@ -15,11 +14,11 @@ import '../views/subjects.dart';
 Drawer appDrawer(BuildContext context) {
   return Drawer(
     child: Container(
-      padding: EdgeInsets.symmetric(horizontal: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 20),
       child: ListView(
         padding: EdgeInsets.zero,
         children: [
-          Container(
+          SizedBox(
             height: 250,
             child: DrawerHeader(
               child: Column(
@@ -28,7 +27,7 @@ Drawer appDrawer(BuildContext context) {
                     "assets/appicon.png",
                     width: 100,
                   ),
-                  Text(
+                  const Text(
                     "Hello!",
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.w200),
                   ),
@@ -36,7 +35,7 @@ Drawer appDrawer(BuildContext context) {
                     context.watch<User>().name != ''
                         ? "${context.watch<User>().name[0].toUpperCase()}${context.watch<User>().name.substring(1).toLowerCase()}"
                         : "",
-                    style: TextStyle(fontSize: 25, fontWeight: FontWeight.w400),
+                    style: const TextStyle(fontSize: 25, fontWeight: FontWeight.w400),
                   )
                 ],
               ),
@@ -48,48 +47,48 @@ Drawer appDrawer(BuildContext context) {
               Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => Subjects(message: '')));
+                      builder: (context) => const Subjects(message: '')));
             },
-            leading: Icon(Icons.subject_outlined, size: 30),
-            title: Text(
+            leading: const Icon(Icons.subject_outlined, size: 30),
+            title: const Text(
               "Categories",
               style: TextStyle(fontSize: 22, fontWeight: FontWeight.w400),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
           ListTile(
             onTap: () {
               Navigator.pop(context);
               Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (context) => PlayedQuiz()));
+                  MaterialPageRoute(builder: (context) => const PlayedQuiz()));
             },
-            leading: Icon(
+            leading: const Icon(
               Icons.category_outlined,
               size: 30,
             ),
-            title: Text(
+            title: const Text(
               "Results",
               style: TextStyle(fontSize: 22, fontWeight: FontWeight.w400),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
           ListTile(
             onTap: () {
               Navigator.pop(context);
               Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => FeedbackScrean()));
+                  MaterialPageRoute(builder: (context) => const FeedbackScrean()));
             },
-            leading: Icon(Icons.feedback_sharp, size: 30),
-            title: Text(
+            leading: const Icon(Icons.feedback_sharp, size: 30),
+            title: const Text(
               "Feedback",
               style: TextStyle(fontSize: 22, fontWeight: FontWeight.w300),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
           ListTile(
@@ -98,47 +97,47 @@ Drawer appDrawer(BuildContext context) {
               Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => SettingScreen(
+                      builder: (context) => const SettingScreen(
                             message: '',
                           )));
             },
-            leading: Icon(Icons.settings_outlined, size: 30),
-            title: Text(
+            leading: const Icon(Icons.settings_outlined, size: 30),
+            title: const Text(
               "Settings",
               style: TextStyle(fontSize: 22, fontWeight: FontWeight.w300),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
           ListTile(
             onTap: () async {
               Navigator.pop(context);
               await NDialog(
-                title: Text(
+                title: const Text(
                   "Log Out",
                   textAlign: TextAlign.center,
                 ),
-                content: Text(
+                content: const Text(
                   "Are you sure!",
                   textAlign: TextAlign.center,
                 ),
                 actions: <Widget>[
                   TextButton(
-                    child: Text("Yes"),
+                    child: const Text("Yes"),
                     onPressed: () async {
                       try {
                         Navigator.pop(context);
                         ProgressDialog progressDialog = ProgressDialog(context,
-                            message: Text("Logging Out"));
+                            message: const Text("Logging Out"));
 
                         progressDialog.show();
 
                         String url = base_url + "/api/logout";
-                        String api_token =
+                        String apiToken =
                             await HelperFunctions.getUserApiKey();
                         Response response = await Dio(BaseOptions(headers: {
-                          'Authorization': 'Bearer $api_token',
+                          'Authorization': 'Bearer $apiToken',
                           "X-Requested-With": "XMLHttpRequest"
                         })).post(url);
 
@@ -149,7 +148,7 @@ Drawer appDrawer(BuildContext context) {
                           progressDialog.dismiss();
                           await Navigator.pushAndRemoveUntil(
                               context,
-                              MaterialPageRoute(builder: (context) => SignIn()),
+                              MaterialPageRoute(builder: (context) => const SignIn()),
                               (route) => false);
                         } else if (response.data['status'] == 401) {
                           await HelperFunctions.saveUserLoggedIn(false);
@@ -158,15 +157,15 @@ Drawer appDrawer(BuildContext context) {
                           progressDialog.dismiss();
                           await Navigator.pushAndRemoveUntil(
                               context,
-                              MaterialPageRoute(builder: (context) => SignIn()),
+                              MaterialPageRoute(builder: (context) => const SignIn()),
                               (route) => false);
                         } else {
                           progressDialog.dismiss();
                           await NDialog(
-                              title: Text("Please contact Admin"),
+                              title: const Text("Please contact Admin"),
                               actions: <Widget>[
                                 TextButton(
-                                    child: Text("Ok"),
+                                    child: const Text("Ok"),
                                     onPressed: () {
                                       Navigator.pop(context);
                                     }),
@@ -174,10 +173,10 @@ Drawer appDrawer(BuildContext context) {
                         }
                       } catch (e) {
                         await NDialog(
-                            title: Text("Please contact Admin"),
+                            title: const Text("Please contact Admin"),
                             actions: <Widget>[
                               TextButton(
-                                  child: Text("Ok"),
+                                  child: const Text("Ok"),
                                   onPressed: () {
                                     Navigator.pop(context);
                                   }),
@@ -186,15 +185,15 @@ Drawer appDrawer(BuildContext context) {
                     },
                   ),
                   TextButton(
-                      child: Text("No"),
+                      child: const Text("No"),
                       onPressed: () {
                         Navigator.pop(context);
                       }),
                 ],
               ).show(context);
             },
-            leading: Icon(Icons.exit_to_app_outlined, size: 30),
-            title: Text(
+            leading: const Icon(Icons.exit_to_app_outlined, size: 30),
+            title: const Text(
               "Logout",
               style: TextStyle(fontSize: 22, fontWeight: FontWeight.w300),
             ),
@@ -207,6 +206,6 @@ Drawer appDrawer(BuildContext context) {
 
 extension StringExtension on String {
   String capitalize() {
-    return "${this[0].toUpperCase()}${this.substring(1).toLowerCase()}";
+    return "${this[0].toUpperCase()}${substring(1).toLowerCase()}";
   }
 }

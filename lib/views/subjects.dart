@@ -13,7 +13,7 @@ import '../providers/userprovider.dart';
 class Subjects extends StatefulWidget {
   final String message;
 
-  Subjects({required this.message});
+  const Subjects({super.key, required this.message});
   @override
   _SubjectsState createState() => _SubjectsState();
 }
@@ -33,7 +33,7 @@ class _SubjectsState extends State<Subjects> {
       await HelperFunctions.saveUserLoggedIn(false);
       await HelperFunctions.saveUserApiKey("");
       Navigator.pushAndRemoveUntil(context,
-          MaterialPageRoute(builder: (context) => SignIn()), (route) => false);
+          MaterialPageRoute(builder: (context) => const SignIn()), (route) => false);
     }
   }
 
@@ -92,7 +92,7 @@ class _SubjectsState extends State<Subjects> {
           await HelperFunctions.saveUserApiKey("");
           await Navigator.pushAndRemoveUntil(
               context,
-              MaterialPageRoute(builder: (context) => SignIn()),
+              MaterialPageRoute(builder: (context) => const SignIn()),
               (route) => false);
         } else {
           await NAlertDialog(
@@ -101,7 +101,7 @@ class _SubjectsState extends State<Subjects> {
             title: Text(response.data['message']),
             actions: <Widget>[
               TextButton(
-                  child: Text("Ok"),
+                  child: const Text("Ok"),
                   onPressed: () {
                     Navigator.pop(context);
                   }),
@@ -112,11 +112,11 @@ class _SubjectsState extends State<Subjects> {
         await NAlertDialog(
           dismissable: false,
           dialogStyle: DialogStyle(titleDivider: true),
-          title: Text("Opps Something Went Worng!"),
-          content: Text("Please check your connectivity and try Again.."),
+          title: const Text("Opps Something Went Worng!"),
+          content: const Text("Please check your connectivity and try Again.."),
           actions: <Widget>[
             TextButton(
-                child: Text("Ok"),
+                child: const Text("Ok"),
                 onPressed: () {
                   Navigator.pop(context);
                 }),
@@ -140,7 +140,7 @@ class _SubjectsState extends State<Subjects> {
         await HelperFunctions.saveUserApiKey("");
         await Navigator.pushAndRemoveUntil(
             context,
-            MaterialPageRoute(builder: (context) => SignIn()),
+            MaterialPageRoute(builder: (context) => const SignIn()),
             (route) => false);
       } else {
         await NAlertDialog(
@@ -149,7 +149,7 @@ class _SubjectsState extends State<Subjects> {
           title: Text(response.data['message']),
           actions: <Widget>[
             TextButton(
-                child: Text("Ok"),
+                child: const Text("Ok"),
                 onPressed: () {
                   Navigator.pop(context);
                 }),
@@ -160,11 +160,11 @@ class _SubjectsState extends State<Subjects> {
       await NAlertDialog(
         dismissable: false,
         dialogStyle: DialogStyle(titleDivider: true),
-        title: Text("Opps Something Went Worng!"),
-        content: Text("Please check your connectivity and try Again.."),
+        title: const Text("Opps Something Went Worng!"),
+        content: const Text("Please check your connectivity and try Again.."),
         actions: <Widget>[
           TextButton(
-              child: Text("Ok"),
+              child: const Text("Ok"),
               onPressed: () {
                 Navigator.pop(context);
               }),
@@ -173,7 +173,7 @@ class _SubjectsState extends State<Subjects> {
     }
   }
 
-  Future<Null> _handleRefresh() async {
+  Future<void> _handleRefresh() async {
     setState(() {
       getDataFun = getData();
     });
@@ -184,7 +184,7 @@ class _SubjectsState extends State<Subjects> {
     return Scaffold(
       drawer: appDrawer(context),
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           'Categories',
         ),
         actions: [
@@ -201,14 +201,14 @@ class _SubjectsState extends State<Subjects> {
                       }
                       return null;
                     },
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       labelText: "Subject Name",
                     ),
                   ),
                 ),
                 actions: <Widget>[
                   TextButton(
-                      child: Text("Search"),
+                      child: const Text("Search"),
                       onPressed: () async {
                         if (formKey.currentState!.validate()) {
                           Navigator.pop(context);
@@ -225,7 +225,7 @@ class _SubjectsState extends State<Subjects> {
                 ],
               ).show(context);
             },
-            child: Padding(
+            child: const Padding(
               padding: EdgeInsets.only(right: 25),
               child: Icon(
                 Icons.search,
@@ -238,7 +238,7 @@ class _SubjectsState extends State<Subjects> {
                 getDataFun = getData();
               });
             },
-            child: Padding(
+            child: const Padding(
               padding: EdgeInsets.only(right: 15),
               child: Icon(
                 Icons.refresh,
@@ -248,7 +248,7 @@ class _SubjectsState extends State<Subjects> {
         ],
       ),
       body: Container(
-        margin: EdgeInsets.symmetric(horizontal: 8, vertical: 10),
+        margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
         child: RefreshIndicator(
           onRefresh: _handleRefresh,
           child: FutureBuilder(
@@ -282,7 +282,7 @@ class _SubjectsState extends State<Subjects> {
                             alignment: Alignment.center,
                             child: Text(
                               subjectsGet[index]['name'],
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontSize: 20,
                                 color: Colors.white,
                               ),
@@ -305,10 +305,10 @@ class _SubjectsState extends State<Subjects> {
                                         subject_name: subjectsGet[index]
                                             ['name'])));
                           },
-                          leading: Icon(Icons.subject),
+                          leading: const Icon(Icons.subject),
                           title: Text(subjectsGet[index]['name']),
                           subtitle: Text(subjectsGet[index]['code']),
-                          trailing: Icon(
+                          trailing: const Icon(
                             Icons.arrow_forward_ios,
                             color: Color(0xFF303030),
                             size: 20,
@@ -318,13 +318,13 @@ class _SubjectsState extends State<Subjects> {
                 } else if (snapshot.hasError) {
                   return Text("${snapshot.error}");
                 } else {
-                  return Center(
+                  return const Center(
                       child: Text(
                     'No result Found',
                   ));
                 }
               }
-              return Center(child: CircularProgressIndicator());
+              return const Center(child: CircularProgressIndicator());
             },
           ),
         ),

@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:ndialog/ndialog.dart';
 
 class ChangePass extends StatefulWidget {
+  const ChangePass({super.key});
+
   @override
   _ChangePassState createState() => _ChangePassState();
 }
@@ -28,11 +30,11 @@ class _ChangePassState extends State<ChangePass> {
   storeapi() async {
     api_token = await HelperFunctions.getUserApiKey();
 
-    if (api_token == '' || api_token == null) {
+    if (api_token == '') {
       await HelperFunctions.saveUserLoggedIn(false);
       await HelperFunctions.saveUserApiKey("");
       Navigator.pushAndRemoveUntil(context,
-          MaterialPageRoute(builder: (context) => SignIn()), (route) => false);
+          MaterialPageRoute(builder: (context) => const SignIn()), (route) => false);
     }
   }
 
@@ -61,7 +63,7 @@ class _ChangePassState extends State<ChangePass> {
           await Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute(
-                  builder: (context) => MyAccount(
+                  builder: (context) => const MyAccount(
                         message: 'Password changed successfully',
                       )),
               (route) => false);
@@ -74,7 +76,7 @@ class _ChangePassState extends State<ChangePass> {
           await HelperFunctions.saveUserApiKey("");
           await Navigator.pushAndRemoveUntil(
               context,
-              MaterialPageRoute(builder: (context) => SignIn()),
+              MaterialPageRoute(builder: (context) => const SignIn()),
               (route) => false);
         } else {
           setState(() {
@@ -86,7 +88,7 @@ class _ChangePassState extends State<ChangePass> {
             title: Text(response.data['message']),
             actions: <Widget>[
               TextButton(
-                  child: Text("Ok"),
+                  child: const Text("Ok"),
                   onPressed: () {
                     Navigator.pop(context);
                   }),
@@ -100,11 +102,11 @@ class _ChangePassState extends State<ChangePass> {
         await NAlertDialog(
           dismissable: false,
           dialogStyle: DialogStyle(titleDivider: true),
-          title: Text("Opps Something Went Worng!"),
-          content: Text("Please check your connectivity and try Again.."),
+          title: const Text("Opps Something Went Worng!"),
+          content: const Text("Please check your connectivity and try Again.."),
           actions: <Widget>[
             TextButton(
-                child: Text("Ok"),
+                child: const Text("Ok"),
                 onPressed: () {
                   Navigator.pop(context);
                 }),
@@ -118,14 +120,14 @@ class _ChangePassState extends State<ChangePass> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Center(
+        title: const Center(
             child: Text(
           "Quiz Learn",
         )),
       ),
       body: isLoading
           ? Container(
-              child: Center(
+              child: const Center(
                 child: CircularProgressIndicator(),
               ),
             )
@@ -134,7 +136,7 @@ class _ChangePassState extends State<ChangePass> {
                 child: Form(
                   key: formKey,
                   child: Container(
-                    margin: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                    margin: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
                     child: Column(
                       children: <Widget>[
                         TextFormField(
@@ -148,11 +150,11 @@ class _ChangePassState extends State<ChangePass> {
                           },
                           controller: oldpasswordEditingController,
                           decoration: InputDecoration(
-                            icon: Icon(Icons.lock),
+                            icon: const Icon(Icons.lock),
                             suffix: InkWell(
                               onTap: _togglePasswordView,
                               child: Padding(
-                                padding: EdgeInsets.only(left: 8.0, right: 20),
+                                padding: const EdgeInsets.only(left: 8.0, right: 20),
                                 child: Icon(
                                   Icons.visibility,
                                   size: 24,
@@ -165,7 +167,7 @@ class _ChangePassState extends State<ChangePass> {
                             labelText: "Old Password",
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 24,
                         ),
                         TextFormField(
@@ -183,11 +185,11 @@ class _ChangePassState extends State<ChangePass> {
                           },
                           controller: passwordTextEditingController,
                           decoration: InputDecoration(
-                            icon: Icon(Icons.lock),
+                            icon: const Icon(Icons.lock),
                             suffix: InkWell(
                               onTap: _togglePasswordView1,
                               child: Padding(
-                                padding: EdgeInsets.only(left: 8.0, right: 20),
+                                padding: const EdgeInsets.only(left: 8.0, right: 20),
                                 child: Icon(
                                   Icons.visibility,
                                   size: 24,
@@ -200,7 +202,7 @@ class _ChangePassState extends State<ChangePass> {
                             labelText: "New Password",
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 24,
                         ),
                         TextFormField(
@@ -216,11 +218,11 @@ class _ChangePassState extends State<ChangePass> {
                           },
                           controller: confirmPasswordTextEditingController,
                           decoration: InputDecoration(
-                            icon: Icon(Icons.lock),
+                            icon: const Icon(Icons.lock),
                             suffix: InkWell(
                               onTap: _togglePasswordView2,
                               child: Padding(
-                                padding: EdgeInsets.only(left: 8.0, right: 20),
+                                padding: const EdgeInsets.only(left: 8.0, right: 20),
                                 child: Icon(
                                   Icons.visibility,
                                   size: 24,
@@ -233,7 +235,7 @@ class _ChangePassState extends State<ChangePass> {
                             labelText: "Confirm New Password",
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 24,
                         ),
                         GestureDetector(
@@ -241,21 +243,21 @@ class _ChangePassState extends State<ChangePass> {
                             signUp();
                           },
                           child: Container(
-                            padding: EdgeInsets.symmetric(vertical: 16),
+                            padding: const EdgeInsets.symmetric(vertical: 16),
                             width: MediaQuery.of(context).size.width - 50,
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
                               color: Colors.blue,
                               borderRadius: BorderRadius.circular(30),
                             ),
-                            child: Text(
+                            child: const Text(
                               "Sign Up",
                               style:
                                   TextStyle(color: Colors.white, fontSize: 17),
                             ),
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 16,
                         ),
                       ],

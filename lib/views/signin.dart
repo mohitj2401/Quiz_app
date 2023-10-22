@@ -1,4 +1,3 @@
-import 'package:loading_elevated_button/loading_elevated_button.dart';
 import 'package:provider/provider.dart';
 import 'package:quiz_earn/constant/constant.dart';
 import 'package:quiz_earn/helper/helper.dart';
@@ -15,6 +14,8 @@ import 'package:ndialog/ndialog.dart';
 import '../providers/userprovider.dart';
 
 class SignIn extends StatefulWidget {
+  const SignIn({super.key});
+
   @override
   _SignInState createState() => _SignInState();
 }
@@ -24,7 +25,7 @@ class _SignInState extends State<SignIn> {
   bool showError = false;
   bool _isHidden = true;
   final formKey = GlobalKey<FormState>();
-  AuthService authService = new AuthService();
+  AuthService authService = AuthService();
   TextEditingController emailTextEditingController = TextEditingController();
   TextEditingController passwordTextEditingController = TextEditingController();
 
@@ -60,7 +61,7 @@ class _SignInState extends State<SignIn> {
             await Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => Subjects(
+                    builder: (context) => const Subjects(
                           message: 'Login successfully',
                         )));
             setState(() {
@@ -80,11 +81,11 @@ class _SignInState extends State<SignIn> {
         await NAlertDialog(
           dismissable: false,
           dialogStyle: DialogStyle(titleDivider: true),
-          title: Text("Opps Something Went Worng!"),
-          content: Text("Please check your connectivity and try Again.."),
+          title: const Text("Opps Something Went Worng!"),
+          content: const Text("Please check your connectivity and try Again.."),
           actions: <Widget>[
             TextButton(
-                child: Text("Ok"),
+                child: const Text("Ok"),
                 onPressed: () {
                   Navigator.pop(context);
                 }),
@@ -102,32 +103,32 @@ class _SignInState extends State<SignIn> {
           key: formKey,
           child: Container(
             alignment: Alignment.center,
-            margin: EdgeInsets.symmetric(horizontal: 24, vertical: 50),
+            margin: const EdgeInsets.symmetric(horizontal: 24, vertical: 50),
             child: Column(
               // crossAxisAlignment: CrossAxisAlignment.end,
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                SizedBox(
+                const SizedBox(
                   height: 100,
                 ),
                 showAlert(),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 AnimatedTextKit(
                   animatedTexts: [
                     TypewriterAnimatedText(
                       'Hello There!',
-                      textStyle: TextStyle(
+                      textStyle: const TextStyle(
                         fontSize: 30,
                         fontWeight: FontWeight.bold,
                         color: Colors.grey,
                       ),
-                      speed: Duration(milliseconds: 100),
+                      speed: const Duration(milliseconds: 100),
                     ),
                   ],
-                  pause: Duration(milliseconds: 500),
+                  pause: const Duration(milliseconds: 500),
                   displayFullTextOnTap: true,
                 ),
-                SizedBox(height: 50),
+                const SizedBox(height: 50),
                 TextFormField(
                   validator: (value) {
                     if (value!.isEmpty) {
@@ -141,14 +142,14 @@ class _SignInState extends State<SignIn> {
                     return null;
                   },
                   controller: emailTextEditingController,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     icon: Icon(
                       Icons.email_rounded,
                     ),
                     labelText: "Email",
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 8,
                 ),
                 TextFormField(
@@ -162,11 +163,11 @@ class _SignInState extends State<SignIn> {
                   },
                   controller: passwordTextEditingController,
                   decoration: InputDecoration(
-                    icon: Icon(Icons.lock),
+                    icon: const Icon(Icons.lock),
                     suffix: InkWell(
                       onTap: _togglePasswordView,
                       child: Padding(
-                        padding: EdgeInsets.only(left: 8.0, right: 20),
+                        padding: const EdgeInsets.only(left: 8.0, right: 20),
                         child: Icon(
                           Icons.visibility,
                           size: 24,
@@ -177,7 +178,7 @@ class _SignInState extends State<SignIn> {
                     labelText: "Password",
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 24,
                 ),
                 GestureDetector(
@@ -185,39 +186,39 @@ class _SignInState extends State<SignIn> {
                     signIn();
                   },
                   child: isLoading
-                      ? Center(
+                      ? const Center(
                           child: CircularProgressIndicator(),
                         )
                       : Container(
-                          padding: EdgeInsets.symmetric(vertical: 16),
+                          padding: const EdgeInsets.symmetric(vertical: 16),
                           width: MediaQuery.of(context).size.width - 50,
                           alignment: Alignment.center,
                           decoration: BoxDecoration(
                             color: Colors.blue,
                             borderRadius: BorderRadius.circular(30),
                           ),
-                          child: Text(
+                          child: const Text(
                             "Sign In",
                             style: TextStyle(color: Colors.white, fontSize: 17),
                           ),
                         ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 16,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Text(
+                    const Text(
                       "Don't have Account? ",
                       style: TextStyle(fontSize: 16),
                     ),
                     GestureDetector(
                       onTap: () {
                         Navigator.pushReplacement(context,
-                            MaterialPageRoute(builder: (context) => SignUp()));
+                            MaterialPageRoute(builder: (context) => const SignUp()));
                       },
-                      child: Text(
+                      child: const Text(
                         "Sign Up",
                         style: TextStyle(
                           fontSize: 16,
@@ -227,7 +228,7 @@ class _SignInState extends State<SignIn> {
                     ),
                   ],
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 60,
                 )
               ],
@@ -249,18 +250,18 @@ class _SignInState extends State<SignIn> {
       return Container(
         color: Colors.amberAccent,
         width: double.infinity,
-        padding: EdgeInsets.all(8),
+        padding: const EdgeInsets.all(8),
         child: Row(
           children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
+            const Padding(
+              padding: EdgeInsets.all(8.0),
               child: Icon(Icons.error_outline),
             ),
             Expanded(
               child: Text(authService.error),
             ),
             IconButton(
-              icon: Icon(Icons.close),
+              icon: const Icon(Icons.close),
               onPressed: () {
                 setState(() {
                   authService.error = '';
@@ -271,7 +272,7 @@ class _SignInState extends State<SignIn> {
         ),
       );
     } else {
-      return SizedBox(height: 0);
+      return const SizedBox(height: 0);
     }
   }
 }
