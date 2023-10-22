@@ -263,11 +263,9 @@ class _PlayQuizState extends State<PlayQuiz> with WidgetsBindingObserver {
         appBar: AppBar(
           title: Text(
             widget.quizName,
-            style: TextStyle(color: Colors.blueAccent, fontSize: 22),
+            style: TextStyle(fontSize: 22),
           ),
           automaticallyImplyLeading: false,
-          iconTheme: IconThemeData(color: Colors.black),
-          backgroundColor: Colors.white,
           actions: <Widget>[
             GestureDetector(
               onTap: () async {
@@ -432,7 +430,6 @@ class _QuizPlayTileState extends State<QuizPlayTile>
                   zoomScale: 5,
                   child: Container(
                     child: Image(image: NetworkImage(url)),
-                    color: Colors.white,
                     padding: EdgeInsets.all(20),
                   ),
                 ).show(super.context);

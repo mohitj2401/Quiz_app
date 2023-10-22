@@ -12,6 +12,7 @@ import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:ndialog/ndialog.dart';
 import 'package:easy_pdf_viewer/easy_pdf_viewer.dart';
 import 'package:open_file/open_file.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 import '../widget/drawer.dart';
 
 class PlayedQuiz extends StatefulWidget {
@@ -309,123 +310,136 @@ class _PlayedQuizState extends State<PlayedQuiz> {
               if (snapshot.connectionState == ConnectionState.done) {
                 if (snapshot.hasData && (snapshot.data as List).isNotEmpty) {
                   List subjectsGet = snapshot.data as List;
+
                   return ListView.builder(
                       itemCount: subjectsGet.length,
                       itemBuilder: (context, index) {
-                        return Container(
-                            child: Row(
-                          children: [
-                            Icon(
-                              Icons.arrow_forward_ios_sharp,
-                              size: 25,
-                              color: Colors.grey[500],
-                            ),
-                            SizedBox(
-                              width: 12,
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Container(
-                                  child: Text(subjectsGet[index]['title']),
-                                ),
-                                SizedBox(
-                                  height: 4,
-                                ),
-                                Container(
-                                  child:
-                                      Text(subjectsGet[index]['description']),
-                                )
-                              ],
-                            ),
-                            Spacer(),
-                            IconButton(
-                              onPressed: () async {
-                                try {
-                                  ProgressDialog progressDialog =
-                                      ProgressDialog(context,
-                                          title: Text("Loading..."));
-                                  progressDialog.show();
-                                  var url = base_url +
-                                      "/api/download/result/" +
-                                      subjectsGet[index]['id'].toString();
-
-                                  var api =
-                                      await HelperFunctions.getUserApiKey();
-                                  PDFDocument doc =
-                                      await PDFDocument.fromURL(url, headers: {
-                                    'Authorization': 'Bearer $api',
-                                    "X-Requested-With": "XMLHttpRequest"
-                                  });
-                                  progressDialog.dismiss();
-                                  await Dialog(
-                                    child: PDFViewer(
-                                      document: doc,
-                                      lazyLoad: false,
+                        print(subjectsGet[index]);
+                        return Card(
+                          child: Container(
+                              child: Row(
+                            children: [
+                              Image.network(
+                                "$base_url/${subjectsGet[index]['image']}",
+                                width: 40.sp,
+                              ),
+                              // Icon(
+                              //   Icons.arrow_forward_ios_sharp,
+                              //   size: 25,
+                              //   color: Colors.grey[500],
+                              // ),
+                              SizedBox(
+                                width: 12,
+                              ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    child: Text(
+                                      subjectsGet[index]['title'],
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headlineSmall,
                                     ),
-                                  ).show(super.context);
-                                } catch (e) {
-                                  await NAlertDialog(
-                                    dismissable: false,
-                                    dialogStyle:
-                                        DialogStyle(titleDivider: true),
-                                    title: Text("Opps Something Went Worng!"),
-                                    content: Text(
-                                        "Please check your connectivity or try Again.."),
-                                    actions: <Widget>[
-                                      TextButton(
-                                          child: Text("Ok"),
-                                          onPressed: () {
-                                            Navigator.pop(context);
-                                          }),
-                                    ],
-                                  ).show(context);
-                                }
-                              },
-                              icon: Icon(
-                                Icons.visibility,
-                                size: 25,
-                                color: Colors.grey[500],
+                                  ),
+                                  Container(
+                                    child:
+                                        Text(subjectsGet[index]['description']),
+                                  )
+                                ],
                               ),
-                            ),
-                            IconButton(
-                              onPressed: () async {
-                                try {
-                                  var url = base_url +
-                                      "/api/download/result/" +
-                                      subjectsGet[index]['id'].toString();
+                              Spacer(),
+                              IconButton(
+                                onPressed: () async {
+                                  try {
+                                    ProgressDialog progressDialog =
+                                        ProgressDialog(context,
+                                            title: Text("Loading..."));
+                                    progressDialog.show();
+                                    var url = base_url +
+                                        "/api/download/result/" +
+                                        subjectsGet[index]['id'].toString();
 
-                                  final status =
-                                      await Permission.storage.request();
-
-                                  final exterdir2 =
-                                      await getExternalStorageDirectory();
-
-                                  final task = await FlutterDownloader.enqueue(
-                                    url: url,
-                                    headers: {
-                                      'Authorization': 'Bearer $api_token',
-                                    },
-                                    savedDir: exterdir2!.path,
-                                    fileName: 'result.pdf',
-                                    saveInPublicStorage: true,
-                                  );
-                                } catch (e) {
-                                  print(e.toString());
-                                  await NDialog(
-                                    title: Text(
-                                        "Opps Something Went Worng! or try again after sometime.."),
-                                  ).show(context);
-                                }
-                              },
-                              icon: Icon(
-                                Icons.download_sharp,
-                                size: 25,
-                                color: Colors.grey[500],
+                                    var api =
+                                        await HelperFunctions.getUserApiKey();
+                                    PDFDocument doc = await PDFDocument.fromURL(
+                                        url,
+                                        headers: {
+                                          'Authorization': 'Bearer $api',
+                                          "X-Requested-With": "XMLHttpRequest"
+                                        });
+                                    progressDialog.dismiss();
+                                    await Dialog(
+                                      child: PDFViewer(
+                                        document: doc,
+                                        lazyLoad: false,
+                                      ),
+                                    ).show(super.context);
+                                  } catch (e) {
+                                    await NAlertDialog(
+                                      dismissable: false,
+                                      dialogStyle:
+                                          DialogStyle(titleDivider: true),
+                                      title: Text("Opps Something Went Worng!"),
+                                      content: Text(
+                                          "Please check your connectivity or try Again.."),
+                                      actions: <Widget>[
+                                        TextButton(
+                                            child: Text("Ok"),
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                            }),
+                                      ],
+                                    ).show(context);
+                                  }
+                                },
+                                icon: Icon(
+                                  Icons.visibility,
+                                  size: 25,
+                                  color: Colors.grey[500],
+                                ),
                               ),
-                            )
-                          ],
-                        ));
+                              IconButton(
+                                onPressed: () async {
+                                  try {
+                                    var url = base_url +
+                                        "/api/download/result/" +
+                                        subjectsGet[index]['id'].toString();
+
+                                    final status =
+                                        await Permission.storage.request();
+
+                                    final exterdir2 =
+                                        await getExternalStorageDirectory();
+
+                                    final task =
+                                        await FlutterDownloader.enqueue(
+                                      url: url,
+                                      headers: {
+                                        'Authorization': 'Bearer $api_token',
+                                      },
+                                      savedDir: exterdir2!.path,
+                                      fileName: 'result.pdf',
+                                      saveInPublicStorage: true,
+                                    );
+                                  } catch (e) {
+                                    print(e.toString());
+                                    await NDialog(
+                                      title: Text(
+                                          "Opps Something Went Worng! or try again after sometime.."),
+                                    ).show(context);
+                                  }
+                                },
+                                icon: Icon(
+                                  Icons.download_sharp,
+                                  size: 25,
+                                  color: Colors.grey[500],
+                                ),
+                              )
+                            ],
+                          )),
+                        );
                         return ListTile(
                           onTap: () async {
                             try {

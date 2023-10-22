@@ -50,7 +50,6 @@ class _QuestionTileState extends State<QuestionTile> {
             widget.description,
             style: TextStyle(
               fontSize: 16,
-              color: Colors.black54,
             ),
           ),
           SizedBox(height: 2)

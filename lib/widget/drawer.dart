@@ -4,6 +4,7 @@ import 'package:ndialog/ndialog.dart';
 import 'package:provider/provider.dart';
 import 'package:quiz_earn/constant/constant.dart';
 import 'package:quiz_earn/views/feedback.dart';
+import 'package:quiz_earn/views/settings.dart';
 import '../helper/helper.dart';
 import '../providers/userprovider.dart';
 import '../views/myaccount.dart';
@@ -97,7 +98,7 @@ Drawer appDrawer(BuildContext context) {
               Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => MyAccount(
+                      builder: (context) => SettingScreen(
                             message: '',
                           )));
             },

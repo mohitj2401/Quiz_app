@@ -123,7 +123,7 @@ class _MyAccountState extends State<MyAccount> {
           'My Account',
         ),
       ),
-      drawer: appDrawer(context),
+      // drawer: appDrawer(context),
       body: isLoading
           ? Center(child: CircularProgressIndicator())
           : SingleChildScrollView(
@@ -131,15 +131,6 @@ class _MyAccountState extends State<MyAccount> {
                 padding: EdgeInsets.all(20),
                 child: Column(
                   children: [
-                    Container(
-                      child: Card(
-                        shape: CircleBorder(),
-                        child: Icon(
-                          Icons.person_rounded,
-                          // size: 20.sp,
-                        ),
-                      ),
-                    ),
                     Center(
                         child: Icon(
                       Icons.person_rounded,
