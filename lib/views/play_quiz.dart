@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:logger/logger.dart';
 import 'package:quiz_earn/constant/constant.dart';
 import 'package:quiz_earn/helper/helper.dart';
 import 'package:quiz_earn/models/questions.dart';
@@ -11,6 +12,7 @@ import 'package:quiz_earn/views/quiz_play_widget.dart';
 import 'package:quiz_earn/views/signin.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:wakelock/wakelock.dart';
 
 import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
@@ -111,8 +113,10 @@ class _PlayQuizState extends State<PlayQuiz> with WidgetsBindingObserver {
     if (apiToken == '') {
       await HelperFunctions.saveUserLoggedIn(false);
       await HelperFunctions.saveUserApiKey("");
-      Navigator.pushAndRemoveUntil(context,
-          MaterialPageRoute(builder: (context) => const SignIn()), (route) => false);
+      Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => const SignIn()),
+          (route) => false);
     }
 
     Response response = await Dio(BaseOptions(headers: {
@@ -127,8 +131,10 @@ class _PlayQuizState extends State<PlayQuiz> with WidgetsBindingObserver {
     } else if (response.data['status'] == 401) {
       await HelperFunctions.saveUserLoggedIn(false);
       await HelperFunctions.saveUserApiKey("");
-      await Navigator.pushAndRemoveUntil(context,
-          MaterialPageRoute(builder: (context) => const SignIn()), (route) => false);
+      await Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => const SignIn()),
+          (route) => false);
     } else {
       await NAlertDialog(
         dismissable: false,
@@ -198,7 +204,8 @@ class _PlayQuizState extends State<PlayQuiz> with WidgetsBindingObserver {
         Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(
-                builder: (context) => const Subjects(message: 'Quiz Attempted')),
+                builder: (context) =>
+                    const Subjects(message: 'Quiz Attempted')),
             (route) => false);
       } else {
         progressDialog.dismiss();
@@ -295,7 +302,8 @@ class _PlayQuizState extends State<PlayQuiz> with WidgetsBindingObserver {
                 await NDialog(
                   dialogStyle: DialogStyle(titleDivider: true),
                   title: const Text("Log Out"),
-                  content: const Text("Are you sure!.Process is going to be saved"),
+                  content:
+                      const Text("Are you sure!.Process is going to be saved"),
                   actions: <Widget>[
                     TextButton(
                         child: const Text("Yes"),
@@ -395,7 +403,8 @@ class QuizPlayTile extends StatefulWidget {
   final int page;
   // final bool disable;
   final VoidCallback onTap;
-  const QuizPlayTile({super.key, 
+  const QuizPlayTile({
+    super.key,
     required this.questionModel,
     required this.page,
     required this.onTap,
@@ -412,30 +421,71 @@ class _QuizPlayTileState extends State<QuizPlayTile>
   get wantKeepAlive => true;
   String optionSelected = "";
   bool disable = false;
+  Logger logger = Logger();
   @override
   Widget build(BuildContext context) {
     super.build(context);
     return ListView(
+      // shrinkWrap: true,
       children: [
         if (widget.questionModel.question != "")
-          Expanded(
-            child: Html(
-              shrinkWrap: true,
-              data: "Q${widget.page + 1} " + widget.questionModel.question,
-              onLinkTap: (String? url, Map<String, String> attributes,
-                  dom.Element? element) async {
-                url = url as String;
-                await ZoomDialog(
-                  zoomScale: 5,
-                  child: Container(
-                    child: Image(image: NetworkImage(url)),
-                    padding: const EdgeInsets.all(20),
-                  ),
-                ).show(super.context);
-              },
-            ),
+          Html(
+            shrinkWrap: false,
+            data: "Q${widget.page + 1} " + widget.questionModel.question,
+            onLinkTap: (String? url, Map<String, String> attributes,
+                dom.Element? element) async {
+              print(url);
+              url = url as String;
+              await ZoomDialog(
+                zoomScale: 5,
+                child: Container(
+                  child: Image(image: NetworkImage(url)),
+                  padding: const EdgeInsets.all(20),
+                ),
+              ).show(super.context);
+            },
+            extensions: [
+              TagExtension(
+                tagsToExtend: {"img"},
+                // child: CircularProgressIndicator(),
+                builder: (p0) {
+                  return InkWell(
+                    child: Image.network(
+                      p0.attributes['src']!,
+                      frameBuilder:
+                          (context, child, frame, wasSynchronouslyLoaded) {
+                        return child;
+                      },
+                      loadingBuilder: (context, child, loadingProgress) {
+                        if (loadingProgress == null) {
+                          return child;
+                        } else {
+                          return CircularProgressIndicator();
+                        }
+                      },
+                    ),
+                    onTap: () async {
+                      await ZoomDialog(
+                        zoomScale: 5,
+                        child: Container(
+                          child:
+                              Image(image: NetworkImage(p0.attributes['src']!)),
+                          padding: const EdgeInsets.all(20),
+                        ),
+                      ).show(super.context);
+                    },
+                  );
+                },
+              ),
+            ],
+            style: {
+              "body": Style(
+                fontSize: FontSize(18.sp),
+                fontWeight: FontWeight.bold,
+              ),
+            },
           ),
-        const Spacer(),
+        // const Spacer(),
         const SizedBox(height: 4),
         Column(
           children: [
@@ -597,14 +647,15 @@ class _QuizPlayTileState extends State<QuizPlayTile>
           ],
         ),
         const SizedBox(height: 8),
-        const Spacer(),
+        // const Spacer(),
         (page + 1) != totalPage
             ? Container(
                 padding: const EdgeInsets.only(bottom: 5),
                 alignment: Alignment.bottomRight,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    foregroundColor: Colors.white, shape: const CircleBorder(), backgroundColor: Colors.blue,
+                    foregroundColor: Colors.white, shape: const CircleBorder(),
+                    backgroundColor: Colors.blue,
                     padding: const EdgeInsets.all(20), // <-- Splash color
                   ),
                   onPressed: widget.onTap,
@@ -616,7 +667,8 @@ class _QuizPlayTileState extends State<QuizPlayTile>
                 alignment: Alignment.bottomRight,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    foregroundColor: Colors.white, shape: const CircleBorder(), backgroundColor: Colors.blue,
+                    foregroundColor: Colors.white, shape: const CircleBorder(),
+                    backgroundColor: Colors.blue,
                     padding: const EdgeInsets.all(20), // <-- Splash color
                   ),
                   onPressed: widget.onTap,
