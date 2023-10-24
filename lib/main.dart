@@ -40,7 +40,12 @@ class _MyAppState extends State<MyApp> {
 
   userLoggedInStatus() async {
     var api = await HelperFunctions.getUserApiKey();
-
+    var themeIndex = await HelperFunctions.getUserThemeKey();
+    if (themeIndex != -1) {
+      await context.read<ThemeProviders>().updateTheme(themeIndex);
+    } else {
+      await context.read<ThemeProviders>().updateTheme(0);
+    }
     if (api != '') {
       setState(() {
         _isLoggedIn = true;

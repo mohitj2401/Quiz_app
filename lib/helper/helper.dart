@@ -4,6 +4,7 @@ class HelperFunctions {
   static String userLoggedInKey = "USERLOGGEDINKEY";
   static String userApiKey = "USERAPIKEY";
   static String userRole = "USERROLE";
+  static String userTheme = "USERROLE";
 
   static saveUserLoggedIn(bool isLoggedIn) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -30,5 +31,18 @@ class HelperFunctions {
       return '';
     }
     return prefs.getString(userApiKey).toString();
+  }
+
+  static Future<int> getUserThemeKey() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    if (prefs.getInt(userTheme) == null) {
+      return -1;
+    }
+    return prefs.getInt(userTheme)!;
+  }
+
+  static saveUserThemeindex(int themeIndex) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setInt(userTheme, themeIndex);
   }
 }

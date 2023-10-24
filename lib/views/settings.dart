@@ -96,8 +96,10 @@ class _SettingScreenState extends State<SettingScreen> {
     if (api_token == '') {
       await HelperFunctions.saveUserLoggedIn(false);
       await HelperFunctions.saveUserApiKey("");
-      Navigator.pushAndRemoveUntil(context,
-          MaterialPageRoute(builder: (context) => const SignIn()), (route) => false);
+      Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => const SignIn()),
+          (route) => false);
     }
   }
 
@@ -206,8 +208,8 @@ class _SettingScreenState extends State<SettingScreen> {
                 value: context.read<ThemeProviders>().theme_number == 0
                     ? true
                     : false,
-                onChanged: (value) {
-                  print(value);
+                onChanged: (value) async {
+                  await HelperFunctions.saveUserThemeindex(value ? 0 : 1);
                   context.read<ThemeProviders>().updateTheme(value ? 0 : 1);
                 },
               ),
