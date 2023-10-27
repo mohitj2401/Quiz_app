@@ -20,13 +20,8 @@ https://github.com/mohitj2401/Quiz_app
 
 ## Screenshot
 
-<img src="https://mohitj2401.github.io/Portfolio/img/quiz/1 (1).png" width="250">  
-<img src="https://mohitj2401.github.io/Portfolio/img/quiz/1 (2).png" width="250">   
-<img src="https://mohitj2401.github.io/Portfolio/img/quiz/1 (3).png" width="250">   
-<img src="https://mohitj2401.github.io/Portfolio/img/quiz/1 (4).png" width="250">
-<img src="https://mohitj2401.github.io/Portfolio/img/quiz/1 (5).png" width="250">
-<img src="https://mohitj2401.github.io/Portfolio/img/quiz/1 (6).png" width="250">
-<img src="https://mohitj2401.github.io/Portfolio/img/quiz/1 (7).png" width="250">
+<img src="https://mohitj2401.github.io/Portfolio/img/quiz/1 (1).png" width="250"> <img src="https://mohitj2401.github.io/Portfolio/img/quiz/1 (2).png" width="250">  <img src="https://mohitj2401.github.io/Portfolio/img/quiz/1 (3).png" width="250">  <img src="https://mohitj2401.github.io/Portfolio/img/quiz/1 (4).png" width="250">
+<img src="https://mohitj2401.github.io/Portfolio/img/quiz/1 (5).png" width="250">  <img src="https://mohitj2401.github.io/Portfolio/img/quiz/1 (6).png" width="250">  <img src="https://mohitj2401.github.io/Portfolio/img/quiz/1 (7).png" width="250">
    
    
    
