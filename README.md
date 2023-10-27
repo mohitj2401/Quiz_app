@@ -14,11 +14,19 @@ https://github.com/mohitj2401/Quiz_app
     2. Prevent  user from swtiching the screen by showing alert until 3 times then it will submit autometically
     3. Auto Submit on duration Finish
     4. Download the result in pdf formate
+    5. Provided dark theme 
+    6. New and improved UI 
 
 
 ## Screenshot
 
-<img src="https://github.com/mohitj2401/quizee/blob/master/Screenshots/Screenshot_20210705-071635_Quizie.png" width="250">  <img src="https://github.com/mohitj2401/quizee/blob/master/Screenshots/Screenshot_20210705-071643_Quizie.png" width="250">   <img src="https://github.com/mohitj2401/quizee/blob/master/Screenshots/Screenshot_20210705-071934_Quizie.png" width="250">   <img src="https://github.com/mohitj2401/quizee/blob/master/Screenshots/Screenshot_20210705-072000_Quizie.png" width="250">
+<img src="https://mohitj2401.github.io/Portfolio/img/quiz/1 (1).png" width="250">  
+<img src="https://mohitj2401.github.io/Portfolio/img/quiz/1 (2).png" width="250">   
+<img src="https://mohitj2401.github.io/Portfolio/img/quiz/1 (3).png" width="250">   
+<img src="https://mohitj2401.github.io/Portfolio/img/quiz/1 (4).png" width="250">
+<img src="https://mohitj2401.github.io/Portfolio/img/quiz/1 (5).png" width="250">
+<img src="https://mohitj2401.github.io/Portfolio/img/quiz/1 (6).png" width="250">
+<img src="https://mohitj2401.github.io/Portfolio/img/quiz/1 (7).png" width="250">
    
    
    
