@@ -1,7 +1,5 @@
-# Checkout QuizeeApp-V2
-https://github.com/mohitj2401/Quiz_app
 
-# Quizie
+# Quizie v2
 
 ## About
    This project is build in two projects.
